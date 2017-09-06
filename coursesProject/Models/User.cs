@@ -37,6 +37,7 @@ namespace coursesProject.Models
     public class Statistics
     {
         public int ID { get; set; }
+        public int UserID { get; set; }
         public User User { get; set; }
         public int DonateCount { get; set; }
         public int MoneyDonate { get; set; }
