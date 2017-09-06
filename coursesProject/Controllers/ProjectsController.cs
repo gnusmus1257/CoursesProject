@@ -24,7 +24,26 @@ namespace coursesProject.Controllers
         {
             return View(await _context.Project.ToListAsync());
         }
-
+        [HttpPost]
+        public async Task<ActionResult> DelateUserAndProjects (int? id)
+        {
+            if (id==null)
+            {
+                return NotFound();
+            }
+            var project = await _context.Project
+                . SingleOrDefaultAsync(m => m.Athor.ID == id);
+            var user = await _context.User
+                .SingleOrDefaultAsync(m => m.ID == id);
+            if (project == null || user == null)
+            {
+                return NotFound();
+            }
+            _context.Project.Remove(project);
+            _context.User.Remove(user);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
         // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
