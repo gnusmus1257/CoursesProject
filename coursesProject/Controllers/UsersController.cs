@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using coursesProject.Data;
 using coursesProject.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace coursesProject.Controllers
 {
@@ -25,6 +26,7 @@ namespace coursesProject.Controllers
             return View(await _context.User.ToListAsync());
         }
 
+        
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {

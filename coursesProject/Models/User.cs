@@ -14,6 +14,7 @@ namespace coursesProject.Models
         public ICollection<MedalRelation> Medal { get; set; }                        
         public string Region { get; set; }       
         public ICollection<Statistic> Stats { get; set; }
+        public string Status { get; set; }
     }
 
 

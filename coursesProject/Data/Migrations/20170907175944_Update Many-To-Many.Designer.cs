@@ -8,9 +8,10 @@ using coursesProject.Data;
 namespace coursesProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170907175944_Update Many-To-Many")]
+    partial class UpdateManyToMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -240,8 +241,6 @@ namespace coursesProject.Data.Migrations
                         .IsRequired();
 
                     b.Property<string>("Region");
-
-                    b.Property<string>("Status");
 
                     b.HasKey("ID");
 
