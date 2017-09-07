@@ -12,66 +12,10 @@
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="Email" class="col-md-2 control-label"></label>
+            <label asp-for="Region" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="SelfProjects" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="SelfProjects" class="form-control" />
-                <span asp-validation-for="SelfProjects" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="SubProjects" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="SubProjects" class="form-control" />
-                <span asp-validation-for="SubProjects" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="CommentsCount" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="CommentsCount" class="form-control" />
-                <span asp-validation-for="CommentsCount" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="PaymentCount" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="PaymentCount" class="form-control" />
-                <span asp-validation-for="PaymentCount" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="GeneralDonate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="GeneralDonate" class="form-control" />
-                <span asp-validation-for="GeneralDonate" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="SuccesProjectsCount" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="SuccesProjectsCount" class="form-control" />
-                <span asp-validation-for="SuccesProjectsCount" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Role" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="Role" class="form-control"></select>
-                <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Language" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="Language" class="form-control"></select>
-                <span asp-validation-for="Language" class="text-danger"></span>
+                <input asp-for="Region" class="form-control" />
+                <span asp-validation-for="Region" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
@@ -86,6 +30,3 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

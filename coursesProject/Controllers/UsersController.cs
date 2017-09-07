@@ -7,11 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using coursesProject.Data;
 using coursesProject.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace coursesProject.Controllers
 {
-    [Authorize(Roles = "admin")]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -28,7 +26,6 @@ namespace coursesProject.Controllers
         }
 
         // GET: Users/Details/5
-        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -57,7 +54,7 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Email,SelfProjects,SubProjects,CommentsCount,PaymentCount,GeneralDonate,SuccesProjectsCount,Role,Language")] User user)
+        public async Task<IActionResult> Create([Bind("ID,Region")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +86,7 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Email,SelfProjects,SubProjects,CommentsCount,PaymentCount,GeneralDonate,SuccesProjectsCount,Role,Language")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Region")] User user)
         {
             if (id != user.ID)
             {
@@ -120,7 +117,6 @@ namespace coursesProject.Controllers
         }
 
         // GET: Users/Delete/5
-        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,7 +133,8 @@ namespace coursesProject.Controllers
 
             return View(user);
         }
-                // POST: Users/Delete/5
+
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -152,6 +149,5 @@ namespace coursesProject.Controllers
         {
             return _context.User.Any(e => e.ID == id);
         }
-
     }
 }

@@ -24,26 +24,7 @@ namespace coursesProject.Controllers
         {
             return View(await _context.Project.ToListAsync());
         }
-        [HttpPost]
-        public async Task<ActionResult> DelateUserAndProjects (int? id)
-        {
-            if (id==null)
-            {
-                return NotFound();
-            }
-            var project = await _context.Project
-                . SingleOrDefaultAsync(m => m.Athor.ID == id);
-            var user = await _context.User
-                .SingleOrDefaultAsync(m => m.ID == id);
-            if (project == null || user == null)
-            {
-                return NotFound();
-            }
-            _context.Project.Remove(project);
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+
         // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -73,7 +54,7 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,Name,Date,Description,FinancialTarget,DonateCount,PaymentCount,Status,Category")] Project project)
+        public async Task<IActionResult> Create([Bind("ID,NameProject,Date,Status,Category")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -105,7 +86,7 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,Name,Date,Description,FinancialTarget,DonateCount,PaymentCount,Status,Category")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,NameProject,Date,Status,Category")] Project project)
         {
             if (id != project.ID)
             {
