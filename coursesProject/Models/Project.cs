@@ -16,6 +16,8 @@ namespace coursesProject.Models
         public string NameProject { get; set; }
         public DateTime Date { get; set; }
         public string Status { get; set; }
+        [MaxLength(500)]
+        public string Description { get; set; }
         public Category Category { get; set; }
         public ICollection<Comment> Comment { get; set; }
         public double Raiting { get; set; }
@@ -36,15 +38,16 @@ namespace coursesProject.Models
     }
 
 
-  
+
     public class Comment
     {
-        public int ID { get; set; }
-        public User User { get; set; }
+        public int Id { get; set; }
         [Required]
+        [JsonIgnore]
         public Project Project { get; set; }
-        public string Text { get; set; }
-        public DateTime Date { get; set; }
+        public User Author { get; set; }
+        public string Context { get; set; }
+        public DateTime DateCreate { get; set; }   
     }
 
 
