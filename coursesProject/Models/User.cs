@@ -9,14 +9,13 @@ namespace coursesProject.Models
     {
         public int ID { get; set; }
         public ApplicationUser IdentityUser { get; set; }
-        public MedalRelation Medal { get; set; }                
-        public ERole Role { get; set; }
+        public MedalRelation Medal { get; set; }                        
         public ELanguage Language { get; set; }       
         public Statistics Stats { get; set; }
     }
 
 
-    public enum ERole { User, ChekedUser, Admin }
+    
     public enum ELanguage { Ru, En }
 
 
