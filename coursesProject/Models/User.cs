@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,20 +9,38 @@ namespace coursesProject.Models
     public class User
     {
         public int ID { get; set; }
-        public string Email { get; set; }
-        public int SelfProjects { get; set; }
-        public int SubProjects { get; set; }
-
-        public int CommentsCount { get; set; }
-        public int PaymentCount { get; set; }
-        public int GeneralDonate { get; set; }
-        public int SuccesProjectsCount { get; set; }
-        public ERole Role { get; set; }
-        public ELanguage Language { get; set; }
-
-        public enum ERole { User, ChekedUser, Admin}
-        public enum ELanguage { Ru, En}
+        [Required]
+        public ApplicationUser IdentityUser { get; set; }
+        public ICollection<MedalRelation> Medal { get; set; }                        
+        public string Region { get; set; }       
+        public ICollection<Statistic> Stats { get; set; }
+        public string Status { get; set; }
+    }
 
 
+    public class Medal
+    {
+        public int ID { get; set; }
+        public string Text { get; set; }
+    }
+
+    public class MedalRelation
+    {
+        public int ID { get; set; }
+        public Medal Medal { get; set; }
+        [Required]
+        public ICollection<User> User { get; set; }
+    }
+
+
+    public class Statistic
+    {
+        public int ID { get; set; }
+        public int UserID { get; set; }
+        [Required]
+        public User User { get; set; }
+        public int DonateCount { get; set; }
+        public int MoneyDonate { get; set; }
+        public int SuccesProject { get; set; }
     }
 }

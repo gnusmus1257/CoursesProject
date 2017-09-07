@@ -7,16 +7,40 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using coursesProject.Data;
 using coursesProject.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace coursesProject.Controllers
 {
     public class ProjectsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        public readonly ApplicationDbContext _context;
 
         public ProjectsController(ApplicationDbContext context)
         {
             _context = context;    
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<ActionResult> Sort ()
+        {
+            return PartialView();
+        }
+
+        interface IFilter
+        {
+            List<User> Filter();
+        }
+
+        public class FilterVerifiedUser : IFilter
+        {
+            private object _context;
+
+            public List<User> Filter()
+            {
+                
+                return null;
+            }
         }
 
         // GET: Projects
@@ -54,7 +78,7 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,Name,Date,Description,FinancialTarget,DonateCount,PaymentCount,Status,Category")] Project project)
+        public async Task<IActionResult> Create([Bind("ID,NameProject,Date,Status,Description,Raiting")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +110,7 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,Name,Date,Description,FinancialTarget,DonateCount,PaymentCount,Status,Category")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,NameProject,Date,Status,Description,Raiting")] Project project)
         {
             if (id != project.ID)
             {

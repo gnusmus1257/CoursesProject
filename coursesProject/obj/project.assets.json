@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 2,
   "targets": {
     ".NETFramework,Version=v4.5.2": {
       "Libuv/1.9.1": {
@@ -8570,31 +8570,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Царь Александр\\.nuget\\packages\\": {}
+    "C:\\Users\\Arti\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
-    "restoreSettings": {
-      "hideWarningsAndErrors": true
-    },
     "restore": {
-      "projectUniqueName": "T:\\iTransition courses\\CoursesProject\\coursesProject\\coursesProject.csproj",
+      "projectUniqueName": "C:\\Users\\Arti\\Desktop\\Course\\coursesProject\\coursesProject.csproj",
       "projectName": "coursesProject",
-      "projectPath": "T:\\iTransition courses\\CoursesProject\\coursesProject\\coursesProject.csproj",
-      "packagesPath": "C:\\Users\\Царь Александр\\.nuget\\packages\\",
-      "outputPath": "T:\\iTransition courses\\CoursesProject\\coursesProject\\obj\\",
+      "projectPath": "C:\\Users\\Arti\\Desktop\\Course\\coursesProject\\coursesProject.csproj",
+      "outputPath": "C:\\Users\\Arti\\Desktop\\Course\\coursesProject\\obj\\",
       "projectStyle": "PackageReference",
-      "configFilePaths": [
-        "C:\\Users\\Царь Александр\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-      ],
       "originalTargetFrameworks": [
         "net452"
       ],
-      "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
-      },
       "frameworks": {
         "net452": {
           "projectReferences": {}
