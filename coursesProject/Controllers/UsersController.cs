@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using coursesProject.Data;
 using coursesProject.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace coursesProject.Controllers
 {
@@ -25,6 +26,7 @@ namespace coursesProject.Controllers
             return View(await _context.User.ToListAsync());
         }
 
+        
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -54,7 +56,7 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Email,SelfProjects,SubProjects,CommentsCount,PaymentCount,GeneralDonate,SuccesProjectsCount,Role,Language")] User user)
+        public async Task<IActionResult> Create([Bind("ID,Region")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +88,7 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Email,SelfProjects,SubProjects,CommentsCount,PaymentCount,GeneralDonate,SuccesProjectsCount,Role,Language")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Region")] User user)
         {
             if (id != user.ID)
             {

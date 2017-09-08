@@ -13,31 +13,7 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Email)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SelfProjects)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SubProjects)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CommentsCount)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PaymentCount)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.GeneralDonate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SuccesProjectsCount)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Role)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Language)
+                    @Html.DisplayNameFor(model => model.Region)
                 </th>
             <th></th>
         </tr>
@@ -46,31 +22,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SelfProjects)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubProjects)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CommentsCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GeneralDonate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SuccesProjectsCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Role)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Language)
+                @Html.DisplayFor(modelItem => item.Region)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

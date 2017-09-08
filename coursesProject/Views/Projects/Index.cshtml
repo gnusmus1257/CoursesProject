@@ -13,31 +13,19 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.UserID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
+                    @Html.DisplayNameFor(model => model.NameProject)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Date)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FinancialTarget)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DonateCount)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PaymentCount)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Status)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Category)
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Raiting)
                 </th>
             <th></th>
         </tr>
@@ -46,31 +34,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.UserID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.NameProject)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FinancialTarget)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DonateCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentCount)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category)
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Raiting)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
