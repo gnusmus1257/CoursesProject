@@ -18,6 +18,7 @@ namespace coursesProject.Models
         public string Status { get; set; }
         [MaxLength(500)]
         public string Description { get; set; }
+        public byte[] Avatar { get; set; }
         public Category Category { get; set; }
         public ICollection<Comment> Comment { get; set; }
         public double Raiting { get; set; }

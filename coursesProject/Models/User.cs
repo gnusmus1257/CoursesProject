@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace coursesProject.Models
 {
@@ -11,10 +12,12 @@ namespace coursesProject.Models
         public int ID { get; set; }
         [Required]
         public ApplicationUser IdentityUser { get; set; }
-        public ICollection<MedalRelation> Medal { get; set; }                        
-        public string Region { get; set; }       
+        public ICollection<MedalRelation> Medal { get; set; }
+        public string Region { get; set; }
         public ICollection<Statistic> Stats { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } // ПРОВЕРЕН, ЖДЕТ ПРОВЕРКИ, НЕ ПРОВЕРЕН
+        public byte[] Avatar { get; set; }
+        public byte[] PasportScan { get; set; }
     }
 
 
@@ -31,7 +34,6 @@ namespace coursesProject.Models
         [Required]
         public ICollection<User> User { get; set; }
     }
-
 
     public class Statistic
     {
