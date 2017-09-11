@@ -15,7 +15,7 @@ namespace coursesProject.Models
         public ICollection<MedalRelation> Medal { get; set; }
         public string Region { get; set; }
         public ICollection<Statistic> Stats { get; set; }
-        public string Status { get; set; } // ПРОВЕРЕН, ЖДЕТ ПРОВЕРКИ, НЕ ПРОВЕРЕН
+        public string Status { get; set; } // ПРОВЕРЕН (verified), ЖДЕТ ПРОВЕРКИ(applied), НЕ ПРОВЕРЕН
         public byte[] Avatar { get; set; }
         public byte[] PasportScan { get; set; }
     }

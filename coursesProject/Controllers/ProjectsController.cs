@@ -97,8 +97,20 @@ namespace coursesProject.Controllers
         }
 
 
-        // GET: Projects
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "verified,admin,user")]////                                 днаюбкемхе йнлемрю(мюярпнхрэ бундмше дюммше) 
+        [HttpPost, ActionName("AddCommebt")]
+        public async Task<IActionResult> AddComment(int idUser, int idProject, string text)
+        {
+            User user = await _context.User.FirstAsync(x => x.ID == idUser);
+            Project project = await _context.Project.FirstAsync(x => x.ID == idProject);
+            Comment comm = new Comment() { Project = project, Author = user, Context = text, DateCreate = DateTime.Now };
+            project.Comment.Add(comm);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+            // GET: Projects
+            public async Task<IActionResult> Index()
         {
             return View(await _context.Project.ToListAsync());
         }
