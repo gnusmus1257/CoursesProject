@@ -133,14 +133,7 @@ namespace coursesProject.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "verified,admin,user")]////        аюм чгепю ме дндекюм(мюярпнхрэ бундмше дюммше) 
-        [HttpPost, ActionName("AddTopic")]
-        public async Task<IActionResult> BanUser(int idUser)
-        {
-            User user = await _context.User.FirstAsync(x => x.ID == idUser);
-            user.Status = "Ban";
-            return Redirect("Index");
-        }
+        
 
             // GET: Projects
             public async Task<IActionResult> Index()
@@ -178,8 +171,7 @@ namespace coursesProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProject(string nameProject, string descrtiption, DateTime endTime, byte[] avatar, string category, int needMoney, string goal)
-        {
-            
+        {        
                 Project project = (new Project()
                 {
                     NameProject = nameProject,
@@ -197,8 +189,17 @@ namespace coursesProject.Controllers
                 return RedirectToAction("Index");        
         }
 
-        //public async Task<ActionResult> AddGoal
-
+        
+        [Authorize(Roles = "verified,admin,user")]////        днаюбкемхе мнбни жекх(мюярпнхрэ бундмше дюммше) 
+        [HttpPost, ActionName("AddGoal")]
+        public async Task<IActionResult> AddGoal(int needMoney, int idProject, string goal)
+        {
+            Project project = await _context.Project.FirstAsync(x => x.ID == idProject);
+            project.Goals.Add(new Goal() { Project = project, NeedMoney = needMoney, Text = goal });
+            _context.Project.Update(project);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
 
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)

@@ -12,6 +12,8 @@ using Microsoft.Extensions.Options;
 using coursesProject.Models;
 using coursesProject.Models.AccountViewModels;
 using coursesProject.Services;
+using coursesProject.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace coursesProject.Controllers
 {
@@ -31,8 +33,11 @@ namespace coursesProject.Controllers
             IOptions<IdentityCookieOptions> identityCookieOptions,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            ApplicationDbContext context
+            )
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
@@ -40,6 +45,27 @@ namespace coursesProject.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
+        public readonly ApplicationDbContext _context;
+
+
+
+
+
+
+        [Authorize(Roles = "verified,admin,user")]////        БАН ЮЗЕРА (НАСТРОИТЬ ВХОДНЫЕ ДАННЫЕ) 
+        [HttpPost, ActionName("AddTopic")]
+        public async Task<IActionResult> BanUser(int idUser)
+        {
+            User user = await _context.User.FirstAsync(x => x.ID == idUser);
+            user.Status = "Ban";
+            _context.User.Update(user);
+            await _context.SaveChangesAsync();
+            return Redirect("Index");
+        }
+
+
+
+
 
         //
         // GET: /Account/Login
@@ -124,6 +150,10 @@ namespace coursesProject.Controllers
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
+                    _context.User.Add(new Models.User() { IdentityUser = user, Region = "ru", Status = "newUser" });
+                    await _userManager.AddToRoleAsync(user, "admin");
+                    await _context.SaveChangesAsync();
+                    
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);

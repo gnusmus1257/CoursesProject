@@ -17,6 +17,7 @@ namespace coursesProject.Models
         public DateTime DateOfRigister { get; set; }
         public DateTime EndDate { get; set; }
         public string Status { get; set; }
+        public int CollectMoney { get; set; }
         [MaxLength(500)]
         public string Description { get; set; }
         public byte[] Avatar { get; set; }

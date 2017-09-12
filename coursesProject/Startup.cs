@@ -112,9 +112,9 @@ namespace coursesProject
             {
                 await roleManager.CreateAsync(new IdentityRole("user"));
             }
-            if (await roleManager.FindByNameAsync("verified user") == null)
+            if (await roleManager.FindByNameAsync("verified") == null)
             {
-                await roleManager.CreateAsync(new IdentityRole("verified user"));
+                await roleManager.CreateAsync(new IdentityRole("verified"));
             }
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
