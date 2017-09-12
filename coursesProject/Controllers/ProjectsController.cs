@@ -197,7 +197,7 @@ namespace coursesProject.Controllers
                 return RedirectToAction("Index");        
         }
 
-        public async Task<ActionResult> AddGoal
+        //public async Task<ActionResult> AddGoal
 
 
         // GET: Projects/Edit/5
