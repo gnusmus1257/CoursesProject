@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using coursesProject.Data;
 
-namespace coursesProject.Data.Migrations
+namespace coursesProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170912062847_CreateTables")]
+    partial class CreateTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -163,6 +164,26 @@ namespace coursesProject.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Project");
+                });
+
+            modelBuilder.Entity("coursesProject.Models.Rating", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("ProjectID");
+
+                    b.Property<int?>("UserID");
+
+                    b.Property<int>("rating");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProjectID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Rating");
                 });
 
             modelBuilder.Entity("coursesProject.Models.Statistic", b =>
@@ -401,6 +422,17 @@ namespace coursesProject.Data.Migrations
                     b.HasOne("coursesProject.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId");
+                });
+
+            modelBuilder.Entity("coursesProject.Models.Rating", b =>
+                {
+                    b.HasOne("coursesProject.Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectID");
+
+                    b.HasOne("coursesProject.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("coursesProject.Models.Statistic", b =>

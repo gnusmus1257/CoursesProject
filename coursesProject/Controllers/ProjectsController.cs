@@ -10,6 +10,7 @@ using coursesProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using coursesProject.Service;
 
 namespace coursesProject.Controllers
 {
@@ -21,7 +22,6 @@ namespace coursesProject.Controllers
         {
             _context = context;    
         }
-
 
         [Authorize(Roles = "admin")]
         [HttpPost, ActionName("DeleteUser")]
@@ -41,43 +41,18 @@ namespace coursesProject.Controllers
             return RedirectToAction("Index");
         }
 
-        private byte[] _GetImg (UserViewModel uvm)
-        {
-            byte[] imageData = null;
-            // ЯВХРШБЮЕЛ ОЕПЕДЮММШИ ТЮИК Б ЛЮЯЯХБ АЮИРНБ
-            using (var binaryReader = new BinaryReader(uvm.Avatar.OpenReadStream()))
-            {
-                imageData = binaryReader.ReadBytes((int)uvm.Avatar.Length);
-            }
-            return imageData;
-        }
-
-       
-        private List<User> _UsersSort (string Sort)
-        {
-            List<User> Users = new List<Models.User>();
-            foreach (var item in _context.User)
-            {
-                if (item.Status == Sort)//                      еякх опнбепеммши = verified   еякх ондюкх гюъбйс = Applied
-                {
-                    Users.Add(item);
-                }
-            }
-            return Users;
-        }
-
 
         [Authorize(Roles = "admin")]////                                опнбепеммше онкэгнбюрекх  (бепмер вюярхвмне опедярюбкемхе)
-        public async Task<IActionResult> verifiedUsers()
+        public IActionResult verifiedUsers()
         {           
-            return PartialView(_UsersSort("verified"));
+            return PartialView( "verified".UsersSort(_context));
         }
 
 
         [Authorize(Roles = "admin")]////                                онкэгнбюрекх ондюбьхе гюъбйх (бепмер вюярхвмне опедярюбкемхе)
-        public async Task<IActionResult> AppliedUsers()
+        public IActionResult AppliedUsers()
         {
-            return PartialView(_UsersSort("Applied"));
+            return PartialView("Applied".UsersSort(_context));
         }
 
 
@@ -88,7 +63,7 @@ namespace coursesProject.Controllers
             User person =await _context.User.FirstAsync(x => x.ID == pvm.ID);
             if (pvm.Avatar != null)
             {
-                person.PasportScan = _GetImg(pvm);
+                person.PasportScan = pvm.GetImg();
             }
             _context.User.Update(person);
             _context.SaveChanges();
@@ -97,8 +72,8 @@ namespace coursesProject.Controllers
         }
 
 
-        [Authorize(Roles = "verified,admin,user")]////                                 днаюбкемхе йнлемрю(мюярпнхрэ бундмше дюммше) 
-        [HttpPost, ActionName("AddCommebt")]
+        [Authorize(Roles = "verified,admin,user")]////        днаюбкемхе йнлемрю(мюярпнхрэ бундмше дюммше) 
+        [HttpPost, ActionName("AddComment")]
         public async Task<IActionResult> AddComment(int idUser, int idProject, string text)
         {
             User user = await _context.User.FirstAsync(x => x.ID == idUser);
@@ -107,6 +82,64 @@ namespace coursesProject.Controllers
             project.Comment.Add(comm);
             _context.SaveChanges();
             return Ok();
+        }
+
+
+        [Authorize(Roles = "verified,admin,user")]////        днаюбкемхе мнбнярх(мюярпнхрэ бундмше дюммше) 
+        [HttpPost, ActionName("AddTopic")]
+        public async Task<IActionResult> AddTopic(string Topic, int idProject)
+        {
+            Project project = await _context.Project.FirstAsync(x => x.ID == idProject);
+            New topic = new New() { Project = project, Text = Topic };
+            project.News.Add(topic);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+
+
+        [Authorize(Roles = "verified,admin,user")]////        днаюбкемхе ондохыхйю(мюярпнхрэ бундмше дюммше) 
+        [HttpPost, ActionName("AddSubscriber")]
+        public async Task<IActionResult> AddSubscriber(int idUser, int idProject)
+        {
+            User user = await _context.User.FirstAsync(x => x.ID == idUser);
+            Project project = await _context.Project.FirstAsync(x => x.ID == idProject);
+            _context.Subscriber.Add(new Subscriber() { Project = project, User = user });
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [Authorize(Roles = "verified,admin,user")]////        сдюкемхе ондохыхйю(мюярпнхрэ бундмше дюммше) 
+        [HttpPost, ActionName("RemoveSubscriber")]
+        public async Task<IActionResult> RemoveSubscriber(int idUser, int idProject)
+        {
+            User user = await _context.User.FirstAsync(x => x.ID == idUser);
+            Project project = await _context.Project.FirstAsync(x => x.ID == idProject);
+            Subscriber sub = await _context.Subscriber.FirstAsync(x => x.User == user && x.Project == project);
+            _context.Subscriber.Remove(sub);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [Authorize(Roles = "verified,admin,user")]////        днаюбкемхе пеирхмцю(мюярпнхрэ бундмше дюммше) 
+        [HttpPost, ActionName("AddRating")]
+        public async Task<IActionResult> AddRating(int idUser, int idProject, int Rating)
+        {
+            User user = await _context.User.FirstAsync(x => x.ID == idUser);
+            Project project = await _context.Project.FirstAsync(x => x.ID == idProject);
+            Rating rating = new Rating() { Project = project, User = user,  rating=Rating};
+            _context.Rating.Add(rating);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [Authorize(Roles = "verified,admin,user")]////        аюм чгепю ме дндекюм(мюярпнхрэ бундмше дюммше) 
+        [HttpPost, ActionName("AddTopic")]
+        public async Task<IActionResult> BanUser(int idUser)
+        {
+            User user = await _context.User.FirstAsync(x => x.ID == idUser);
+            user.Status = "Ban";
+            return Redirect("Index");
         }
 
             // GET: Projects
@@ -144,16 +177,28 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,NameProject,Date,Status,Description,Raiting")] Project project)
+        public async Task<IActionResult> CreateProject(string nameProject, string descrtiption, DateTime endTime, byte[] avatar, string category, int needMoney, string goal)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(project);
+            
+                Project project = (new Project()
+                {
+                    NameProject = nameProject,
+                    Status = "newUser",
+                    Avatar = avatar,
+                    Category = await _context.Category.FirstAsync(x => x.Name == category),
+                    Athor = await _context.User.FirstAsync(x => x.IdentityUser == User.Identity),
+                    DateOfRigister = DateTime.Now, EndDate = endTime,
+                    Description = descrtiption,
+                    Raiting = 0
+                });
+                project.Goals.Add(new Goal() { Project = project, NeedMoney = needMoney, Text = goal });
+                _context.Project.Add(project);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(project);
+                return RedirectToAction("Index");        
         }
+
+        public async Task<ActionResult> AddGoal
+
 
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)

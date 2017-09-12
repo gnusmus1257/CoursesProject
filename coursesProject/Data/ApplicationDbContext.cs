@@ -24,7 +24,9 @@ namespace coursesProject.Data
         }
 
         public DbSet<coursesProject.Models.User> User { get; set; }
-
+        public DbSet<coursesProject.Models.Rating> Rating { get; set; }
         public DbSet<coursesProject.Models.Project> Project { get; set; }
+        public DbSet<coursesProject.Models.Category> Category { get; set; }
+        public DbSet<coursesProject.Models.Subscriber> Subscriber { get; set; }
     }
 }

@@ -14,7 +14,8 @@ namespace coursesProject.Models
         [Required]
         public User Athor { get; set; }        
         public string NameProject { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime DateOfRigister { get; set; }
+        public DateTime EndDate { get; set; }
         public string Status { get; set; }
         [MaxLength(500)]
         public string Description { get; set; }
@@ -38,7 +39,13 @@ namespace coursesProject.Models
         }
     }
 
-
+    public class Rating
+    {
+        public int ID { get; set; }
+        public Project Project { get; set; }
+        public User User { get; set; }
+        public int rating { get; set; }
+    }
 
     public class Comment
     {
