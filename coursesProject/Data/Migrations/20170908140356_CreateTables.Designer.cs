@@ -8,9 +8,10 @@ using coursesProject.Data;
 namespace coursesProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170908140356_CreateTables")]
+    partial class CreateTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -141,8 +142,6 @@ namespace coursesProject.Data.Migrations
 
                     b.Property<int>("AthorID");
 
-                    b.Property<byte[]>("Avatar");
-
                     b.Property<int?>("CategoryId");
 
                     b.Property<DateTime>("Date");
@@ -238,12 +237,8 @@ namespace coursesProject.Data.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Avatar");
-
                     b.Property<string>("IdentityUserId")
                         .IsRequired();
-
-                    b.Property<byte[]>("PasportScan");
 
                     b.Property<string>("Region");
 
