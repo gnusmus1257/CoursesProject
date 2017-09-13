@@ -14,6 +14,7 @@ using coursesProject.Models.AccountViewModels;
 using coursesProject.Services;
 using coursesProject.Data;
 using Microsoft.EntityFrameworkCore;
+using coursesProject.Helpers;
 
 namespace coursesProject.Controllers
 {
@@ -52,17 +53,7 @@ namespace coursesProject.Controllers
 
 
 
-        [Authorize(Roles = "verified,admin,user")]////        БАН ЮЗЕРА (НАСТРОИТЬ ВХОДНЫЕ ДАННЫЕ) 
-        [HttpPost, ActionName("AddTopic")]
-        public async Task<IActionResult> BanUser(int idUser)
-        {
-            User user = await _context.User.FirstAsync(x => x.ID == idUser);
-            user.Status = "Ban";
-            _context.User.Update(user);
-            await _context.SaveChangesAsync();
-            return Redirect("Index");
-        }
-
+        
 
 
 
@@ -151,9 +142,8 @@ namespace coursesProject.Controllers
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     _context.User.Add(new Models.User() { IdentityUser = user, Region = "ru", Status = "newUser" });
-                    await _userManager.AddToRoleAsync(user, "admin");
-                    await _context.SaveChangesAsync();
-                    
+                    await _userManager.AddToRoleAsync(user, "user");
+                    await _context.SaveChangesAsync();                    
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
