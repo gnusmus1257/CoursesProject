@@ -8,9 +8,10 @@ using coursesProject.Data;
 namespace coursesProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170915171825_ForIndexProject")]
+    partial class ForIndexProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -154,11 +155,11 @@ namespace coursesProject.Migrations
 
                     b.Property<DateTime>("EndDate");
 
+                    b.Property<string>("MinDescription");
+
                     b.Property<string>("NameProject");
 
                     b.Property<double>("Raiting");
-
-                    b.Property<string>("ShortDescription");
 
                     b.Property<string>("Status");
 
@@ -266,16 +267,12 @@ namespace coursesProject.Migrations
 
                     b.Property<byte[]>("Avatar");
 
-                    b.Property<string>("CommentForVerified");
-
                     b.Property<string>("IdentityUserId")
                         .IsRequired();
 
                     b.Property<bool>("IsBan");
 
                     b.Property<byte[]>("PasportScan");
-
-                    b.Property<string>("PersonalInfoForVerified");
 
                     b.Property<string>("Region");
 

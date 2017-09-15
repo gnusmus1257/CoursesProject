@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using coursesProject.Service;
 using coursesProject.Helpers;
+using coursesProject.Models.ProjectViewModels;
 
 namespace coursesProject.Controllers
 {
@@ -28,7 +29,15 @@ namespace coursesProject.Controllers
             // GET: Projects
             public async Task<IActionResult> Index()
         {
-            return View(await _context.Project.ToListAsync());
+            List<Project> Projects = await _context.Project.ToListAsync();
+            List<MinProjectViewModel> MinModels = new List<MinProjectViewModel>();
+            for (int i = 0; i < Projects.Count; i++)
+            {
+                MinModels.Add(new MinProjectViewModel() { Avatar=Projects[i].Avatar, Category= Projects[i].Category,Raiting= Projects[i].Raiting,Status= Projects[i].Status,
+                    CollectMoney = Projects[i].CollectMoney, EndDate= Projects[i].EndDate,MinDescription = Projects[i].ShortDescription,NameProject= Projects[i].NameProject,
+                });
+            }
+            return View(MinModels);
         }
 
         // GET: Projects/Details/5
@@ -49,10 +58,34 @@ namespace coursesProject.Controllers
             return View();
         }
 
+        [HttpPost]
+        //[Authorize(Roles ="verified,admin,user")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProject(CreateProjectViewModel CreateModel)
+        {
+            Project project = (new Project()
+            {
+                NameProject = CreateModel.nameProject,
+                Status = "newUser",
+                Avatar = CreateModel.GetImg(),
+                Category = await _context.Category.FirstAsync(x => x.Name == CreateModel.Category),
+                Athor = await _context.User.FirstAsync(x => x.IdentityUser == User.Identity),
+                DateOfRigister = DateTime.Now,
+                EndDate = CreateModel.EndTime,
+                Description = CreateModel.Descrtiption,
+                Raiting = 0,
+                ShortDescription= CreateModel.ShortDescription
+            });
+            project.Goals.Add(new Goal() { Project = project, NeedMoney = CreateModel.NeedMoney, Text = CreateModel.Goal });
+            _context.Project.Add(project);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
         // POST: Projects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        
+
 
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)

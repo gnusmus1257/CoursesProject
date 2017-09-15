@@ -1,4 +1,6 @@
 ﻿using coursesProject.Models;
+using coursesProject.Models.ProjectViewModels;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +11,17 @@ namespace coursesProject.Service
 {
     public static class ImgToByte
     {
-        public static byte[] GetImg(this UserViewModel uvm)
+        public static byte[] GetImg(this UserViewModel uvm, IFormFile img)
+        {
+            byte[] imageData = null;
+            // считываем переданный файл в массив байтов
+            using (var binaryReader = new BinaryReader(img.OpenReadStream()))
+            {
+                imageData = binaryReader.ReadBytes((int)img.Length);
+            }
+            return imageData;
+        }
+        public static byte[] GetImg(this CreateProjectViewModel uvm)
         {
             byte[] imageData = null;
             // считываем переданный файл в массив байтов
@@ -19,5 +31,6 @@ namespace coursesProject.Service
             }
             return imageData;
         }
+
     }
 }

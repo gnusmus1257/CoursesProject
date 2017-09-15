@@ -64,16 +64,23 @@ namespace coursesProject.Controllers.Roles
         }
 
 
-
-
+        [HttpGet]
+        [Authorize(Roles = "user")]////                                 ДОБАВЛЕНИЕ СКАНА ПАСПОРТА(нужно добавить событие)
+        public  IActionResult PassportScan()
+        {
+            return View();
+        }
+        
         [Authorize(Roles = "user")]////                                 ДОБАВЛЕНИЕ СКАНА ПАСПОРТА(нужно добавить событие)
         [HttpPost, ActionName("PassportScan")]
-        public async Task<IActionResult> PassportScan(UserViewModel pvm)
+        public async Task<IActionResult> PassportScanLoad(UserViewModel pvm)
         {
             User person = await _context.User.FirstAsync(x => x.ID == pvm.ID);
             if (pvm.Avatar != null)
             {
-                person.PasportScan = pvm.GetImg();
+                person.PasportScan = pvm.GetImg(pvm.PasportScan);
+                person.CommentForVerified = pvm.Comment;
+                person.PersonalInfoForVerified = pvm.PersonalInfo;
             }
             _context.User.Update(person);
             _context.SaveChanges();

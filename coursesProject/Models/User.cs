@@ -19,6 +19,8 @@ namespace coursesProject.Models
         public bool IsBan { get; set; }
         public byte[] Avatar { get; set; }
         public byte[] PasportScan { get; set; }
+        public string PersonalInfoForVerified { get; set; }
+        public string CommentForVerified { get; set; }
     }
 
 

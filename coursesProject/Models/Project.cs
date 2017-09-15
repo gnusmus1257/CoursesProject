@@ -20,6 +20,7 @@ namespace coursesProject.Models
         public int CollectMoney { get; set; }
         [MaxLength(500)]
         public string Description { get; set; }
+        public string ShortDescription { get; set; }
         public byte[] Avatar { get; set; }
         public Category Category { get; set; }
         public ICollection<Comment> Comment { get; set; }

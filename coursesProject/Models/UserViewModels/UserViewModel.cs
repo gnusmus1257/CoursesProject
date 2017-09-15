@@ -11,5 +11,7 @@ namespace coursesProject.Models
         public int ID { get; set; }
         public IFormFile Avatar { get; set; }
         public IFormFile PasportScan { get; set; }
+        public string PersonalInfo { get; set; }
+        public string Comment { get; set; }
     }
 }
