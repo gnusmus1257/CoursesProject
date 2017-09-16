@@ -11,14 +11,11 @@ namespace coursesProject.Service
 {
     public static class ImgToByte
     {
-        public static byte[] GetImg(this UserViewModel uvm, IFormFile img)
+        public static byte[] GetImg( this IFormFile img)
         {
             byte[] imageData = null;
-            // считываем переданный файл в массив байтов
-            using (var binaryReader = new BinaryReader(img.OpenReadStream()))
-            {
-                imageData = binaryReader.ReadBytes((int)img.Length);
-            }
+            var binaryReader = new BinaryReader(img.OpenReadStream());
+            imageData = binaryReader.ReadBytes((int)img.Length);
             return imageData;
         }
         public static byte[] GetImg(this CreateProjectViewModel uvm)

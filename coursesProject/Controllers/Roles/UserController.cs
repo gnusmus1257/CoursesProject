@@ -11,7 +11,7 @@ using coursesProject.Service;
 
 namespace coursesProject.Controllers.Roles
 {
-    [Authorize(Roles = "user")]
+    //[Authorize]//(Roles = "user")
     public class UserController : Controller
     {
         public readonly ApplicationDbContext _context;
@@ -65,20 +65,26 @@ namespace coursesProject.Controllers.Roles
 
 
         [HttpGet]
-        [Authorize(Roles = "user")]////                                 ДОБАВЛЕНИЕ СКАНА ПАСПОРТА(нужно добавить событие)
+        //[Authorize(Roles = "user")]////                                 ДОБАВЛЕНИЕ СКАНА ПАСПОРТА(нужно добавить событие)
         public  IActionResult PassportScan()
         {
             return View();
         }
         
-        [Authorize(Roles = "user")]////                                 ДОБАВЛЕНИЕ СКАНА ПАСПОРТА(нужно добавить событие)
+       // [Authorize]////   (Roles = "user")                              ДОБАВЛЕНИЕ СКАНА ПАСПОРТА(нужно добавить событие)
         [HttpPost, ActionName("PassportScan")]
         public async Task<IActionResult> PassportScanLoad(UserViewModel pvm)
         {
-            User person = await _context.User.FirstAsync(x => x.ID == pvm.ID);
-            if (pvm.Avatar != null)
+            
+            User person = await _context.User.FirstAsync(x => x.IdentityUser.UserName == User.Identity.Name);
+            if (person.PasportScan!=null)
             {
-                person.PasportScan = pvm.GetImg(pvm.PasportScan);
+                ViewBag.eror = "you have already downloaded the scan of your passport";
+                return View();
+            }
+            if (pvm.PasportScan != null)
+            {
+                person.PasportScan = pvm.PasportScan.GetImg();
                 person.CommentForVerified = pvm.Comment;
                 person.PersonalInfoForVerified = pvm.PersonalInfo;
             }
@@ -104,7 +110,13 @@ namespace coursesProject.Controllers.Roles
 
         public IActionResult Index()
         {
-            return View();
+            User person =  _context.User.First(x => x.IdentityUser.UserName == User.Identity.Name);
+            return View(person);
+        }
+
+        public string LoadImage(byte[] photo)
+        {
+            return "data:image/jpg;base64," + Convert.ToBase64String(photo);
         }
     }
 }
