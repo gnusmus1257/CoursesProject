@@ -1,0 +1,120 @@
+@model IEnumerable<coursesProject.Models.UserViewModel>
+
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<h2>Admin</h2>
+
+
+
+<div class="btn-group open">
+    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Sort <span class="caret"></span></button> <p></p>
+    <ul class="dropdown-menu">
+        <li><a id="SortByVerified">Verified users</a></li>
+        <li><a id="SortByApplied">Applied users</li>
+        <li class="divider"></li>
+        <li><a id="SortAll">All</a></li>
+    </ul>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsBanned)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PersonalInfo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Comment)
+                </th>
+            <th>
+                <text class="text-info"> delete/ban</text>
+            </th>
+            <th>
+                <button id="Ban" class="btn btn-default"> Ban</button>
+            </th>
+            <th>
+                <button id="Del" class="btn btn-default"> Delete</button>
+            </th>
+            <th>
+                <button id="Verified" class="btn btn-default"> Verified</button>
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody id="result">
+
+        
+
+    </tbody>
+</table>
+<text class="text-danger">@ViewBag.eror</text>
+    <script>
+
+
+        $('.user-row').click(function () {
+            $('.user-row').removeClass('active');
+            $(this).addClass('active');
+        });
+
+
+        $('#Del').click(function () {
+            var temp = $('.active .UserID').val();
+            $.post('/UserModels/Delete/' + temp)
+            location.reload();
+        });
+
+
+        $('#Ban').click(function () {
+
+            var temp = $('.active .UserID').val();
+            $.post('/UserModels/Ban/' + temp);
+            close();
+            $.post('/Account/BanC/' + temp);
+            //location.reload();
+        });
+
+
+        $('#Verified').click(function () {
+
+            var temp = $('.active .UserID').val();
+            if (temp) {
+                open('/Admin/Verified/' + temp, null, null, true);
+                //close();
+            } else
+            { alert('select user'); }
+
+
+            //location.reload();
+        });
+
+        $('#SortByApplied').click(ajaxLoad("applied"));
+        $('#SortByVerified').click(ajaxLoad('verified'));
+        $('#SortAll').click(ajaxLoad('all'));
+
+        function ajaxLoad ( param) {
+            $.ajax({
+                url: '/Admin/IndexSorted',             // указываем URL и
+                data: param,
+                dataType: "html",                     // тип загружаемых данных
+                success: function (data, textStatus) { // вешаем свой обработчик на функцию success
+                    $("#result").append(data);
+                }
+            }
+            );
+        }
+
+        
+
+
+    </script>

@@ -9,10 +9,14 @@ namespace coursesProject.Helpers
 {
     public static class SortByState
     {
-        public static List<User> UsersSort(this string Sort, ApplicationDbContext context)
+        public static List<UserViewModel> UsersSort(this  List<UserViewModel> users, string Sort)
         {
-            List<User> Users = new List<Models.User>();
-            foreach (var item in context.User)
+            List<UserViewModel> Users = new List<UserViewModel>();
+            if (Sort=="all")
+            {
+                return users;
+            }
+            foreach (var item in users)
             {
                 if (item.Status == Sort)//                      ЕСЛИ ПРОВЕРЕННЫЙ = verified   ЕСЛИ ПОДАЛИ ЗАЯВКУ = Applied
                 {

@@ -1,0 +1,135 @@
+@model coursesProject.Models.UserViewModel
+
+@{
+    ViewData["Title"] = "Verified";
+}
+
+<h2>@Html.DisplayFor(model => model.Email)</h2>
+
+
+<div class="pager">
+    <div class="row">
+        <div class="col-md-4">
+            <hr />
+            @Html.DisplayNameFor(model => model.Avatar)
+            @if (Model.AvatarByte != null)
+            {
+                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.AvatarByte))" />
+            }
+
+            @*@if (Model.PasportScan != null)
+                {
+                    <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.PasportScan))" />
+                }*@
+        </div>
+        <div class="col-md-4">
+            <hr />
+            @Html.DisplayNameFor(model => model.PasportScan)
+            @*@if (Model.Avatar != null)
+            {
+                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.Avatar))" />
+            }*@
+
+            @if (Model.PasportScanByte != null)
+            {
+                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.PasportScanByte))" />
+            }
+        </div>
+        <div class="col-md-4">
+            <hr />
+            <div class="text-capitalize">
+
+                @Html.DisplayNameFor(model => model.Status)
+
+                @Html.DisplayFor(model => model.Status)
+                <br /><br />
+                @Html.DisplayNameFor(model => model.IsBanned)
+
+                @Html.DisplayFor(model => model.IsBanned)
+                <br /><br />
+            </div>
+            <hr />
+            <button id="Verified" class="btn btn-default"> Confirmed verification</button><br /><br />
+            <button id="UnVerified" class="btn btn-default"> Not confirmed verification</button>
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#Verified').click(function () {
+
+        var temp = '@Model.User';
+        open('/Admin/VerifiedConfirmed/' + temp);
+        close();
+        //location.reload();
+    });
+
+    $('#UnVerified').click(function () {
+
+        var temp = '@Model.User';
+        open('/Admin/VerifiedUnConfirmed/' + temp);
+        close();
+        //location.reload();
+    });
+</script>
+
+
+
+@*<div>
+    <h4>@Html.DisplayNameFor(model => model.Email)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Region)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Region)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsBan)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsBan)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Avatar)
+        </dt>
+        @if (Model.Avatar != null)
+        {
+            <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.Avatar))" />
+        }
+        <dt>
+            @Html.DisplayNameFor(model => model.PasportScan)
+        </dt>
+        <dd>
+            @if (Model.PasportScan != null)
+             {
+                 <img  src="data:image/jpg;base64,@(Convert.ToBase64String(Model.PasportScan))" />
+             }
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonalInfoForVerified)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PersonalInfoForVerified)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CommentForVerified)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CommentForVerified)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>*@

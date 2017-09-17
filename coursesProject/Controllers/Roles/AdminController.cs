@@ -11,7 +11,7 @@ using coursesProject.Service;
 
 namespace coursesProject.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize]//(Roles = "admin")
     public class AdminController : Controller
     {
         public readonly ApplicationDbContext _context;
@@ -21,14 +21,14 @@ namespace coursesProject.Controllers
             _context = context;
         }
 
-        [Authorize(Roles = "admin")]////        аюм чгепю (мюярпнхрэ бундмше дюммше) 
+        [Authorize]////   (Roles = "admin")     аюм чгепю (мюярпнхрэ бундмше дюммше) 
         [HttpPost, ActionName("LockUsers")]
         public async Task<IActionResult> LockUsers(int[] idUsers)
         {
             List<User> Users = new List<Models.User>();
             for (int i = 0; i < idUsers.Length; i++)
             {
-                Users.Add(UserHelper.GetUserById(idUsers[i], _context));
+                Users.Add(_context.GetUserById(idUsers[i]));
                 Users[i].IsBan = true;
                 _context.User.Update(Users[i]);
             }
@@ -36,14 +36,14 @@ namespace coursesProject.Controllers
             return Redirect("Index");
         }
 
-        [Authorize(Roles = "admin")]////        пюгаюм чгепю (мюярпнхрэ бундмше дюммше) 
+        [Authorize]////   (Roles = "admin")     пюгаюм чгепю (мюярпнхрэ бундмше дюммше) 
         [HttpPost, ActionName("UnlockUsrs")]
         public async Task<IActionResult> UnlockUsers(int[] idUsers)
         {
             List<User> Users = new List<Models.User>();
             for (int i = 0; i < idUsers.Length; i++)
             {
-                Users.Add(UserHelper.GetUserById(idUsers[i], _context));
+                Users.Add(_context.GetUserById(idUsers[i]));
                 Users[i].IsBan = false;
                 _context.User.Update(Users[i]);
             }
@@ -51,7 +51,7 @@ namespace coursesProject.Controllers
             return Redirect("Index");
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize]//(Roles = "admin")                  сдюкемхе онкэгнбюрекъ 
         [HttpPost, ActionName("DeleteUser")]
         public async Task<ActionResult> DeleteUsersAndProjectConfirmed(int? id)
         {
@@ -70,25 +70,66 @@ namespace coursesProject.Controllers
         }
 
 
-        [Authorize(Roles = "admin")]////                                опнбепеммше онкэгнбюрекх  (бепмер вюярхвмне опедярюбкемхе)
-        public IActionResult verifiedUsers()
+        //[Authorize]////      (Roles = "admin")                          опнбепеммше онкэгнбюрекх  (бепмер вюярхвмне опедярюбкемхе)
+        //public IActionResult verifiedUsers()
+        //{
+        //    return PartialView("verified".UsersSort(_context));
+        //}
+
+
+        //[Authorize]////       (Roles = "admin")                         онкэгнбюрекх ондюбьхе гюъбйх (бепмер вюярхвмне опедярюбкемхе)
+        //public IActionResult AppliedUsers()
+        //{
+        //    return PartialView("Applied".UsersSort(_context));
+        //}
+
+
+
+        [HttpGet, ActionName("Verified")]
+        public async Task<ActionResult> Verified (int id)
         {
-            return PartialView("verified".UsersSort(_context));
+            User user = _context.GetUserById(id);
+            UserViewModel uvm = user.UserToVM();
+            return View(uvm);
         }
 
 
-        [Authorize(Roles = "admin")]////                                онкэгнбюрекх ондюбьхе гюъбйх (бепмер вюярхвмне опедярюбкемхе)
-        public IActionResult AppliedUsers()
+        
+        public async Task<ActionResult> VerifiedConfirmed(int id)
         {
-            return PartialView("Applied".UsersSort(_context));
+            User user = _context.User.First(x => x.ID == id);
+            if (user.Status != "applied") return RedirectToAction("Index"); 
+            user.PasportScan = null;
+            user.Status = "verified";
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
 
+        
+        public async Task<ActionResult> VerifiedUnConfirmed(int id)
+        {
+            User user = _context.User.First(x=>x.ID==id);
+            if (user.Status != "applied") return RedirectToAction("Index");
+            user.PasportScan = null;
+            user.Status = "newUser";
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
 
+
+        
 
         public IActionResult Index()
+        {           
+            return View(_context.GetListUVM());
+        }
+
+        public ActionResult IndexSorted(string param)
         {
-            return View();
+            return PartialView(_context.GetListUVM().UsersSort(param));
         }
     }
 }

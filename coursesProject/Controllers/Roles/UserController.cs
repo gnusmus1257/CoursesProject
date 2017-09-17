@@ -11,7 +11,7 @@ using coursesProject.Service;
 
 namespace coursesProject.Controllers.Roles
 {
-    //[Authorize]//(Roles = "user")
+    [Authorize]//(Roles = "user")
     public class UserController : Controller
     {
         public readonly ApplicationDbContext _context;
@@ -71,28 +71,46 @@ namespace coursesProject.Controllers.Roles
             return View();
         }
         
-       // [Authorize]////   (Roles = "user")                              ÄÎÁÀÂËÅÍÈÅ ÑÊÀÍÀ ÏÀÑÏÎĞÒÀ(íóæíî äîáàâèòü ñîáûòèå)
+        [Authorize  ]////    (Roles = "user")                           ÄÎÁÀÂËÅÍÈÅ ÑÊÀÍÀ ÏÀÑÏÎĞÒÀ(íóæíî äîáàâèòü ñîáûòèå)
         [HttpPost, ActionName("PassportScan")]
         public async Task<IActionResult> PassportScanLoad(UserViewModel pvm)
         {
             
             User person = await _context.User.FirstAsync(x => x.IdentityUser.UserName == User.Identity.Name);
-            if (person.PasportScan!=null)
+            if (person.PasportScan!=null )
             {
-                ViewBag.eror = "you have already downloaded the scan of your passport";
+                ViewBag.eror = "you have already downloaded the scan of your passport";               
                 return View();
             }
-            if (pvm.PasportScan != null)
+            if (pvm.PasportScan != null&&person.Status=="newUser")
             {
                 person.PasportScan = pvm.PasportScan.GetImg();
                 person.CommentForVerified = pvm.Comment;
                 person.PersonalInfoForVerified = pvm.PersonalInfo;
+                person.Status = "applied";
             }
             _context.User.Update(person);
             _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
+
+
+        [Authorize]////    (Roles = "user")                           ÄÎÁÀÂËÅÍÈÅ ÀÂÀÒÀĞÀ(íóæíî äîáàâèòü ñîáûòèå)
+        [HttpPost, ActionName("Avatar")]
+        public async Task<IActionResult> AvatarLoad(UserViewModel pvm)
+        {
+
+            User person = await _context.User.FirstAsync(x => x.IdentityUser.UserName == User.Identity.Name);
+            if (pvm.Avatar != null)
+            {
+                person.Avatar = pvm.Avatar.GetImg();
+            }
+            _context.User.Update(person);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
 
 
         [Authorize(Roles = "verified,admin,user")]////        ÄÎÁÀÂËÅÍÈÅ ĞÅÉÒÈÍÃÀ(ÍÀÑÒĞÎÈÒÜ ÂÕÎÄÍÛÅ ÄÀÍÍÛÅ) 
@@ -105,6 +123,7 @@ namespace coursesProject.Controllers.Roles
             _context.Rating.Add(rating);
             await _context.SaveChangesAsync();
             return Ok();
+           
         }
 
 

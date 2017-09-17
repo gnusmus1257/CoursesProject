@@ -21,6 +21,7 @@ namespace coursesProject.Models
         public byte[] PasportScan { get; set; }
         public string PersonalInfoForVerified { get; set; }
         public string CommentForVerified { get; set; }
+        public string Email { get; set; }
     }
 
 

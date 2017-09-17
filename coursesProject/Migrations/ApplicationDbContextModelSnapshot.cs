@@ -268,6 +268,8 @@ namespace coursesProject.Migrations
 
                     b.Property<string>("CommentForVerified");
 
+                    b.Property<string>("Email");
+
                     b.Property<string>("IdentityUserId")
                         .IsRequired();
 
