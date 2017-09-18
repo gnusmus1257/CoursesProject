@@ -22,7 +22,7 @@ namespace coursesProject.Models
         public string Description { get; set; }
         public string ShortDescription { get; set; }
         public byte[] Avatar { get; set; }
-        public Category Category { get; set; }
+        public string Category { get; set; }
         public ICollection<Comment> Comment { get; set; }
         public double Raiting { get; set; }
         public ICollection<Goal> Goals { get; set; }   

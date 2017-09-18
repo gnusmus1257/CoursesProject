@@ -75,7 +75,7 @@ namespace coursesProject.Controllers.Roles
         [HttpPost, ActionName("PassportScan")]
         public async Task<IActionResult> PassportScanLoad(UserViewModel pvm)
         {
-            
+
             User person = await _context.User.FirstAsync(x => x.IdentityUser.UserName == User.Identity.Name);
             if (person.PasportScan!=null )
             {

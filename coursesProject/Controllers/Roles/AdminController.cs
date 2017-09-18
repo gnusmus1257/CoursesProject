@@ -22,49 +22,44 @@ namespace coursesProject.Controllers
         }
 
         [Authorize]////   (Roles = "admin")     ¡¿Õ ﬁ«≈–¿ (Õ¿—“–Œ»“‹ ¬’ŒƒÕ€≈ ƒ¿ÕÕ€≈) 
-        [HttpPost, ActionName("LockUsers")]
-        public async Task<IActionResult> LockUsers(int[] idUsers)
+        //[HttpPost, ActionName("LockUsers")]
+        public async Task<IActionResult> LockUsers(List<int> idUsers)
         {
-            List<User> Users = new List<Models.User>();
-            for (int i = 0; i < idUsers.Length; i++)
+            List<User> Users = new List<User>();
+            for (int i = 0; i < idUsers.Count; i++)
             {
                 Users.Add(_context.GetUserById(idUsers[i]));
                 Users[i].IsBan = true;
                 _context.User.Update(Users[i]);
             }
             await _context.SaveChangesAsync();
-            return Redirect("Index");
+            return RedirectToAction("Index");
         }
 
         [Authorize]////   (Roles = "admin")     –¿«¡¿Õ ﬁ«≈–¿ (Õ¿—“–Œ»“‹ ¬’ŒƒÕ€≈ ƒ¿ÕÕ€≈) 
-        [HttpPost, ActionName("UnlockUsrs")]
-        public async Task<IActionResult> UnlockUsers(int[] idUsers)
+        //[HttpPost, ActionName("UnlockUsrs")]
+        public async Task<IActionResult> UnlockUsers(List<int> idUsers)
         {
             List<User> Users = new List<Models.User>();
-            for (int i = 0; i < idUsers.Length; i++)
+            for (int i = 0; i < idUsers.Count; i++)
             {
                 Users.Add(_context.GetUserById(idUsers[i]));
                 Users[i].IsBan = false;
                 _context.User.Update(Users[i]);
             }
             await _context.SaveChangesAsync();
-            return Redirect("Index");
+            return RedirectToAction("Index");
         }
 
         [Authorize]//(Roles = "admin")                  ”ƒ¿À≈Õ»≈ œŒÀ‹«Œ¬¿“≈Àﬂ 
-        [HttpPost, ActionName("DeleteUser")]
-        public async Task<ActionResult> DeleteUsersAndProjectConfirmed(int? id)
+        //[HttpPost, ActionName("DeleteUser")]
+        public async Task<ActionResult> DeleteUsersAndProjectConfirmed(List<int> idUsers)
         {
-            if (id == null)
+            List<User> users = _context.GetUserListByListID(idUsers);
+            foreach (var item in users)
             {
-                return BadRequest();
-            }
-            User userModel = await _context.User.FindAsync(id);
-            if (userModel == null)
-            {
-                return NotFound();
-            }
-            _context.User.Remove(userModel);
+                _context.User.Remove(item);
+            }   
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
@@ -119,17 +114,17 @@ namespace coursesProject.Controllers
             return RedirectToAction("Index");
         }
 
-
-        
-
-        public IActionResult Index()
-        {           
-            return View(_context.GetListUVM());
-        }
-
-        public ActionResult IndexSorted(string param)
+        [HttpGet]
+        public IActionResult Index(string param = "all")
         {
-            return PartialView(_context.GetListUVM().UsersSort(param));
+            return View(_context.GetListUVM().UsersSort(param));
         }
+
+
+        public IActionResult IndexSorted(string param)
+        {           
+            return View("Index",_context.GetListUVM().UsersSort(param));
+        }
+        
     }
 }

@@ -8,11 +8,11 @@
 
 
 
-<div class="btn-group open">
+<div class="btn-group">
     <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Sort <span class="caret"></span></button> <p></p>
     <ul class="dropdown-menu">
         <li><a id="SortByVerified">Verified users</a></li>
-        <li><a id="SortByApplied">Applied users</li>
+        <li><a id="SortByApplied">Applied users</a></li>
         <li class="divider"></li>
         <li><a id="SortAll">All</a></li>
     </ul>
@@ -44,6 +44,9 @@
                 <button id="Ban" class="btn btn-default"> Ban</button>
             </th>
             <th>
+                <button id="UnLock" class="btn btn-default"> Unlock</button>
+            </th>
+            <th>
                 <button id="Del" class="btn btn-default"> Delete</button>
             </th>
             <th>
@@ -53,7 +56,31 @@
         </tr>
     </thead>
     <tbody id="result">
+        @foreach (var item in Model)
+        {
+            <tr class="user-row">
+                <td>
+                    @Html.DisplayFor(model => item.Email)
+                </td>
 
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @item.IsBanned
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PersonalInfo)
+                </td>
+                @Html.HiddenFor(x => item.User, new { @class = "UserID" })
+                <td>
+                    @Html.DisplayFor(modelItem => item.Comment)
+                </td>
+                <td>
+                    <input type="checkbox" class="checkbox checkbox-inline CheckedUser" value="@item.User"/>
+                </td>
+            </tr>
+        }
         
 
     </tbody>
@@ -62,26 +89,62 @@
     <script>
 
 
+
         $('.user-row').click(function () {
             $('.user-row').removeClass('active');
             $(this).addClass('active');
         });
 
 
+
+
         $('#Del').click(function () {
-            var temp = $('.active .UserID').val();
-            $.post('/UserModels/Delete/' + temp)
-            location.reload();
+            var checkboxes = $('input[type=checkbox]:checked');
+            var temp = "?";
+            for (var i = 0; i < checkboxes.length; i++) {
+                var x = checkboxes[i].value;
+                if (i == 0) {
+                    temp += "idUsers[" + i + "]=" + x;
+                } else
+                    temp += "&idUsers[" + i + "]=" + x;
+
+            }
+            console.log(temp);
+            open('/Admin/DeleteUsersAndProjectConfirmed/' + temp);
+            close();
         });
 
 
         $('#Ban').click(function () {
-
-            var temp = $('.active .UserID').val();
-            $.post('/UserModels/Ban/' + temp);
+            var checkboxes = $('input[type=checkbox]:checked');
+            var temp = "?";
+            for (var i = 0; i < checkboxes.length; i++) {
+                var x = checkboxes[i].value;
+                if (i == 0) {
+                    temp += "idUsers[" + i + "]=" + x;
+                } else
+                    temp += "&idUsers[" + i + "]=" + x;
+                
+            }  
+            console.log(temp);
+            open('/Admin/lockUsers/' + temp);
             close();
-            $.post('/Account/BanC/' + temp);
-            //location.reload();
+        });
+
+        $('#UnLock').click(function () {
+            var checkboxes = $('input[type=checkbox]:checked');
+            var temp = "?";
+            for (var i = 0; i < checkboxes.length; i++) {
+                var x = checkboxes[i].value;
+                if (i == 0) {
+                    temp += "idUsers[" + i + "]=" + x;
+                } else
+                    temp += "&idUsers[" + i + "]=" + x;
+
+            }
+            console.log(temp);
+            open('/Admin/UnlockUsers/' + temp);
+            close();
         });
 
 
@@ -90,7 +153,7 @@
             var temp = $('.active .UserID').val();
             if (temp) {
                 open('/Admin/Verified/' + temp, null, null, true);
-                //close();
+                close();
             } else
             { alert('select user'); }
 
@@ -98,23 +161,16 @@
             //location.reload();
         });
 
-        $('#SortByApplied').click(ajaxLoad("applied"));
-        $('#SortByVerified').click(ajaxLoad('verified'));
-        $('#SortAll').click(ajaxLoad('all'));
-
-        function ajaxLoad ( param) {
-            $.ajax({
-                url: '/Admin/IndexSorted',             // указываем URL и
-                data: param,
-                dataType: "html",                     // тип загружаемых данных
-                success: function (data, textStatus) { // вешаем свой обработчик на функцию success
-                    $("#result").append(data);
-                }
-            }
-            );
-        }
-
-        
-
-
+        $('#SortByVerified').click(function () {
+            open('/Admin/IndexSorted?param=verified');
+            close();
+        });
+        $('#SortByApplied').click(function () {
+            open('/Admin/IndexSorted?param=applied');
+            close();
+        });
+        $('#SortAll').click(function () {
+            open('/Admin/IndexSorted?param=all');
+            close();
+        });
     </script>

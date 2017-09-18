@@ -33,9 +33,7 @@ namespace coursesProject.Controllers
             List<MinProjectViewModel> MinModels = new List<MinProjectViewModel>();
             for (int i = 0; i < Projects.Count; i++)
             {
-                MinModels.Add(new MinProjectViewModel() { Avatar=Projects[i].Avatar, Category= Projects[i].Category,Raiting= Projects[i].Raiting,Status= Projects[i].Status,
-                    CollectMoney = Projects[i].CollectMoney, EndDate= Projects[i].EndDate,MinDescription = Projects[i].ShortDescription,NameProject= Projects[i].NameProject,
-                });
+                MinModels.Add(Projects[i].ProjectToMVM());
             }
             return View(MinModels);
         }
@@ -44,7 +42,7 @@ namespace coursesProject.Controllers
         public async Task<IActionResult> Details(int id)
         {
 
-            var project = ProjectHelper.GetProjectById(id,_context);
+            var project =_context.GetProjectById(id);
             if (project == null)
             {
                 return NotFound();
@@ -63,19 +61,18 @@ namespace coursesProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProject(CreateProjectViewModel CreateModel)
         {
-            Project project = (new Project()
-            {
-                NameProject = CreateModel.nameProject,
-                Status = "newUser",
-                Avatar = CreateModel.GetImg(),
-                Category = await _context.Category.FirstAsync(x => x.Name == CreateModel.Category),
-                Athor = await _context.User.FirstAsync(x => x.IdentityUser == User.Identity),
-                DateOfRigister = DateTime.Now,
-                EndDate = CreateModel.EndTime,
-                Description = CreateModel.Descrtiption,
-                Raiting = 0,
-                ShortDescription= CreateModel.ShortDescription
-            });
+            Project project = new Project();
+
+            project.NameProject = CreateModel.nameProject;
+            project.Status = "newUser";
+            project.Avatar = CreateModel.GetImg();
+            //project.Category = await _context.Category.FirstAsync(x => x.Name == CreateModel.Category);
+            project.Athor =_context.GetIdentityUser(User.Identity.Name);
+            project.DateOfRigister = DateTime.Now;
+            project.EndDate = CreateModel.EndTime;
+            project.Description = CreateModel.Descrtiption;
+            project.Raiting = 0;
+            project.ShortDescription = CreateModel.ShortDescription;
             project.Goals.Add(new Goal() { Project = project, NeedMoney = CreateModel.NeedMoney, Text = CreateModel.Goal });
             _context.Project.Add(project);
             await _context.SaveChangesAsync();
@@ -111,7 +108,7 @@ namespace coursesProject.Controllers
         [Authorize(Roles ="verified,admin")]
         public async Task<IActionResult> Edit(int id, string descrtiption, DateTime endTime, byte[] avatar, int needMoney, string goal)
         {
-            Project project = ProjectHelper.GetProjectById(id, _context);
+            Project project =_context.GetProjectById(id);
             if (project == null)
             {
                 return NotFound();

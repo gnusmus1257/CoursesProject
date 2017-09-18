@@ -22,6 +22,10 @@ namespace coursesProject.Models
         public string PersonalInfoForVerified { get; set; }
         public string CommentForVerified { get; set; }
         public string Email { get; set; }
+        public DateTime RegistrationDate { get; set; }
+        public DateTime LastLoginDate { get; set; }
+        public int Rating { get; set; }
+        public int ProjectCount { get; set; }
     }
 
 

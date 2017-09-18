@@ -48,16 +48,6 @@ namespace coursesProject.Controllers
         }
         public readonly ApplicationDbContext _context;
 
-
-
-
-
-
-        
-
-
-
-
         //
         // GET: /Account/Login
         [HttpGet]
@@ -86,7 +76,18 @@ namespace coursesProject.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation(1, "User logged in.");
+                    if (_context.GetUserByEmail(model.Email).IsBan)
+                    {
+                        ViewBag.ban = "You have been blocked";
+                        await _signInManager.SignOutAsync();
+                    }
+                    else
+                    {
+                        User user = _context.GetUserByEmail(model.Email);
+                        user.LastLoginDate = DateTime.Now;
+                        _context.Update(user);
+                        _logger.LogInformation(1, "User logged in.");
+                    }
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -141,7 +142,7 @@ namespace coursesProject.Controllers
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
-                    _context.User.Add(new Models.User() { IdentityUser = user, Region = "en", Status = "newUser" , Email=model.Email});
+                    _context.User.Add(new User() { IdentityUser = user, Region = "en", Status = "newUser" , Email=model.Email});
                     await _userManager.AddToRoleAsync(user, "user");
                     await _context.SaveChangesAsync();                    
                     return RedirectToLocal(returnUrl);

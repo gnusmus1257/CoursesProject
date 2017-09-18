@@ -14,6 +14,22 @@ namespace coursesProject.Helpers
             return user;
         }
 
+        public static User GetUserByEmail(this ApplicationDbContext _context, string Email)
+        {
+            User user = _context.User.FirstOrDefault(x => x.Email == Email);
+            return user;
+        }
+
+        public static List<User> GetUserListByListID(this ApplicationDbContext _context, List<int> idUsers)
+        {
+            List<User> users = new List<User>();
+            foreach (var item in idUsers)
+            {
+                users.Add( _context.User.First(x => x.ID == item));
+            }
+            return users;
+        }
+
         public static UserViewModel UserToVM(this User User)
         {
             UserViewModel uvm = new UserViewModel();
@@ -28,6 +44,12 @@ namespace coursesProject.Helpers
             return uvm;
         }
 
+
+        public static User GetIdentityUser(this ApplicationDbContext _context,string Email)
+        {
+            User user = _context.GetUserByEmail(Email);
+            return user;
+        }
         public static List<UserViewModel> GetListUVM( this ApplicationDbContext _context)
         {
             List<UserViewModel> UsersVM = new List<UserViewModel>();

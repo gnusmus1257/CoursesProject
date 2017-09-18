@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,8 +13,9 @@ namespace coursesProject.Models.ProjectViewModels
         public string Status { get; set; }
         public int CollectMoney { get; set; }
         public string MinDescription { get; set; }
-        public byte[] Avatar { get; set; }
-        public Category Category { get; set; }
+        public byte[] AvatarByte { get; set; }
+        public IFormFile Avatar { get; set; }
+        public string Category { get; set; }
         public double Raiting { get; set; }
     }
 }

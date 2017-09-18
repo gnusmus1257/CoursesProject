@@ -21,27 +21,25 @@ namespace coursesProject.Controllers.Roles
             _context = context;
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateProject(string nameProject, string descrtiption, DateTime endTime, byte[] avatar, string category, int needMoney, string goal)
-        {
-            Project project = (new Project()
-            {
-                NameProject = nameProject,
-                Status = "newUser",
-                Avatar = avatar,
-                Category = await _context.Category.FirstAsync(x => x.Name == category),
-                Athor = await _context.User.FirstAsync(x => x.IdentityUser == User.Identity),
-                DateOfRigister = DateTime.Now,
-                EndDate = endTime,
-                Description = descrtiption,
-                Raiting = 0
-            });
-            project.Goals.Add(new Goal() { Project = project, NeedMoney = needMoney, Text = goal });
-            _context.Project.Add(project);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> CreateProject(string nameProject, string descrtiption, DateTime endTime, byte[] avatar, string category, int needMoney, string goal)
+        //{
+        //    Project project = new Project();
+        //    project.NameProject = nameProject;
+        //    project.Status = "newUser";
+        //    project.Avatar = avatar;
+        //    project.Category = category;
+        //    project.Athor = _context.;
+        //    project.DateOfRigister = DateTime.Now;
+        //    project.EndDate = endTime;
+        //    project.Description = descrtiption;
+        //    project.Raiting = 0;
+        //    project.Goals.Add(new Goal() { Project = project, NeedMoney = needMoney, Text = goal });
+        //    _context.Project.Add(project);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
 
         [Authorize(Roles = "verified,admin")]////        днаюбкемхе мнбнярх(мюярпнхрэ бундмше дюммше) 
         [HttpPost, ActionName("AddTopic")]
