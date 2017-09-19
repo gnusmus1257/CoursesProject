@@ -8,8 +8,8 @@ using coursesProject.Data;
 namespace coursesProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170917171932_AddEmail")]
-    partial class AddEmail
+    [Migration("20170919061108_CrateTables")]
+    partial class CrateTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -144,7 +144,7 @@ namespace coursesProject.Migrations
 
                     b.Property<byte[]>("Avatar");
 
-                    b.Property<int?>("CategoryId");
+                    b.Property<string>("Category");
 
                     b.Property<int>("CollectMoney");
 
@@ -166,8 +166,6 @@ namespace coursesProject.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("AthorID");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Project");
                 });
@@ -276,11 +274,19 @@ namespace coursesProject.Migrations
 
                     b.Property<bool>("IsBan");
 
+                    b.Property<DateTime>("LastLoginDate");
+
                     b.Property<byte[]>("PasportScan");
 
                     b.Property<string>("PersonalInfoForVerified");
 
+                    b.Property<int>("ProjectCount");
+
+                    b.Property<int>("Rating");
+
                     b.Property<string>("Region");
+
+                    b.Property<DateTime>("RegistrationDate");
 
                     b.Property<string>("Status");
 
@@ -432,10 +438,6 @@ namespace coursesProject.Migrations
                         .WithMany()
                         .HasForeignKey("AthorID")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("coursesProject.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("coursesProject.Models.Rating", b =>

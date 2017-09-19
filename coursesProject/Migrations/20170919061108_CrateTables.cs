@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace coursesProject.Migrations
 {
-    public partial class CreateTables : Migration
+    public partial class CrateTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -96,11 +96,16 @@ namespace coursesProject.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Avatar = table.Column<byte[]>(nullable: true),
                     CommentForVerified = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
                     IdentityUserId = table.Column<string>(nullable: false),
                     IsBan = table.Column<bool>(nullable: false),
+                    LastLoginDate = table.Column<DateTime>(nullable: false),
                     PasportScan = table.Column<byte[]>(nullable: true),
                     PersonalInfoForVerified = table.Column<string>(nullable: true),
+                    ProjectCount = table.Column<int>(nullable: false),
+                    Rating = table.Column<int>(nullable: false),
                     Region = table.Column<string>(nullable: true),
+                    RegistrationDate = table.Column<DateTime>(nullable: false),
                     Status = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -208,7 +213,7 @@ namespace coursesProject.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AthorID = table.Column<int>(nullable: false),
                     Avatar = table.Column<byte[]>(nullable: true),
-                    CategoryId = table.Column<int>(nullable: true),
+                    Category = table.Column<string>(nullable: true),
                     CollectMoney = table.Column<int>(nullable: false),
                     DateOfRigister = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
@@ -227,12 +232,6 @@ namespace coursesProject.Migrations
                         principalTable: "User",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Project_Category_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Category",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -442,11 +441,6 @@ namespace coursesProject.Migrations
                 column: "AthorID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Project_CategoryId",
-                table: "Project",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Rating_ProjectID",
                 table: "Rating",
                 column: "ProjectID");
@@ -516,6 +510,9 @@ namespace coursesProject.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Category");
+
+            migrationBuilder.DropTable(
                 name: "Comment");
 
             migrationBuilder.DropTable(
@@ -562,9 +559,6 @@ namespace coursesProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "User");
-
-            migrationBuilder.DropTable(
-                name: "Category");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
