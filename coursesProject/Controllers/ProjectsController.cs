@@ -47,6 +47,7 @@ namespace coursesProject.Controllers
             {
                 return NotFound();
             }
+           // project.updateStatus();                                   œŒ—À≈ ¬ Àﬁ◊»“‹
             return View(project);
         }
 
@@ -62,19 +63,28 @@ namespace coursesProject.Controllers
         public async Task<IActionResult> CreateProject(CreateProjectViewModel CreateModel)
         {
             Project project = new Project();
-
+            User user = _context.GetIdentityUser(User.Identity.Name);
+            user.ProjectCount++;
             project.NameProject = CreateModel.nameProject;
-            project.Status = "newUser";
+            project.Status = "Active";
+            if (CreateModel.Avatar==null)
+            {
+                ViewBag.imgEror = "select file";
+                return View("Create");
+            }
             project.Avatar = CreateModel.GetImg();
-            //project.Category = await _context.Category.FirstAsync(x => x.Name == CreateModel.Category);
+            project.Category = CreateModel.Category;
             project.Athor =_context.GetIdentityUser(User.Identity.Name);
             project.DateOfRigister = DateTime.Now;
             project.EndDate = CreateModel.EndTime;
             project.Description = CreateModel.Descrtiption;
             project.Raiting = 0;
-            project.ShortDescription = CreateModel.ShortDescription;
+            project.AthorEmail = User.Identity.Name;
+            project.ShortDescription =  CreateModel.ShortDescription.GetShortDescrtiption(230);
+            project.NeedMoney = CreateModel.NeedMoney;
             project.Goals.Add(new Goal() { Project = project, NeedMoney = CreateModel.NeedMoney, Text = CreateModel.Goal });
             _context.Project.Add(project);
+            _context.Update(user);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
@@ -142,8 +152,8 @@ namespace coursesProject.Controllers
         }
 
         // POST: Projects/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var project = await _context.Project.SingleOrDefaultAsync(m => m.ID == id);

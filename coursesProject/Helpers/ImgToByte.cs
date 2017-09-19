@@ -21,10 +21,12 @@ namespace coursesProject.Service
         public static byte[] GetImg(this CreateProjectViewModel uvm)
         {
             byte[] imageData = null;
-            // считываем переданный файл в массив байтов
-            using (var binaryReader = new BinaryReader(uvm.Avatar.OpenReadStream()))
+            if (uvm.Avatar!=null)
             {
-                imageData = binaryReader.ReadBytes((int)uvm.Avatar.Length);
+                using (var binaryReader = new BinaryReader(uvm.Avatar.OpenReadStream()))
+                {
+                    imageData = binaryReader.ReadBytes((int)uvm.Avatar.Length);
+                }
             }
             return imageData;
         }

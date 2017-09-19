@@ -28,5 +28,12 @@ namespace coursesProject.Data
         public DbSet<coursesProject.Models.Project> Project { get; set; }
         public DbSet<coursesProject.Models.Category> Category { get; set; }
         public DbSet<coursesProject.Models.Subscriber> Subscriber { get; set; }
+        public DbSet<coursesProject.Models.Goal> Goal { get; set; }
+        public DbSet<coursesProject.Models.Comment> Comment { get; set; }
+        public DbSet<coursesProject.Models.Statistic> Statistic { get; set; }
+        public DbSet<coursesProject.Models.Tag> Tag { get; set; }
+        public DbSet<coursesProject.Models.TagsRelation> TagRelation { get; set; }
+        public DbSet<coursesProject.Models.Medal> Medal { get; set; }
+        public DbSet<coursesProject.Models.MedalRelation> MedalRelation { get; set; }
     }
 }

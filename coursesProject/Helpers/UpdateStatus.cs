@@ -10,7 +10,7 @@ namespace coursesProject.Helpers
     {
         public static Project updateStatus(this Project project )
         {
-            if (GetStartGoal(project)==null){
+            if (project.GetStartGoal()==null){
                 return null;
             }
 
@@ -27,20 +27,6 @@ namespace coursesProject.Helpers
                 return project;
         }
 
-        public static Goal GetStartGoal(this Project project)
-        {
-            List<Goal> Goals = new List<Goal>( project.Goals);
-            int minValue = int.MaxValue;
-            Goal goal = null;
-            for (int i = 0; i < Goals.Count; i++)
-            {
-                if (Goals[i].NeedMoney<minValue)
-                {
-                    minValue = Goals[i].NeedMoney;
-                    goal = Goals[i];
-                }
-            }
-            return goal;
-        }
+        
     }
 }

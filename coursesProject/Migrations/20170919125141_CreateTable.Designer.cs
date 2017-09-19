@@ -8,8 +8,8 @@ using coursesProject.Data;
 namespace coursesProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170919061108_CrateTables")]
-    partial class CrateTables
+    [Migration("20170919125141_CreateTable")]
+    partial class CreateTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

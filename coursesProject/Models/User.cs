@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace coursesProject.Models
 {
@@ -38,16 +39,22 @@ namespace coursesProject.Models
     public class MedalRelation
     {
         public int ID { get; set; }
-        public Medal Medal { get; set; }
-        [Required]
-        public ICollection<User> User { get; set; }
+        public User User { get; set; }
+        [JsonIgnore]
+
+        public ICollection<Medal> Medals { get; set; }
+
+        public MedalRelation()
+        {
+            Medals = new List<Medal>();
+        }
     }
 
     public class Statistic
     {
         public int ID { get; set; }
         public int UserID { get; set; }
-        [Required]
+        [Required]        
         public User User { get; set; }
         public int DonateCount { get; set; }
         public int MoneyDonate { get; set; }

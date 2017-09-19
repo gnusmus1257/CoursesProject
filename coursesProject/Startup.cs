@@ -89,7 +89,7 @@ namespace coursesProject
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Projects}/{action=Index}/{id?}");
             });
 
             DatabaseInitialize(app.ApplicationServices).Wait();

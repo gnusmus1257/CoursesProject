@@ -4,7 +4,6 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -36,18 +35,28 @@
     <div class="row">
 @foreach (var item in Model)
 {
-        <div class="col-md-4">
+        <div class="col-md-4"  padding:10px;">
             <div class="card">
-                <h4>@Html.DisplayFor(model => item.NameProject)</h4> <h4 align="right">@Html.DisplayFor(model => item.Raiting)</h4>
+                <h4><a href="Projects/Details/@item.Project">@Html.DisplayFor(model => item.NameProject)</a> </h4>
                 
                 @if (item.AvatarByte != null)
                 {
-                   <img style="width:100%; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(item.AvatarByte))" />
+                    <a href="Projects/Details/@item.Project"> <img style="width:100%; height:270px; " src="data:image/jpg;base64,@(Convert.ToBase64String(item.AvatarByte))" /></a>
                 }
             </div>
-            <div class="card">
+            <text>@item.Category</text>
+            <div class="card text-justify" style="margin:5px; height:60px">
                 @Html.DisplayFor(model => item.MinDescription)
-                <hr />
+            </div><hr />
+            <text> By @item.Author</text><hr />
+            <div>
+               Collect money @item.CollectMoney <hr />
+                Need money @item.NeedMoney <hr />
+                @if (@item.Goals.Count>=1)
+                {
+                    @item.Goals.ToList()[0].Text
+                }
+                
             </div>
         </div>
  }

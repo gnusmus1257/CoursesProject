@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace coursesProject.Migrations
 {
-    public partial class CrateTables : Migration
+    public partial class CreateTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

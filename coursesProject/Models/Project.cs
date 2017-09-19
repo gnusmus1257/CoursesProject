@@ -12,13 +12,14 @@ namespace coursesProject.Models
     {
         public int ID { get; set; }
         [Required]
-        public User Athor { get; set; }        
+        public User Athor { get; set; }      
+        public string AthorEmail { get; set; }
         public string NameProject { get; set; }
         public DateTime DateOfRigister { get; set; }
         public DateTime EndDate { get; set; }
         public string Status { get; set; }
         public int CollectMoney { get; set; }
-        [MaxLength(500)]
+        public int NeedMoney { get; set; }
         public string Description { get; set; }
         public string ShortDescription { get; set; }
         public byte[] Avatar { get; set; }
