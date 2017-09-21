@@ -58,6 +58,7 @@ namespace coursesProject.Controllers
             List<User> users = _context.GetUserListByListID(idUsers);
             foreach (var item in users)
             {
+                _context.Users.Remove(_context.Users.First(x=>x.UserName==item.Email));
                 _context.User.Remove(item);
             }   
             await _context.SaveChangesAsync();

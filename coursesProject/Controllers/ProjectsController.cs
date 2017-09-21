@@ -33,7 +33,7 @@ namespace coursesProject.Controllers
             List<MinProjectViewModel> MinModels = new List<MinProjectViewModel>();
             for (int i = 0; i < Projects.Count; i++)
             {
-                MinModels.Add(Projects[i].ProjectToMVM());
+                MinModels.Add(Projects[i].ProjectToMVM(User.Identity.Name));
             }
             return View(MinModels);
         }
@@ -47,8 +47,10 @@ namespace coursesProject.Controllers
             {
                 return NotFound();
             }
+            project.Goals=_context.GetListGoals(project);
+            project.Comment = _context.GetListComments(project);
            // project.updateStatus();                                   œŒ—À≈ ¬ Àﬁ◊»“‹
-            return View(project);
+            return View(project.ProjectToDVM(User.Identity.Name));
         }
 
         // GET: Projects/Create
@@ -58,7 +60,7 @@ namespace coursesProject.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles ="verified,admin,user")]
+        [Authorize]//(Roles ="verified,admin,user")
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProject(CreateProjectViewModel CreateModel)
         {
@@ -82,7 +84,9 @@ namespace coursesProject.Controllers
             project.AthorEmail = User.Identity.Name;
             project.ShortDescription =  CreateModel.ShortDescription.GetShortDescrtiption(230);
             project.NeedMoney = CreateModel.NeedMoney;
-            project.Goals.Add(new Goal() { Project = project, NeedMoney = CreateModel.NeedMoney, Text = CreateModel.Goal });
+            Goal FirstGoal = new Goal() { Project = project, NeedMoney = CreateModel.NeedMoney, Text = CreateModel.Goal };
+            _context.Goal.Add(FirstGoal);
+            //project.Goals.Add(FirstGoal);
             _context.Project.Add(project);
             _context.Update(user);
             await _context.SaveChangesAsync();
@@ -92,6 +96,45 @@ namespace coursesProject.Controllers
         // POST: Projects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+
+        [Authorize]//// (Roles = "verified,admin")       ƒŒ¡¿¬À≈Õ»≈ ÕŒ¬Œ… ÷≈À»(Õ¿—“–Œ»“‹ ¬’ŒƒÕ€≈ ƒ¿ÕÕ€≈) 
+        [HttpPost, ActionName("AddGoal")]
+        public async Task<IActionResult> AddGoal(int NeedMoney, int ID, string Goal)
+        {
+            Project project = await _context.Project.FirstAsync(x => x.ID == ID);
+            DetailProjectViewModel ViewModel = project.ProjectToDVM(User.Identity.Name);
+            if (ViewModel.IsAthor!=true)
+            {
+                ViewBag.GoalEror = "eror";
+                return RedirectToAction("Details");
+            }
+            project.Goals.Add(new Goal() { Project = project, NeedMoney = NeedMoney, Text = Goal });
+            _context.Project.Update(project);
+            await _context.SaveChangesAsync();
+            project = await _context.Project.FirstAsync(x => x.ID == ID);
+            project.Goals = _context.GetListGoals(project);
+            ViewModel = project.ProjectToDVM(User.Identity.Name);
+            return View("Details", ViewModel);//return RedirectToRoute("Details",ID);//
+        }
+
+
+
+        [Authorize]////   (Roles = "verified,admin,user")     ƒŒ¡¿¬À≈Õ»≈  ŒÃ≈Õ“¿(Õ¿—“–Œ»“‹ ¬’ŒƒÕ€≈ ƒ¿ÕÕ€≈) 
+        [HttpPost, ActionName("AddComment")]
+        public async Task<IActionResult> AddComment(int ID, string Comment)
+        {
+            User user = _context.GetUserByEmail(User.Identity.Name);
+            Project project = await _context.Project.FirstAsync(x => x.ID == ID);
+            DetailProjectViewModel ViewModel = project.ProjectToDVM(User.Identity.Name);
+            Comment comm = new Comment() { Project = project, Author = user, Context = Comment, DateCreate = DateTime.Now,AuthorEmail= User.Identity.Name };
+            project.Comment.Add(comm);
+            _context.SaveChanges();
+            project = await _context.Project.FirstAsync(x => x.ID == ID);
+            project.Comment = _context.GetListComments(project);
+            ViewModel = project.ProjectToDVM(User.Identity.Name);
+            return View("Details", ViewModel);
+        }
 
 
         // GET: Projects/Edit/5
@@ -107,7 +150,8 @@ namespace coursesProject.Controllers
             {
                 return NotFound();
             }
-            return View(project);
+
+            return View(project.ProjectToEVM());
         }
 
         // POST: Projects/Edit/5
@@ -115,19 +159,25 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles ="verified,admin")]
-        public async Task<IActionResult> Edit(int id, string descrtiption, DateTime endTime, byte[] avatar, int needMoney, string goal)
+        //[Authorize(Roles ="verified,admin")]
+        public async Task<IActionResult> Edit(EditProjectViewModel Project)
         {
-            Project project =_context.GetProjectById(id);
+            Project project =_context.GetProjectById(Project.ID);
             if (project == null)
             {
                 return NotFound();
             }
-            project.Description = descrtiption;
-            project.EndDate = endTime;
-            project.Avatar = avatar;
-            project.GetStartGoal().NeedMoney = needMoney;
-            project.GetStartGoal().Text = goal;
+            project.Description = Project.Description;
+            project.ShortDescription = Project.ShortDescription;
+            project.EndDate = Project.EndDate;
+            if (Project.Avatar == null)
+            {
+                ViewBag.imgEror = "select file";
+                return View();
+            }
+            project.Avatar = Project.Avatar.GetImg() ;
+            project.NeedMoney = Project.NeedMoney;
+            //project.GetStartGoal().Text = goal;           œŒ“ŒÃ ¬ Àﬁ◊»“‹
             _context.Update(project);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");

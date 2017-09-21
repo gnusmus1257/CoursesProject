@@ -11,6 +11,7 @@ namespace coursesProject.Models.ProjectViewModels
         public int Project { get; set; }
         public string NameProject { get; set; }
         public string Author { get; set; }
+        public string IdentityUser { get; set; }
         public DateTime EndDate { get; set; }
         public string Status { get; set; }
         public int CollectMoney { get; set; }

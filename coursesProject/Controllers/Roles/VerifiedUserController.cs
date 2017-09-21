@@ -52,16 +52,7 @@ namespace coursesProject.Controllers.Roles
             return Ok();
         }
 
-        [Authorize(Roles = "verified,admin")]////        днаюбкемхе мнбни жекх(мюярпнхрэ бундмше дюммше) 
-        [HttpPost, ActionName("AddGoal")]
-        public async Task<IActionResult> AddGoal(int needMoney, int idProject, string goal)
-        {
-            Project project = await _context.Project.FirstAsync(x => x.ID == idProject);
-            project.Goals.Add(new Goal() { Project = project, NeedMoney = needMoney, Text = goal });
-            _context.Project.Update(project);
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
+
 
 
 

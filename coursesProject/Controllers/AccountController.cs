@@ -86,6 +86,7 @@ namespace coursesProject.Controllers
                         User user = _context.GetUserByEmail(model.Email);
                         user.LastLoginDate = DateTime.Now;
                         _context.Update(user);
+                        await _context.SaveChangesAsync();
                         _logger.LogInformation(1, "User logged in.");
                     }
                     return RedirectToLocal(returnUrl);
@@ -142,6 +143,7 @@ namespace coursesProject.Controllers
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
+                    
                     _context.User.Add(new User() { IdentityUser = user, Region = "en", Status = "newUser" ,LastLoginDate=DateTime.Now,RegistrationDate=DateTime.Now , Email=model.Email});
                     await _userManager.AddToRoleAsync(user, "user");
                     await _context.SaveChangesAsync();                    

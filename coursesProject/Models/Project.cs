@@ -57,6 +57,7 @@ namespace coursesProject.Models
         [JsonIgnore]
         public Project Project { get; set; }
         public User Author { get; set; }
+        public string AuthorEmail { get; set; }
         public string Context { get; set; }
         public DateTime DateCreate { get; set; }   
     }
