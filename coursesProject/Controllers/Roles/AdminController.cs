@@ -82,7 +82,7 @@ namespace coursesProject.Controllers
 
 
         [HttpGet, ActionName("Verified")]
-        public async Task<ActionResult> Verified (int id)
+        public ActionResult Verified (int id)
         {
             User user = _context.GetUserById(id);
             UserViewModel uvm = user.UserToVM();

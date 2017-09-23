@@ -39,7 +39,7 @@ namespace coursesProject.Controllers
         }
 
         // GET: Projects/Details/5
-        public async Task<IActionResult> Details(int id)
+        public IActionResult Details(int id)
         {
 
             var project =_context.GetProjectById(id);
@@ -47,10 +47,10 @@ namespace coursesProject.Controllers
             {
                 return NotFound();
             }
-            project.Goals=_context.GetListGoals(project);
-            project.Comment = _context.GetListComments(project);
-           // project.updateStatus();                                   оняке бйкчвхрэ
-            return View(project.ProjectToDVM(User.Identity.Name));
+            _context.RemoveAllTagsProject(project);//               сдюкхрэ ярпнйх
+            _context.RemoveAllTags();
+            // project.updateStatus();                                   оняке бйкчвхрэ
+            return View(_context.UpdateLists(id,User.Identity.Name));
         }
 
         // GET: Projects/Create
@@ -98,7 +98,7 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 
 
-        [Authorize]//// (Roles = "verified,admin")       днаюбкемхе мнбни жекх(мюярпнхрэ бундмше дюммше) 
+        [Authorize]//// (Roles = "verified,admin")       днаюбкемхе мнбни жекх
         [HttpPost, ActionName("AddGoal")]
         public async Task<IActionResult> AddGoal(int NeedMoney, int ID, string Goal)
         {
@@ -112,15 +112,12 @@ namespace coursesProject.Controllers
             project.Goals.Add(new Goal() { Project = project, NeedMoney = NeedMoney, Text = Goal });
             _context.Project.Update(project);
             await _context.SaveChangesAsync();
-            project = await _context.Project.FirstAsync(x => x.ID == ID);
-            project.Goals = _context.GetListGoals(project);
-            ViewModel = project.ProjectToDVM(User.Identity.Name);
-            return View("Details", ViewModel);//return RedirectToRoute("Details",ID);//
+            return View("Details", _context.UpdateLists(ID, User.Identity.Name));
         }
 
 
 
-        [Authorize]////   (Roles = "verified,admin,user")     днаюбкемхе йнлемрю(мюярпнхрэ бундмше дюммше) 
+        [Authorize]////   (Roles = "verified,admin,user")     днаюбкемхе йнлемрю 
         [HttpPost, ActionName("AddComment")]
         public async Task<IActionResult> AddComment(int ID, string Comment)
         {
@@ -130,12 +127,23 @@ namespace coursesProject.Controllers
             Comment comm = new Comment() { Project = project, Author = user, Context = Comment, DateCreate = DateTime.Now,AuthorEmail= User.Identity.Name };
             project.Comment.Add(comm);
             _context.SaveChanges();
-            project = await _context.Project.FirstAsync(x => x.ID == ID);
-            project.Comment = _context.GetListComments(project);
-            ViewModel = project.ProjectToDVM(User.Identity.Name);
-            return View("Details", ViewModel);
+            return View("Details", _context.UpdateLists(ID, User.Identity.Name));
         }
 
+
+        [Authorize]////   (Roles = "verified,admin,user")     днаюбкемхе рецю
+        [HttpPost, ActionName("AddTag")]
+        public async Task<IActionResult> AddTag(int ID, string Tag)
+        {
+            User user = _context.GetUserByEmail(User.Identity.Name);
+            Project project = await _context.Project.FirstAsync(x => x.ID == ID);
+            DetailProjectViewModel ViewModel = project.ProjectToDVM(User.Identity.Name);
+            //_context.RemoveAllTagsProject(project);//               сдюкхрэ ярпнйх
+            //_context.RemoveAllTags();
+            project.Tags.Add(_context.IsExistTag(Tag));        
+            _context.SaveChanges();    
+            return View("Details", _context.UpdateLists(ID, User.Identity.Name));
+        }
 
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)

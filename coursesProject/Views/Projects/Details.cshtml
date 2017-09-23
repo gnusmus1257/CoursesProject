@@ -108,7 +108,31 @@
                     @item.AuthorEmail : <label style="text-align:center">@item.Context </label> <label style="text-align:right">@item.DateCreate </label>
                 </p>
             }
+        <p class="text-info">
+            @Model.TagStr
+        </p>
+        @if (Model.IsAthor)
+        {
+            <form asp-action="AddTag" enctype="multipart/form-data">
+                <div class="form-horizontal">
+                    <input type="hidden" asp-for="ID" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Tag</label>
+                        <div class="col-md-10">
+                            <input type="text" name="Tag" class="form-control" />
+                            <span asp-validation-for="Tag" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Add Tag" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
     </div>
     <div class="col-md-2"></div>
                                                                         @*WebMoney PAYMENT*@

@@ -22,11 +22,12 @@ namespace coursesProject.Models.ProjectViewModels
         public string Category { get; set; }
         public string Goal { get; set; }
         public string Comment { get; set; }
+        public string Tag { get; set; }
+        public string TagStr { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public double Raiting { get; set; }
         public ICollection<Goal> Goals { get; set; }
         public ICollection<Subscriber> Subscriber { get; set; }
-        public ICollection<TagsRelation> TagsRelation { get; set; }
         public ICollection<New> News { get; set; }
         public bool IsAthor { get; set; }
 
@@ -35,7 +36,6 @@ namespace coursesProject.Models.ProjectViewModels
             Comments = new List<Comment>();
             Goals = new List<Goal>();
             Subscriber = new List<Subscriber>();
-            TagsRelation = new List<TagsRelation>();
             News = new List<New>();
         }
     }

@@ -65,6 +65,8 @@ namespace coursesProject.Helpers
             DetailProjectVM.CollectMoney = project.CollectMoney;
             DetailProjectVM.Goals = project.Goals;
             DetailProjectVM.Comments = project.Comment;
+
+            DetailProjectVM.TagStr = project.Tags.TagsListToStr();
             if (DetailProjectVM.AthorEmail==IdentityUser)
             {
                 DetailProjectVM.IsAthor = true;
@@ -98,8 +100,25 @@ namespace coursesProject.Helpers
             return temp;
         }
 
+        public static DetailProjectViewModel UpdateLists (this ApplicationDbContext _context, int ID, string Email)
+        {
+            var project =  _context.Project.First(x => x.ID == ID);
+            project.Goals = _context.GetListGoals(project);
+            project.Comment = _context.GetListComments(project);
+            project.Tags = _context.GetListTags(project);
+            var ViewModel = project.ProjectToDVM(Email);
+            return ViewModel;
+        }
 
-
+        public static string TagsListToStr(this ICollection<Tag> tags)
+        {
+            string str = "";
+            foreach (var item in tags)
+            {
+                str += item.Name + " ";
+            }
+            return str;
+        }
 
         //public static Project CVMToProject(this CreateProjectViewModel CreateModel)
         //{
