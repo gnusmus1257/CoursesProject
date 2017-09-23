@@ -8570,15 +8570,15 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Arti\\.nuget\\packages\\": {}
+    "C:\\Users\\Inna\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Arti\\Desktop\\Course\\coursesProject\\coursesProject.csproj",
+      "projectUniqueName": "C:\\Users\\Inna\\Desktop\\mysuperduperproject1\\coursesProject\\coursesProject.csproj",
       "projectName": "coursesProject",
-      "projectPath": "C:\\Users\\Arti\\Desktop\\Course\\coursesProject\\coursesProject.csproj",
-      "outputPath": "C:\\Users\\Arti\\Desktop\\Course\\coursesProject\\obj\\",
+      "projectPath": "C:\\Users\\Inna\\Desktop\\mysuperduperproject1\\coursesProject\\coursesProject.csproj",
+      "outputPath": "C:\\Users\\Inna\\Desktop\\mysuperduperproject1\\coursesProject\\obj\\",
       "projectStyle": "PackageReference",
       "originalTargetFrameworks": [
         "net452"
