@@ -15,10 +15,6 @@ namespace coursesProject.Helpers
             List<MinProjectViewModel> MinModels = new List<MinProjectViewModel>();
             if (Search==""|| Search == null)
             {
-                foreach (var item in projects)
-                {
-                    MinModels.Add(item.ProjectToMVM(Email));
-                }
                 return MinModels;
             }
             foreach (var item in projects)
@@ -46,14 +42,7 @@ namespace coursesProject.Helpers
                     MinModels.Add(item.ProjectToMVM(Email));
                 }
             }
-            if (MinModels.Count!=0)
-            {
-                return MinModels;
-            }
-            else foreach(var item in projects)
-                {
-                MinModels.Add(item.ProjectToMVM(Email));
-            }
+
             return MinModels;
         }
     }

@@ -41,16 +41,7 @@ namespace coursesProject.Controllers.Roles
         //    return RedirectToAction("Index");
         //}
 
-        [Authorize(Roles = "verified,admin")]////        днаюбкемхе мнбнярх(мюярпнхрэ бундмше дюммше) 
-        [HttpPost, ActionName("AddTopic")]
-        public async Task<IActionResult> AddTopic(string Topic, int idProject)
-        {
-            Project project = await _context.Project.FirstAsync(x => x.ID == idProject);
-            New topic = new New() { Project = project, Text = Topic };
-            project.News.Add(topic);
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
+
 
 
 

@@ -65,7 +65,7 @@ namespace coursesProject.Helpers
             DetailProjectVM.CollectMoney = project.CollectMoney;
             DetailProjectVM.Goals = project.Goals;
             DetailProjectVM.Comments = project.Comment;
-
+            DetailProjectVM.News = project.News;
             DetailProjectVM.TagStr = project.Tags.TagsListToStr();
             if (DetailProjectVM.AthorEmail==IdentityUser)
             {
@@ -106,6 +106,7 @@ namespace coursesProject.Helpers
             project.Goals = _context.GetListGoals(project);
             project.Comment = _context.GetListComments(project);
             project.Tags = _context.GetListTags(project);
+            project.News = _context.GetListTopics(project);
             var ViewModel = project.ProjectToDVM(Email);
             return ViewModel;
         }

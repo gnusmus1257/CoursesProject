@@ -34,5 +34,6 @@ namespace coursesProject.Data
         public DbSet<coursesProject.Models.Tag> Tag { get; set; }
         public DbSet<coursesProject.Models.Medal> Medal { get; set; }
         public DbSet<coursesProject.Models.MedalRelation> MedalRelation { get; set; }
+        public DbSet<coursesProject.Models.New> Topic { get; set; }
     }
 }

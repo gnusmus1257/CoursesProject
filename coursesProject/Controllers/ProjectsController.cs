@@ -35,7 +35,11 @@ namespace coursesProject.Controllers
             {
                 MinModels.Add(Projects[i].ProjectToMVM(User.Identity.Name));
             }
-            MinModels[0].Categorys = _context.Category.ToList();
+            if (MinModels.Count!=0)
+            {
+                MinModels[0].Categorys = _context.Category.ToList();
+            }
+
             return View(MinModels);
         }
 
@@ -52,14 +56,18 @@ namespace coursesProject.Controllers
             return View(_context.UpdateListsDVM(id,User.Identity.Name));
         }
 
+
+        [Authorize(Roles = "verified,admin")]
         // GET: Projects/Create
         public IActionResult Create()
         {
             return View();
         }
 
+
+
         [HttpPost]
-        [Authorize]//(Roles ="verified,admin,user")
+        [Authorize(Roles ="verified,admin")]//
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProject(CreateProjectViewModel CreateModel)
         {
@@ -97,7 +105,7 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 
 
-        [Authorize]//// (Roles = "verified,admin")       днаюбкемхе мнбни жекх
+        [Authorize(Roles = "verified,admin") ]////       днаюбкемхе мнбни жекх
         [HttpPost, ActionName("AddGoal")]
         public async Task<IActionResult> AddGoal(int NeedMoney, int ID, string Goal)
         {
@@ -121,10 +129,19 @@ namespace coursesProject.Controllers
             {
                 item.UpdateListsMVM(_context, User.Identity.Name);
             }
-           return View("Index",projects.Search(Search, User.Identity.Name));
+            List<MinProjectViewModel> MinModels = projects.Search(Search, User.Identity.Name);
+            if (projects == null)
+            {
+                ViewBag.search = "not found";
+                foreach (var item in _context.Project.ToList())
+                {
+                    MinModels.Add(item.ProjectToMVM(User.Identity.Name));
+                }
+            }
+           return View(MinModels);
         }
 
-        [Authorize]////   (Roles = "verified,admin,user")     днаюбкемхе йнлемрю 
+        [Authorize(Roles = "verified,admin,user")]////        днаюбкемхе йнлемрю 
         [HttpPost, ActionName("AddComment")]
         public async Task<IActionResult> AddComment(int ID, string Comment)
         {
@@ -135,11 +152,26 @@ namespace coursesProject.Controllers
                 DateCreate = DateTime.Now,AuthorEmail= User.Identity.Name };
             project.Comment.Add(comm);
             _context.SaveChanges();
-            return View("Details", _context.UpdateListsDVM(ID, User.Identity.Name));
+            return View(nameof(Details), _context.UpdateListsDVM(ID, User.Identity.Name));
         }
 
 
-        [Authorize]////   (Roles = "verified,admin,user")     днаюбкемхе рецю
+
+
+        [Authorize(Roles = "verified,admin")]////        днаюбкемхе мнбнярх(мюярпнхрэ бундмше дюммше) 
+        [HttpPost, ActionName("AddTopic")]
+        public async Task<IActionResult> AddTopic(string Topic, int ID)
+        {
+            Project project = await _context.Project.FirstAsync(x => x.ID == ID);
+            New topic = new New() { Project = project, Text = Topic };
+            project.News.Add(topic);
+            _context.Update(project);
+            await _context.SaveChangesAsync();
+            return View(nameof(Details), _context.UpdateListsDVM(ID, User.Identity.Name));
+        }
+
+
+        [Authorize(Roles = "verified,admin") ]////       днаюбкемхе рецю
         [HttpPost, ActionName("AddTag")]
         public async Task<IActionResult> AddTag(int ID, string Tag)
         {
@@ -155,7 +187,7 @@ namespace coursesProject.Controllers
         }
 
         // GET: Projects/Edit/5
-        [Authorize]//(Roles ="verified,admin")
+        [Authorize(Roles ="verified,admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -177,7 +209,7 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]//(Roles ="verified,admin")
+        [Authorize(Roles ="verified,admin")]//
         public async Task<IActionResult> Edit(EditProjectViewModel Project)
         {
             Project project =_context.GetProjectById(Project.ID);
@@ -202,7 +234,7 @@ namespace coursesProject.Controllers
         }
 
         // GET: Projects/Delete/5
-        [Authorize]//(Roles ="verified,admin")
+        [Authorize(Roles ="verified,admin")]//
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -223,7 +255,7 @@ namespace coursesProject.Controllers
         // POST: Projects/Delete/5
         //[HttpPost, ActionName("Delete")]
         //[ValidateAntiForgeryToken]
-        [Authorize]//(Roles ="verified,admin")
+        [Authorize(Roles ="verified,admin")]//
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var project = await _context.Project.SingleOrDefaultAsync(m => m.ID == id);

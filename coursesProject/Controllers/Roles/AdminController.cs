@@ -8,16 +8,19 @@ using coursesProject.Models;
 using coursesProject.Data;
 using coursesProject.Helpers;
 using coursesProject.Service;
+using Microsoft.AspNetCore.Identity;
 
 namespace coursesProject.Controllers
 {
-    [Authorize]//(Roles = "admin")
+    [Authorize(Roles = "admin")]//
     public class AdminController : Controller
     {
         public readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AdminController(ApplicationDbContext context)
+        public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
@@ -98,6 +101,8 @@ namespace coursesProject.Controllers
             user.PasportScan = null;
             user.Status = "verified";
             _context.Update(user);
+            var User = _context.Users.First(x => x.Email == user.Email);
+            await _userManager.AddToRoleAsync(User, "verified");
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

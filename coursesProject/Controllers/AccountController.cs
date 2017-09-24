@@ -13,8 +13,6 @@ using coursesProject.Models;
 using coursesProject.Models.AccountViewModels;
 using coursesProject.Services;
 using coursesProject.Data;
-using Microsoft.EntityFrameworkCore;
-using coursesProject.Helpers;
 
 namespace coursesProject.Controllers
 {
@@ -27,16 +25,16 @@ namespace coursesProject.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly string _externalCookieScheme;
+        public readonly ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IOptions<IdentityCookieOptions> identityCookieOptions,
+            ApplicationDbContext context,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory,
-            ApplicationDbContext context
-            )
+            ILoggerFactory loggerFactory)
         {
             _context = context;
             _userManager = userManager;
@@ -46,7 +44,6 @@ namespace coursesProject.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
-        public readonly ApplicationDbContext _context;
 
         //
         // GET: /Account/Login
@@ -76,19 +73,7 @@ namespace coursesProject.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    if (_context.GetUserByEmail(model.Email).IsBan)
-                    {
-                        ViewBag.ban = "You have been blocked";
-                        await _signInManager.SignOutAsync();
-                    }
-                    else
-                    {
-                        User user = _context.GetUserByEmail(model.Email);
-                        user.LastLoginDate = DateTime.Now;
-                        _context.Update(user);
-                        await _context.SaveChangesAsync();
-                        _logger.LogInformation(1, "User logged in.");
-                    }
+                    _logger.LogInformation(1, "User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -143,10 +128,9 @@ namespace coursesProject.Controllers
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
-                    
-                    _context.User.Add(new User() { IdentityUser = user, Region = "en", Status = "newUser" ,LastLoginDate=DateTime.Now,RegistrationDate=DateTime.Now , Email=model.Email});
-                    await _userManager.AddToRoleAsync(user, "user");
-                    await _context.SaveChangesAsync();                    
+                    await _userManager.AddToRoleAsync(user, "admin");
+                    _context.User.Add(new User() { IdentityUser = user, Region = "en", Status = "newUser", LastLoginDate = DateTime.Now, RegistrationDate = DateTime.Now, Email = model.Email });
+                    _context.SaveChanges();
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
@@ -164,7 +148,7 @@ namespace coursesProject.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(ProjectsController.Index), "Project");
         }
 
         //
@@ -467,7 +451,7 @@ namespace coursesProject.Controllers
         }
 
         //
-        // GET /Account/AccessDenied
+        // GET: /Account/AccessDenied
         [HttpGet]
         public IActionResult AccessDenied()
         {

@@ -50,24 +50,36 @@
                     <i class="glyphicon glyphicon-search"></i>
                     <input type="text" class="form-control" name="Search" style="margin-top:12px" />
                 </div>
-
+                <text class="text-danger">
+                    @ViewBag.search
+                </text>
             </div>
         </div>
     </div>
 </form>
 
-<div>
+@*<div>
     Categoryes:
     <ul>
-        @foreach (var item in Model.ToList()[0].Categorys)
+        @if (Model.ToList().Count!=0)
         {
-            <li>
-                @item.Name
-            </li>
+            @foreach (var item in Model.ToList()[0].Categorys)
+            {
+                <li>
+                    @item.Name
+                </li>
+            }
         }
-    </ul>
-</div>
 
+    </ul>
+</div>*@
+
+@if (Model.Count() == 0)
+{
+    <p>
+        <h1>Not found</h1>
+    </p>
+}
     <div class="row">
 @foreach (var item in Model)
 {

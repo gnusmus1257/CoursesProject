@@ -28,7 +28,10 @@
             <p>
                 <input type="submit" class="btn btn-default" value="Pay">
             </p>
-        </form> <br /></div>
+        </form> <br />
+
+
+    </div>
     <div class="col-md-4" style="min-height:310px">
         <h4>Goals</h4>
         <ul>
@@ -72,7 +75,44 @@
     </div>
  <div class="col-md-2"></div>
         <div class="col-md-8 lead text-justify" style="margin-top:15px">
+
+
+                @if (Model.IsAthor)
+                {
+                    <form asp-action="AddTopic" enctype="multipart/form-data">
+                        <div class="form-horizontal">
+                            <input type="hidden" asp-for="ID" />
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">New topic</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="Topic" class="form-control" />
+                                    <span asp-validation-for="Topic" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Add" class="btn btn-default" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                }
             <p>
+                Project news:
+                <ul>
+                    @foreach (var item in Model.News)
+                    {
+                        <li>
+                            @item.Text
+                        </li>
+                    }
+                </ul>
+            </p>
+
+            <p>
+                Descriotion: <br />
                 @Model.Description
             </p>
         </div>
@@ -108,7 +148,9 @@
                     @item.AuthorEmail : <label style="text-align:center">@item.Context </label> <label style="text-align:right">@item.DateCreate </label>
                 </p>
             }
+
         <p class="text-info">
+            Tags:
             @Model.TagStr
         </p>
         @if (Model.IsAthor)
