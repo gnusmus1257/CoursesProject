@@ -1,0 +1,125 @@
+@model coursesProject.Models.User
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="pager">
+    <div class="row">
+        <div class="col-md-4">
+            <hr />
+            @Html.DisplayNameFor(model => model.Avatar)
+            @if (Model.Avatar != null)
+                {
+                   <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.Avatar))" />
+                }
+            
+            @*@if (Model.PasportScan != null)
+            {
+                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.PasportScan))" />
+            }*@
+            <form asp-action="Avatar" enctype="multipart/form-data">
+                <div class="form-horizontal">
+                    <hr />
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"> Avatar</label>
+                        <div class="col-md-10">
+                            <input name="Avatar" type="file" class="form-control" />
+                            <span asp-validation-for="Avatar" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Change" class="btn btn-default" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <text class="text-danger">@ViewBag.eror</text>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-8">
+            <hr />
+            <div class="text-capitalize">
+                @Html.DisplayNameFor(model => model.Region)
+
+                @Html.DisplayFor(model => model.Region)
+                <br /><br />
+                @Html.DisplayNameFor(model => model.Status)
+
+                @Html.DisplayFor(model => model.Status)
+                <br /><br />
+                @Html.DisplayNameFor(model => model.IsBan)
+
+                @Html.DisplayFor(model => model.IsBan)
+                <br /><br />
+            </div>
+            <hr />
+            <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Reset password</a> <br /><br />
+            <a asp-area="" asp-controller="User" asp-action="PassportScan" title="Passport scan">Passport scan</a>
+            
+        </div>
+    </div>
+</div>
+@*<div>
+    <h4>@Html.DisplayFor(model => model.IdentityUser.Email)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Region)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Region)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsBan)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsBan)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Avatar)
+        </dt>
+        <dd>
+            
+            
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PasportScan)
+        </dt>
+        <dd>
+            
+            @if (Model.PasportScan != null)
+            {
+                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.PasportScan))" />
+            }
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonalInfoForVerified)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PersonalInfoForVerified)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CommentForVerified)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CommentForVerified)
+        </dd>
+    </dl>
+</div>*@
+@*<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>*@

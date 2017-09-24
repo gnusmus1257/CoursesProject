@@ -1,59 +1,111 @@
-@model IEnumerable<coursesProject.Models.Project>
+@model IEnumerable<coursesProject.Models.ProjectViewModels.MinProjectViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
+<style>
+    /* enable absolute positioning */
+    .inner-addon {
+        position: relative;
+    }
 
-<h2>Index</h2>
+        /* style icon */
+        .inner-addon .glyphicon {
+            position: absolute;
+            padding: 10px;
+            pointer-events: none;
+        }
+
+    /* align icon */
+    .left-addon .glyphicon {
+        left: 0px;
+    }
+
+    .right-addon .glyphicon {
+        right: 0px;
+    }
+
+    /* add padding  */
+    .left-addon input {
+        padding-left: 30px;
+    }
+
+    .right-addon input {
+        padding-right: 30px;
+    }
+</style>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <h4>
+        <a asp-action="Create">Create New</a>
+    </h4>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.NameProject)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Status)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Raiting)
-                </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NameProject)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Raiting)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
+
+<form asp-action="Search" enctype="multipart/form-data">
+    <div class="form-horizontal">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <div class="inner-addon left-addon">
+                    <i class="glyphicon glyphicon-search"></i>
+                    <input type="text" class="form-control" name="Search" style="margin-top:12px" />
+                </div>
+                <text class="text-danger">
+                    @ViewBag.search
+                </text>
+            </div>
+        </div>
+    </div>
+</form>
+
+@*<div>
+    Categoryes:
+    <ul>
+        @if (Model.ToList().Count!=0)
+        {
+            @foreach (var item in Model.ToList()[0].Categorys)
+            {
+                <li>
+                    @item.Name
+                </li>
+            }
+        }
+
+    </ul>
+</div>*@
+
+@if (Model.Count() == 0)
+{
+    <p>
+        <h1>Not found</h1>
+    </p>
 }
-    </tbody>
-</table>
+    <div class="row">
+@foreach (var item in Model)
+{
+        <div class="col-md-4"  padding:10px;">
+            <div class="card">
+                <h4><a href="Projects/Details/@item.Project">@Html.DisplayFor(model => item.NameProject)</a> </h4>
+                
+                @if (item.AvatarByte != null)
+                {
+                    <a href="Projects/Details/@item.Project"> <img style="width:100%; height:270px; " src="data:image/jpg;base64,@(Convert.ToBase64String(item.AvatarByte))" /></a>
+                }
+            </div>
+            <text>@item.Category</text>
+            <div class="card text-justify" style="margin:5px; height:60px">
+                @Html.DisplayFor(model => item.MinDescription)
+            </div><hr />
+            <text> By @item.Author</text><hr />
+            <div>
+               Collect money @item.CollectMoney <hr />
+                Need money @item.NeedMoney <hr />
+                @if (@item.Goals.Count>=1)
+                {
+                    @item.Goals.ToList()[0].Text
+                }
+                
+            </div>
+        </div>
+ }
+    </div>

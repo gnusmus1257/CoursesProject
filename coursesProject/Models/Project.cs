@@ -12,19 +12,23 @@ namespace coursesProject.Models
     {
         public int ID { get; set; }
         [Required]
-        public User Athor { get; set; }        
+        public User Athor { get; set; }      
+        public string AthorEmail { get; set; }
         public string NameProject { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime DateOfRigister { get; set; }
+        public DateTime EndDate { get; set; }
         public string Status { get; set; }
-        [MaxLength(500)]
+        public int CollectMoney { get; set; }
+        public int NeedMoney { get; set; }
         public string Description { get; set; }
+        public string ShortDescription { get; set; }
         public byte[] Avatar { get; set; }
-        public Category Category { get; set; }
+        public string Category { get; set; }
         public ICollection<Comment> Comment { get; set; }
         public double Raiting { get; set; }
         public ICollection<Goal> Goals { get; set; }   
         public ICollection<Subscriber> Subscriber { get; set; }
-        public ICollection<TagsRelation> TagsRelation { get; set; }
+        public ICollection<Tag> Tags { get; set; }
         public ICollection<New> News { get; set; }
 
 
@@ -33,12 +37,18 @@ namespace coursesProject.Models
             Comment = new List<Comment>();
             Goals = new List<Goal>();
             Subscriber = new List<Subscriber>();
-            TagsRelation = new List<TagsRelation>();
+            Tags = new List<Tag>();
             News = new List<New>();
         }
     }
 
-
+    public class Rating
+    {
+        public int ID { get; set; }
+        public Project Project { get; set; }
+        public User User { get; set; }
+        public int rating { get; set; }
+    }
 
     public class Comment
     {
@@ -47,6 +57,7 @@ namespace coursesProject.Models
         [JsonIgnore]
         public Project Project { get; set; }
         public User Author { get; set; }
+        public string AuthorEmail { get; set; }
         public string Context { get; set; }
         public DateTime DateCreate { get; set; }   
     }
@@ -63,24 +74,11 @@ namespace coursesProject.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        [JsonIgnore]
-        public ICollection<TagsRelation> TagsRelation { get; set; }
-
-        public Tag()
-        {
-            TagsRelation = new List<TagsRelation>();
-        }
-    }
-
-    public class TagsRelation
-    {
-        public int Id { get; set; }
-        [ForeignKey("TagId")]
-        public Tag Tag { get; set; }
-        [JsonIgnore]
         [Required]
+        [JsonIgnore]       
         public Project Project { get; set; }
     }
+
 
 
     //public class Tag

@@ -83,6 +83,8 @@ namespace coursesProject.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AuthorEmail");
+
                     b.Property<int?>("AuthorID");
 
                     b.Property<string>("Context");
@@ -118,6 +120,36 @@ namespace coursesProject.Data.Migrations
                     b.ToTable("Goal");
                 });
 
+            modelBuilder.Entity("coursesProject.Models.Medal", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("MedalRelationID");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("MedalRelationID");
+
+                    b.ToTable("Medal");
+                });
+
+            modelBuilder.Entity("coursesProject.Models.MedalRelation", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("UserID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("MedalRelation");
+                });
+
             modelBuilder.Entity("coursesProject.Models.New", b =>
                 {
                     b.Property<int>("ID")
@@ -131,7 +163,7 @@ namespace coursesProject.Data.Migrations
 
                     b.HasIndex("ProjectID");
 
-                    b.ToTable("New");
+                    b.ToTable("Topic");
                 });
 
             modelBuilder.Entity("coursesProject.Models.Project", b =>
@@ -139,20 +171,29 @@ namespace coursesProject.Data.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AthorEmail");
+
                     b.Property<int>("AthorID");
 
                     b.Property<byte[]>("Avatar");
 
-                    b.Property<int?>("CategoryId");
+                    b.Property<string>("Category");
 
-                    b.Property<DateTime>("Date");
+                    b.Property<int>("CollectMoney");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(500);
+                    b.Property<DateTime>("DateOfRigister");
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("EndDate");
 
                     b.Property<string>("NameProject");
 
+                    b.Property<int>("NeedMoney");
+
                     b.Property<double>("Raiting");
+
+                    b.Property<string>("ShortDescription");
 
                     b.Property<string>("Status");
 
@@ -160,9 +201,27 @@ namespace coursesProject.Data.Migrations
 
                     b.HasIndex("AthorID");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("Project");
+                });
+
+            modelBuilder.Entity("coursesProject.Models.Rating", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("ProjectID");
+
+                    b.Property<int?>("UserID");
+
+                    b.Property<int>("rating");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProjectID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Rating");
                 });
 
             modelBuilder.Entity("coursesProject.Models.Statistic", b =>
@@ -210,27 +269,13 @@ namespace coursesProject.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Tag");
-                });
-
-            modelBuilder.Entity("coursesProject.Models.TagsRelation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<int>("ProjectID");
-
-                    b.Property<int?>("TagId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectID");
 
-                    b.HasIndex("TagId");
-
-                    b.ToTable("TagsRelation");
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("coursesProject.Models.User", b =>
@@ -240,12 +285,28 @@ namespace coursesProject.Data.Migrations
 
                     b.Property<byte[]>("Avatar");
 
+                    b.Property<string>("CommentForVerified");
+
+                    b.Property<string>("Email");
+
                     b.Property<string>("IdentityUserId")
                         .IsRequired();
 
+                    b.Property<bool>("IsBan");
+
+                    b.Property<DateTime>("LastLoginDate");
+
                     b.Property<byte[]>("PasportScan");
 
+                    b.Property<string>("PersonalInfoForVerified");
+
+                    b.Property<int>("ProjectCount");
+
+                    b.Property<int>("Rating");
+
                     b.Property<string>("Region");
+
+                    b.Property<DateTime>("RegistrationDate");
 
                     b.Property<string>("Status");
 
@@ -383,6 +444,20 @@ namespace coursesProject.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("coursesProject.Models.Medal", b =>
+                {
+                    b.HasOne("coursesProject.Models.MedalRelation")
+                        .WithMany("Medals")
+                        .HasForeignKey("MedalRelationID");
+                });
+
+            modelBuilder.Entity("coursesProject.Models.MedalRelation", b =>
+                {
+                    b.HasOne("coursesProject.Models.User", "User")
+                        .WithMany("Medal")
+                        .HasForeignKey("UserID");
+                });
+
             modelBuilder.Entity("coursesProject.Models.New", b =>
                 {
                     b.HasOne("coursesProject.Models.Project", "Project")
@@ -397,10 +472,17 @@ namespace coursesProject.Data.Migrations
                         .WithMany()
                         .HasForeignKey("AthorID")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
 
-                    b.HasOne("coursesProject.Models.Category", "Category")
+            modelBuilder.Entity("coursesProject.Models.Rating", b =>
+                {
+                    b.HasOne("coursesProject.Models.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("ProjectID");
+
+                    b.HasOne("coursesProject.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("coursesProject.Models.Statistic", b =>
@@ -423,16 +505,12 @@ namespace coursesProject.Data.Migrations
                         .HasForeignKey("UserID");
                 });
 
-            modelBuilder.Entity("coursesProject.Models.TagsRelation", b =>
+            modelBuilder.Entity("coursesProject.Models.Tag", b =>
                 {
                     b.HasOne("coursesProject.Models.Project", "Project")
-                        .WithMany("TagsRelation")
+                        .WithMany("Tags")
                         .HasForeignKey("ProjectID")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("coursesProject.Models.Tag", "Tag")
-                        .WithMany("TagsRelation")
-                        .HasForeignKey("TagId");
                 });
 
             modelBuilder.Entity("coursesProject.Models.User", b =>

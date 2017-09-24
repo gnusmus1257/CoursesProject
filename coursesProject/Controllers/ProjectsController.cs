@@ -10,6 +10,9 @@ using coursesProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using coursesProject.Service;
+using coursesProject.Helpers;
+using coursesProject.Models.ProjectViewModels;
 
 namespace coursesProject.Controllers
 {
@@ -23,139 +26,168 @@ namespace coursesProject.Controllers
         }
 
 
-        [Authorize(Roles = "admin")]
-        [HttpPost, ActionName("DeleteUser")]
-        public async Task<ActionResult> DeleteUsersAndProjectConfirmed(int? id)
+        // GET: Projects
+        public async Task<IActionResult> Index()
         {
-            if (id == null)
+            List<Project> Projects = await _context.Project.ToListAsync();
+            List<MinProjectViewModel> MinModels = new List<MinProjectViewModel>();
+            for (int i = 0; i < Projects.Count; i++)
             {
-                return BadRequest();
+                MinModels.Add(Projects[i].ProjectToMVM(User.Identity.Name));
             }
-            User userModel = await _context.User.FindAsync(id);
-            if (userModel == null)
+            if (MinModels.Count!=0)
             {
-                return NotFound();
+                MinModels[0].Categorys = _context.Category.ToList();
             }
-            _context.User.Remove(userModel);           
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
 
-        private byte[] _GetImg (UserViewModel uvm)
-        {
-            byte[] imageData = null;
-            // Ò˜ËÚ˚‚‡ÂÏ ÔÂÂ‰‡ÌÌ˚È Ù‡ÈÎ ‚ Ï‡ÒÒË‚ ·‡ÈÚÓ‚
-            using (var binaryReader = new BinaryReader(uvm.Avatar.OpenReadStream()))
-            {
-                imageData = binaryReader.ReadBytes((int)uvm.Avatar.Length);
-            }
-            return imageData;
-        }
-
-       
-        private List<User> _UsersSort (string Sort)
-        {
-            List<User> Users = new List<Models.User>();
-            foreach (var item in _context.User)
-            {
-                if (item.Status == Sort)//                      ≈—À» œ–Œ¬≈–≈ÕÕ€… = verified   ≈—À» œŒƒ¿À» «¿ﬂ¬ ” = Applied
-                {
-                    Users.Add(item);
-                }
-            }
-            return Users;
-        }
-
-
-        [Authorize(Roles = "admin")]////                                œ–Œ¬≈–≈ÕÕ€≈ œŒÀ‹«Œ¬¿“≈À»  (¬≈–Õ≈“ ◊¿—“»◊ÕŒ≈ œ–≈ƒ—“¿¬À≈Õ»≈)
-        public async Task<IActionResult> verifiedUsers()
-        {           
-            return PartialView(_UsersSort("verified"));
-        }
-
-
-        [Authorize(Roles = "admin")]////                                œŒÀ‹«Œ¬¿“≈À» œŒƒ¿¬ÿ»≈ «¿ﬂ¬ » (¬≈–Õ≈“ ◊¿—“»◊ÕŒ≈ œ–≈ƒ—“¿¬À≈Õ»≈)
-        public async Task<IActionResult> AppliedUsers()
-        {
-            return PartialView(_UsersSort("Applied"));
-        }
-
-
-        [Authorize(Roles = "user")]////                                 ƒŒ¡¿¬À≈Õ»≈ — ¿Õ¿ œ¿—œŒ–“¿(ÌÛÊÌÓ ‰Ó·‡‚ËÚ¸ ÒÓ·˚ÚËÂ)
-        [HttpPost, ActionName("PassportScan")]
-        public async Task<IActionResult> PassportScan(UserViewModel pvm)
-        {
-            User person =await _context.User.FirstAsync(x => x.ID == pvm.ID);
-            if (pvm.Avatar != null)
-            {
-                person.PasportScan = _GetImg(pvm);
-            }
-            _context.User.Update(person);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
-        }
-
-
-        [Authorize(Roles = "verified,admin,user")]////                                 ƒŒ¡¿¬À≈Õ»≈  ŒÃ≈Õ“¿(Õ¿—“–Œ»“‹ ¬’ŒƒÕ€≈ ƒ¿ÕÕ€≈) 
-        [HttpPost, ActionName("AddCommebt")]
-        public async Task<IActionResult> AddComment(int idUser, int idProject, string text)
-        {
-            User user = await _context.User.FirstAsync(x => x.ID == idUser);
-            Project project = await _context.Project.FirstAsync(x => x.ID == idProject);
-            Comment comm = new Comment() { Project = project, Author = user, Context = text, DateCreate = DateTime.Now };
-            project.Comment.Add(comm);
-            _context.SaveChanges();
-            return Ok();
-        }
-
-            // GET: Projects
-            public async Task<IActionResult> Index()
-        {
-            return View(await _context.Project.ToListAsync());
+            return View(MinModels);
         }
 
         // GET: Projects/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var project = await _context.Project
-                .SingleOrDefaultAsync(m => m.ID == id);
+            var project =_context.GetProjectById(id);
             if (project == null)
             {
                 return NotFound();
             }
-
-            return View(project);
+            // project.updateStatus();                                   œŒ—À≈ ¬ Àﬁ◊»“‹
+            return View(_context.UpdateListsDVM(id,User.Identity.Name));
         }
 
+
+        [Authorize(Roles = "verified,admin")]
         // GET: Projects/Create
         public IActionResult Create()
         {
             return View();
         }
 
+
+
+        [HttpPost]
+        [Authorize(Roles ="verified,admin")]//
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProject(CreateProjectViewModel CreateModel)
+        {
+            Project project = new Project();
+            User user = _context.GetIdentityUser(User.Identity.Name);
+            user.ProjectCount++;
+            project.NameProject = CreateModel.nameProject;
+            project.Status = "Active";
+            if (CreateModel.Avatar==null)
+            {
+                ViewBag.imgEror = "select file";
+                return View("Create");
+            }
+            project.Avatar = CreateModel.GetImg();
+            project.Category = CreateModel.Category;
+            _context.CreateCategoryIfNotExist(CreateModel.Category);
+            project.Athor =_context.GetIdentityUser(User.Identity.Name);
+            project.DateOfRigister = DateTime.Now;
+            project.EndDate = CreateModel.EndTime;
+            project.Description = CreateModel.Descrtiption;
+            project.Raiting = 0;
+            project.AthorEmail = User.Identity.Name;
+            project.ShortDescription =  CreateModel.ShortDescription.GetShortDescrtiption(230);
+            project.NeedMoney = CreateModel.NeedMoney;
+            Goal FirstGoal = new Goal() { Project = project, NeedMoney = CreateModel.NeedMoney, Text = CreateModel.Goal };
+            _context.Goal.Add(FirstGoal);
+            _context.Project.Add(project);
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
         // POST: Projects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,NameProject,Date,Status,Description,Raiting")] Project project)
+
+
+        [Authorize(Roles = "verified,admin") ]////       ƒŒ¡¿¬À≈Õ»≈ ÕŒ¬Œ… ÷≈À»
+        [HttpPost, ActionName("AddGoal")]
+        public async Task<IActionResult> AddGoal(int NeedMoney, int ID, string Goal)
         {
-            if (ModelState.IsValid)
+            Project project = await _context.Project.FirstAsync(x => x.ID == ID);
+            DetailProjectViewModel ViewModel = project.ProjectToDVM(User.Identity.Name);
+            if (ViewModel.IsAthor!=true)
             {
-                _context.Add(project);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                ViewBag.GoalEror = "eror";
+                return RedirectToAction("Details");
             }
-            return View(project);
+            project.Goals.Add(new Goal() { Project = project, NeedMoney = NeedMoney, Text = Goal });
+            _context.Project.Update(project);
+            await _context.SaveChangesAsync();
+            return View("Details", _context.UpdateListsDVM(ID, User.Identity.Name));
+        }
+
+        public ActionResult Search (string Search)      //œŒ»—  œŒ “≈√¿Ã  ŒÃÃ≈Õ“¿Ã  Õ¿«¬¿Õ»ﬁ » ÷≈ÀﬂÃ
+        {
+            var projects = _context.Project.ToList();
+            foreach (var item in projects)
+            {
+                item.UpdateListsMVM(_context, User.Identity.Name);
+            }
+            List<MinProjectViewModel> MinModels = projects.Search(Search, User.Identity.Name);
+            if (projects == null)
+            {
+                ViewBag.search = "not found";
+                foreach (var item in _context.Project.ToList())
+                {
+                    MinModels.Add(item.ProjectToMVM(User.Identity.Name));
+                }
+            }
+           return View(MinModels);
+        }
+
+        [Authorize(Roles = "verified,admin,user")]////        ƒŒ¡¿¬À≈Õ»≈  ŒÃ≈Õ“¿ 
+        [HttpPost, ActionName("AddComment")]
+        public async Task<IActionResult> AddComment(int ID, string Comment)
+        {
+            User user = _context.GetUserByEmail(User.Identity.Name);
+            Project project = await _context.Project.FirstAsync(x => x.ID == ID);
+            DetailProjectViewModel ViewModel = project.ProjectToDVM(User.Identity.Name);
+            Comment comm = new Comment() { Project = project, Author = user, Context = Comment,
+                DateCreate = DateTime.Now,AuthorEmail= User.Identity.Name };
+            project.Comment.Add(comm);
+            _context.SaveChanges();
+            return View(nameof(Details), _context.UpdateListsDVM(ID, User.Identity.Name));
+        }
+
+
+
+
+        [Authorize(Roles = "verified,admin")]////        ƒŒ¡¿¬À≈Õ»≈ ÕŒ¬Œ—“»(Õ¿—“–Œ»“‹ ¬’ŒƒÕ€≈ ƒ¿ÕÕ€≈) 
+        [HttpPost, ActionName("AddTopic")]
+        public async Task<IActionResult> AddTopic(string Topic, int ID)
+        {
+            Project project = await _context.Project.FirstAsync(x => x.ID == ID);
+            New topic = new New() { Project = project, Text = Topic };
+            project.News.Add(topic);
+            _context.Update(project);
+            await _context.SaveChangesAsync();
+            return View(nameof(Details), _context.UpdateListsDVM(ID, User.Identity.Name));
+        }
+
+
+        [Authorize(Roles = "verified,admin") ]////       ƒŒ¡¿¬À≈Õ»≈ “≈√¿
+        [HttpPost, ActionName("AddTag")]
+        public async Task<IActionResult> AddTag(int ID, string Tag)
+        {
+            User user = _context.GetUserByEmail(User.Identity.Name);
+            Project project = await _context.Project.FirstAsync(x => x.ID == ID);
+            DetailProjectViewModel ViewModel = project.ProjectToDVM(User.Identity.Name);
+            //_context.RemoveAllTagsProject(project);//               ”ƒ¿À»“‹ —“–Œ »
+            //_context.RemoveAllTags();
+            project.Tags.Add( new Tag() { Name=Tag,Project=project});
+            _context.Project.Update(project);
+            _context.SaveChanges();    
+            return View("Details", _context.UpdateListsDVM(ID, User.Identity.Name));
         }
 
         // GET: Projects/Edit/5
+        [Authorize(Roles ="verified,admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -168,7 +200,8 @@ namespace coursesProject.Controllers
             {
                 return NotFound();
             }
-            return View(project);
+
+            return View(project.ProjectToEVM());
         }
 
         // POST: Projects/Edit/5
@@ -176,37 +209,32 @@ namespace coursesProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,NameProject,Date,Status,Description,Raiting")] Project project)
+        [Authorize(Roles ="verified,admin")]//
+        public async Task<IActionResult> Edit(EditProjectViewModel Project)
         {
-            if (id != project.ID)
+            Project project =_context.GetProjectById(Project.ID);
+            if (project == null)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            project.Description = Project.Description;
+            project.ShortDescription = Project.ShortDescription;
+            project.EndDate = Project.EndDate;
+            if (Project.Avatar == null)
             {
-                try
-                {
-                    _context.Update(project);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProjectExists(project.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Index");
+                ViewBag.imgEror = "select file";
+                return View();
             }
-            return View(project);
+            project.Avatar = Project.Avatar.GetImg() ;
+            project.NeedMoney = Project.NeedMoney;
+            //project.GetStartGoal().Text = goal;           œŒ“ŒÃ ¬ Àﬁ◊»“‹
+            _context.Update(project);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         // GET: Projects/Delete/5
+        [Authorize(Roles ="verified,admin")]//
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -225,8 +253,9 @@ namespace coursesProject.Controllers
         }
 
         // POST: Projects/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        [Authorize(Roles ="verified,admin")]//
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var project = await _context.Project.SingleOrDefaultAsync(m => m.ID == id);

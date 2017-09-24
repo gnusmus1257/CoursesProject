@@ -1,0 +1,11 @@
+C:\Users\artem\source\repos\coursesProject\coursesProject\bin\Debug\netcoreapp1.1\coursesProject.deps.json
+C:\Users\artem\source\repos\coursesProject\coursesProject\bin\Debug\netcoreapp1.1\coursesProject.runtimeconfig.json
+C:\Users\artem\source\repos\coursesProject\coursesProject\bin\Debug\netcoreapp1.1\coursesProject.runtimeconfig.dev.json
+C:\Users\artem\source\repos\coursesProject\coursesProject\obj\Debug\netcoreapp1.1\coursesProject.csprojResolveAssemblyReference.cache
+C:\Users\artem\source\repos\coursesProject\coursesProject\obj\Debug\netcoreapp1.1\coursesProject.csproj.CoreCompileInputs.cache
+C:\Users\artem\source\repos\coursesProject\coursesProject\obj\Debug\netcoreapp1.1\UserSecretsAssemblyInfo.cs
+C:\Users\artem\source\repos\coursesProject\coursesProject\obj\Debug\netcoreapp1.1\coursesProject.AssemblyInfo.cs
+C:\Users\artem\source\repos\coursesProject\coursesProject\bin\Debug\netcoreapp1.1\coursesProject.dll
+C:\Users\artem\source\repos\coursesProject\coursesProject\bin\Debug\netcoreapp1.1\coursesProject.pdb
+C:\Users\artem\source\repos\coursesProject\coursesProject\obj\Debug\netcoreapp1.1\coursesProject.dll
+C:\Users\artem\source\repos\coursesProject\coursesProject\obj\Debug\netcoreapp1.1\coursesProject.pdb

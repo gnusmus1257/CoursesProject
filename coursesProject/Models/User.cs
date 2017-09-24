@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace coursesProject.Models
 {
@@ -16,8 +17,16 @@ namespace coursesProject.Models
         public string Region { get; set; }
         public ICollection<Statistic> Stats { get; set; }
         public string Status { get; set; } // ПРОВЕРЕН (verified), ЖДЕТ ПРОВЕРКИ(applied), НЕ ПРОВЕРЕН
+        public bool IsBan { get; set; }
         public byte[] Avatar { get; set; }
         public byte[] PasportScan { get; set; }
+        public string PersonalInfoForVerified { get; set; }
+        public string CommentForVerified { get; set; }
+        public string Email { get; set; }
+        public DateTime RegistrationDate { get; set; }
+        public DateTime LastLoginDate { get; set; }
+        public int Rating { get; set; }
+        public int ProjectCount { get; set; }
     }
 
 
@@ -30,16 +39,22 @@ namespace coursesProject.Models
     public class MedalRelation
     {
         public int ID { get; set; }
-        public Medal Medal { get; set; }
-        [Required]
-        public ICollection<User> User { get; set; }
+        public User User { get; set; }
+        [JsonIgnore]
+
+        public ICollection<Medal> Medals { get; set; }
+
+        public MedalRelation()
+        {
+            Medals = new List<Medal>();
+        }
     }
 
     public class Statistic
     {
         public int ID { get; set; }
         public int UserID { get; set; }
-        [Required]
+        [Required]        
         public User User { get; set; }
         public int DonateCount { get; set; }
         public int MoneyDonate { get; set; }

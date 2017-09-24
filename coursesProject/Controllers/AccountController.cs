@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using coursesProject.Models;
 using coursesProject.Models.AccountViewModels;
 using coursesProject.Services;
+using coursesProject.Data;
 
 namespace coursesProject.Controllers
 {
@@ -24,15 +25,18 @@ namespace coursesProject.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly string _externalCookieScheme;
+        public readonly ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IOptions<IdentityCookieOptions> identityCookieOptions,
+            ApplicationDbContext context,
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
@@ -124,6 +128,9 @@ namespace coursesProject.Controllers
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
+                    await _userManager.AddToRoleAsync(user, "admin");
+                    _context.User.Add(new User() { IdentityUser = user, Region = "en", Status = "newUser", LastLoginDate = DateTime.Now, RegistrationDate = DateTime.Now, Email = model.Email });
+                    _context.SaveChanges();
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
@@ -141,7 +148,7 @@ namespace coursesProject.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(ProjectsController.Index), "Project");
         }
 
         //
@@ -444,7 +451,7 @@ namespace coursesProject.Controllers
         }
 
         //
-        // GET /Account/AccessDenied
+        // GET: /Account/AccessDenied
         [HttpGet]
         public IActionResult AccessDenied()
         {

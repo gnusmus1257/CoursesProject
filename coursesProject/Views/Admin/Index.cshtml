@@ -1,0 +1,176 @@
+@model IEnumerable<coursesProject.Models.UserViewModel>
+
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<h2>Admin</h2>
+
+
+
+<div class="btn-group">
+    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Sort <span class="caret"></span></button> <p></p>
+    <ul class="dropdown-menu">
+        <li><a id="SortByVerified">Verified users</a></li>
+        <li><a id="SortByApplied">Applied users</a></li>
+        <li class="divider"></li>
+        <li><a id="SortAll">All</a></li>
+    </ul>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsBanned)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PersonalInfo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Comment)
+                </th>
+            <th>
+                <text class="text-info"> delete/ban</text>
+            </th>
+            <th>
+                <button id="Ban" class="btn btn-default"> Ban</button>
+            </th>
+            <th>
+                <button id="UnLock" class="btn btn-default"> Unlock</button>
+            </th>
+            <th>
+                <button id="Del" class="btn btn-default"> Delete</button>
+            </th>
+            <th>
+                <button id="Verified" class="btn btn-default"> Verified</button>
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody id="result">
+        @foreach (var item in Model)
+        {
+            <tr class="user-row">
+                <td>
+                    @Html.DisplayFor(model => item.Email)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @item.IsBanned
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PersonalInfo)
+                </td>
+                @Html.HiddenFor(x => item.User, new { @class = "UserID" })
+                <td>
+                    @Html.DisplayFor(modelItem => item.Comment)
+                </td>
+                <td>
+                    <input type="checkbox" class="checkbox checkbox-inline CheckedUser" value="@item.User"/>
+                </td>
+            </tr>
+        }
+        
+
+    </tbody>
+</table>
+<text class="text-danger">@ViewBag.eror</text>
+    <script>
+
+
+
+        $('.user-row').click(function () {
+            $('.user-row').removeClass('active');
+            $(this).addClass('active');
+        });
+
+
+
+
+        $('#Del').click(function () {
+            var checkboxes = $('input[type=checkbox]:checked');
+            var temp = "?";
+            for (var i = 0; i < checkboxes.length; i++) {
+                var x = checkboxes[i].value;
+                if (i == 0) {
+                    temp += "idUsers[" + i + "]=" + x;
+                } else
+                    temp += "&idUsers[" + i + "]=" + x;
+
+            }
+            console.log(temp);
+            open('/Admin/DeleteUsersAndProjectConfirmed/' + temp);
+            close();
+        });
+
+
+        $('#Ban').click(function () {
+            var checkboxes = $('input[type=checkbox]:checked');
+            var temp = "?";
+            for (var i = 0; i < checkboxes.length; i++) {
+                var x = checkboxes[i].value;
+                if (i == 0) {
+                    temp += "idUsers[" + i + "]=" + x;
+                } else
+                    temp += "&idUsers[" + i + "]=" + x;
+                
+            }  
+            console.log(temp);
+            open('/Admin/lockUsers/' + temp);
+            close();
+        });
+
+        $('#UnLock').click(function () {
+            var checkboxes = $('input[type=checkbox]:checked');
+            var temp = "?";
+            for (var i = 0; i < checkboxes.length; i++) {
+                var x = checkboxes[i].value;
+                if (i == 0) {
+                    temp += "idUsers[" + i + "]=" + x;
+                } else
+                    temp += "&idUsers[" + i + "]=" + x;
+
+            }
+            console.log(temp);
+            open('/Admin/UnlockUsers/' + temp);
+            close();
+        });
+
+
+        $('#Verified').click(function () {
+
+            var temp = $('.active .UserID').val();
+            if (temp) {
+                open('/Admin/Verified/' + temp, null, null, true);
+                close();
+            } else
+            { alert('select user'); }
+
+
+            //location.reload();
+        });
+
+        $('#SortByVerified').click(function () {
+            open('/Admin/IndexSorted?param=verified');
+            close();
+        });
+        $('#SortByApplied').click(function () {
+            open('/Admin/IndexSorted?param=applied');
+            close();
+        });
+        $('#SortAll').click(function () {
+            open('/Admin/IndexSorted?param=all');
+            close();
+        });
+    </script>
