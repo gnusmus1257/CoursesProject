@@ -13,7 +13,8 @@ using coursesProject.Data;
 using coursesProject.Models;
 using coursesProject.Services;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.Owin;
+using Owin;
 namespace coursesProject
 {
     public class Startup
@@ -80,8 +81,8 @@ namespace coursesProject
             }
 
             app.UseStaticFiles();
-
             app.UseIdentity();
+            app.MapSignalR();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 

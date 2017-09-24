@@ -83,6 +83,8 @@ namespace coursesProject.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AuthorEmail");
+
                     b.Property<int?>("AuthorID");
 
                     b.Property<string>("Context");
@@ -267,27 +269,13 @@ namespace coursesProject.Migrations
 
                     b.Property<string>("Name");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Tag");
-                });
-
-            modelBuilder.Entity("coursesProject.Models.TagsRelation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<int>("ProjectID");
-
-                    b.Property<int?>("TagId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectID");
 
-                    b.HasIndex("TagId");
-
-                    b.ToTable("TagRelation");
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("coursesProject.Models.User", b =>
@@ -517,16 +505,12 @@ namespace coursesProject.Migrations
                         .HasForeignKey("UserID");
                 });
 
-            modelBuilder.Entity("coursesProject.Models.TagsRelation", b =>
+            modelBuilder.Entity("coursesProject.Models.Tag", b =>
                 {
                     b.HasOne("coursesProject.Models.Project", "Project")
-                        .WithMany("TagsRelation")
+                        .WithMany("Tags")
                         .HasForeignKey("ProjectID")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("coursesProject.Models.Tag", "Tag")
-                        .WithMany("TagsRelation")
-                        .HasForeignKey("TagId");
                 });
 
             modelBuilder.Entity("coursesProject.Models.User", b =>

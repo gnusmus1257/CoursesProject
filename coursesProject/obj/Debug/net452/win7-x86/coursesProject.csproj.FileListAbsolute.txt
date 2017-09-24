@@ -268,7 +268,6 @@ C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\bin\Debug\net452\win7-
 C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\bin\Debug\net452\win7-x86\System.Threading.Tasks.Extensions.dll
 C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\obj\Debug\net452\win7-x86\coursesProject.csprojResolveAssemblyReference.cache
 C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\obj\Debug\net452\win7-x86\coursesProject.csproj.coursesProject.exe.config
-C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\obj\Debug\net452\win7-x86\UserSecretsAssemblyInfo.cs
 C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\obj\Debug\net452\win7-x86\coursesProject.AssemblyInfo.cs
 C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\obj\Debug\net452\win7-x86\coursesProject.exe
 C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\obj\Debug\net452\win7-x86\coursesProject.pdb
@@ -546,3 +545,9 @@ C:\Users\Arti\Desktop\Course\coursesProject\obj\Debug\net452\win7-x86\UserSecret
 C:\Users\Arti\Desktop\Course\coursesProject\obj\Debug\net452\win7-x86\coursesProject.AssemblyInfo.cs
 C:\Users\Arti\Desktop\Course\coursesProject\obj\Debug\net452\win7-x86\coursesProject.exe
 C:\Users\Arti\Desktop\Course\coursesProject\obj\Debug\net452\win7-x86\coursesProject.pdb
+C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\bin\Debug\net452\win7-x86\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\bin\Debug\net452\win7-x86\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\bin\Debug\net452\win7-x86\Microsoft.Owin.dll
+C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\bin\Debug\net452\win7-x86\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\bin\Debug\net452\win7-x86\Microsoft.Owin.Security.dll
+C:\Users\Inna\Desktop\mysuperduperproject1\coursesProject\bin\Debug\net452\win7-x86\Owin.dll

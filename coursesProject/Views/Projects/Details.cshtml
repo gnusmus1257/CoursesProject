@@ -1,4 +1,4 @@
-@model coursesProject.Models.Project
+@model coursesProject.Models.ProjectViewModels.DetailProjectViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 <h2>Details</h2>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5 ">
         <h4>@Model.NameProject</h4>
         @if (Model.Avatar != null)
         {
@@ -15,10 +15,22 @@
         }
    
     </div>
-    <div class="col-md-5">
-        @Model.Description
-    </div>
-    <div class="col-md-4">
+    <div class="col-md-3" style="min-height:310px">
+        <form id=pay name=pay method="POST" action="https://merchant.webmoney.ru/lmi/payment.asp">
+            <p>Pay 100 WMZ...</p>
+            <p>
+                <input type="hidden" name="LMI_PAYMENT_AMOUNT" value="100.0">
+                <input type="hidden" name="LMI_PAYMENT_DESC" value="Test pay">
+                <input type="hidden" name="LMI_PAYMENT_NO" value="1">
+                <input type="hidden" name="LMI_PAYEE_PURSE" value="Z145179295679">
+                <input type="hidden" name="LMI_SIM_MODE" value="0">
+            </p>
+            <p>
+                <input type="submit" class="btn btn-default" value="Pay">
+            </p>
+        </form> <br /></div>
+    <div class="col-md-4" style="min-height:310px">
+        <h4>Goals</h4>
         <ul>
             @foreach (var item in Model.Goals)
             {
@@ -29,12 +41,102 @@
                 </li>
             }
         </ul>
-
+        @if (Model.IsAthor)
+        {
+            <form asp-action="AddGoal" enctype="multipart/form-data">
+                <div class="form-horizontal">
+                    <input type="hidden" asp-for="ID" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Need money</label>
+                        <div class="col-md-10">
+                            <input type="text" name="NeedMoney" class="form-control" />
+                            <span asp-validation-for="NeedMoney" class="text-danger"></span>
+                        </div>
+                    </div>    
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">New goal</label>
+                        <div class="col-md-10">
+                            <input type="text" name="Goal" class="form-control" />
+                            <span asp-validation-for="Goal" class="text-danger"></span>
+                        </div>
+                    </div>    
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Add" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
     </div>
+ <div class="col-md-2"></div>
+        <div class="col-md-8 lead text-justify" style="margin-top:15px">
+            <p>
+                @Model.Description
+            </p>
+        </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-2"></div>
+    <div class="col-md-8 lead text-justify" style="margin-top:15px">
+        
+        <form asp-action="AddComment" enctype="multipart/form-data">
+                <div class="form-horizontal">
+                    <input type="hidden" asp-for="ID" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Comment</label>
+                        <div class="col-md-10">
+                            <input type="text" name="Comment" class="form-control" />
+                            <span asp-validation-for="Comment" class="text-danger"></span>
+                        </div>
+                    </div>    
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Comment" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            </form>
 
 
+        @foreach (var item in Model.Comments)
+            {
+                <p class="text-info">
+
+                    @item.AuthorEmail : <label style="text-align:center">@item.Context </label> <label style="text-align:right">@item.DateCreate </label>
+                </p>
+            }
+        <p class="text-info">
+            @Model.TagStr
+        </p>
+        @if (Model.IsAthor)
+        {
+            <form asp-action="AddTag" enctype="multipart/form-data">
+                <div class="form-horizontal">
+                    <input type="hidden" asp-for="ID" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Tag</label>
+                        <div class="col-md-10">
+                            <input type="text" name="Tag" class="form-control" />
+                            <span asp-validation-for="Tag" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Add Tag" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
+    </div>
+    <div class="col-md-2"></div>
                                                                         @*WebMoney PAYMENT*@
-    @*<form id=pay name=pay method="POST" action="https://merchant.webmoney.ru/lmi/payment.asp">            
+    @*<form id=pay name=pay method="POST" action="https://merchant.webmoney.ru/lmi/payment.asp">
         <p>пример платежа через сервис Web Merchant Interface</p> <p>заплатить 1 WMZ...</p>
         <p>
             <input type="hidden" name="LMI_PAYMENT_AMOUNT" value="1.0">
@@ -46,10 +148,19 @@
         <p>
             <input type="submit" value="submit">
         </p>
-    </form>*@ 
+    </form>*@
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    @if (Model.IsAthor)
+    {
+        <p>
+            <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a>
+        </p>
+        <p>
+            <a asp-action="DeleteConfirmed" asp-route-id="@Model.ID">Delete</a>
+        </p>
+    }
+
     <a asp-action="Index">Back to List</a>
-    <a asp-action="DeleteConfirmed" asp-route-id="@Model.ID">Delete</a>
+
 </div>

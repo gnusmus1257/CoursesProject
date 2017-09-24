@@ -2,6 +2,9 @@
   "version": 2,
   "targets": {
     ".NETFramework,Version=v4.5.2": {
+      "jQuery/1.6.4": {
+        "type": "package"
+      },
       "Libuv/1.9.1": {
         "type": "package",
         "dependencies": {
@@ -115,6 +118,53 @@
         },
         "runtime": {
           "lib/net45/Microsoft.AI.ServerTelemetryChannel.dll": {}
+        }
+      },
+      "Microsoft.AspNet.SignalR/2.2.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.SignalR.JS": "2.2.2",
+          "Microsoft.AspNet.SignalR.SystemWeb": "2.2.2"
+        },
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
+      "Microsoft.AspNet.SignalR.Core/2.2.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.1.0",
+          "Microsoft.Owin.Security": "2.1.0",
+          "Newtonsoft.Json": "6.0.4",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
+        }
+      },
+      "Microsoft.AspNet.SignalR.JS/2.2.2": {
+        "type": "package",
+        "dependencies": {
+          "jQuery": "1.6.4"
+        }
+      },
+      "Microsoft.AspNet.SignalR.SystemWeb/2.2.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.SignalR.Core": "2.2.2",
+          "Microsoft.Owin.Host.SystemWeb": "2.1.0"
+        },
+        "frameworkAssemblies": [
+          "System"
+        ],
+        "compile": {
+          "lib/net45/Microsoft.AspNet.SignalR.SystemWeb.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.AspNet.SignalR.SystemWeb.dll": {}
         }
       },
       "Microsoft.AspNetCore/1.1.2": {
@@ -1529,6 +1579,44 @@
           "lib/netstandard1.0/_._": {}
         }
       },
+      "Microsoft.Owin/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.dll": {}
+        }
+      },
+      "Microsoft.Owin.Host.SystemWeb/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.1.0",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.Host.SystemWeb.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.Host.SystemWeb.dll": {}
+        }
+      },
+      "Microsoft.Owin.Security/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.1.0",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.Security.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.Security.dll": {}
+        }
+      },
       "Microsoft.VisualStudio.Web.BrowserLink/1.1.2": {
         "type": "package",
         "dependencies": {
@@ -1695,6 +1783,15 @@
         },
         "runtime": {
           "lib/net45/NuGet.Frameworks.dll": {}
+        }
+      },
+      "Owin/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Owin.dll": {}
         }
       },
       "Remotion.Linq/2.1.1": {
@@ -2234,6 +2331,9 @@
       }
     },
     ".NETFramework,Version=v4.5.2/win7-x86": {
+      "jQuery/1.6.4": {
+        "type": "package"
+      },
       "Libuv/1.9.1": {
         "type": "package",
         "dependencies": {
@@ -2316,6 +2416,53 @@
         },
         "runtime": {
           "lib/net45/Microsoft.AI.ServerTelemetryChannel.dll": {}
+        }
+      },
+      "Microsoft.AspNet.SignalR/2.2.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.SignalR.JS": "2.2.2",
+          "Microsoft.AspNet.SignalR.SystemWeb": "2.2.2"
+        },
+        "frameworkAssemblies": [
+          "System"
+        ]
+      },
+      "Microsoft.AspNet.SignalR.Core/2.2.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.1.0",
+          "Microsoft.Owin.Security": "2.1.0",
+          "Newtonsoft.Json": "6.0.4",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
+        }
+      },
+      "Microsoft.AspNet.SignalR.JS/2.2.2": {
+        "type": "package",
+        "dependencies": {
+          "jQuery": "1.6.4"
+        }
+      },
+      "Microsoft.AspNet.SignalR.SystemWeb/2.2.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.SignalR.Core": "2.2.2",
+          "Microsoft.Owin.Host.SystemWeb": "2.1.0"
+        },
+        "frameworkAssemblies": [
+          "System"
+        ],
+        "compile": {
+          "lib/net45/Microsoft.AspNet.SignalR.SystemWeb.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.AspNet.SignalR.SystemWeb.dll": {}
         }
       },
       "Microsoft.AspNetCore/1.1.2": {
@@ -3730,6 +3877,44 @@
           "lib/netstandard1.0/_._": {}
         }
       },
+      "Microsoft.Owin/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.dll": {}
+        }
+      },
+      "Microsoft.Owin.Host.SystemWeb/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.1.0",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.Host.SystemWeb.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.Host.SystemWeb.dll": {}
+        }
+      },
+      "Microsoft.Owin.Security/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.1.0",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.Security.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.Security.dll": {}
+        }
+      },
       "Microsoft.VisualStudio.Web.BrowserLink/1.1.2": {
         "type": "package",
         "dependencies": {
@@ -3896,6 +4081,15 @@
         },
         "runtime": {
           "lib/net45/NuGet.Frameworks.dll": {}
+        }
+      },
+      "Owin/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Owin.dll": {}
         }
       },
       "Remotion.Linq/2.1.1": {
@@ -4426,6 +4620,21 @@
     }
   },
   "libraries": {
+    "jQuery/1.6.4": {
+      "sha512": "8RzoZQFeFYL/cINRXksLWyl8D5TKctZ/2G8hrlOLLM5OgFNI9h3t3l5tB+BBbsBUxaPUageVe0p9ruU5jrFeow==",
+      "type": "package",
+      "path": "jquery/1.6.4",
+      "files": [
+        "Content/Scripts/jquery-1.6.4-vsdoc.js",
+        "Content/Scripts/jquery-1.6.4.js",
+        "Content/Scripts/jquery-1.6.4.min.js",
+        "Tools/install.ps1",
+        "Tools/jquery-1.6.4-vsdoc-para.js",
+        "Tools/uninstall.ps1",
+        "jquery.1.6.4.nupkg.sha512",
+        "jquery.nuspec"
+      ]
+    },
     "Libuv/1.9.1": {
       "sha512": "uqX2Frwf9PW8MaY7PRNY6HM5BpW1D8oj1EdqzrmbEFD5nH63Yat3aEjN/tws6Tw6Fk7LwmLBvtUh32tTeTaHiA==",
       "type": "package",
@@ -4532,6 +4741,49 @@
         "lib/net45/Microsoft.AI.ServerTelemetryChannel.dll",
         "microsoft.applicationinsights.windowsserver.telemetrychannel.2.2.0.nupkg.sha512",
         "microsoft.applicationinsights.windowsserver.telemetrychannel.nuspec"
+      ]
+    },
+    "Microsoft.AspNet.SignalR/2.2.2": {
+      "sha512": "r0n6alLVRcXlu4H3Cqqr98i03rPN+VkG87Po9Mzn8it8RopJs0GA9gSG7+NzexWk7LiR+Oc+7i8P+22U1sXoCg==",
+      "type": "package",
+      "path": "microsoft.aspnet.signalr/2.2.2",
+      "files": [
+        "microsoft.aspnet.signalr.2.2.2.nupkg.sha512",
+        "microsoft.aspnet.signalr.nuspec",
+        "readme.txt"
+      ]
+    },
+    "Microsoft.AspNet.SignalR.Core/2.2.2": {
+      "sha512": "sIpoQK2pFlKsy+1s5j6zsZl4mgp3RN7GEZhBiz3PJjGhzjdwhu8xypcofTwWiqUVgVF0BkKR9GTGZy8wV4kmJQ==",
+      "type": "package",
+      "path": "microsoft.aspnet.signalr.core/2.2.2",
+      "files": [
+        "lib/net45/Microsoft.AspNet.SignalR.Core.dll",
+        "lib/net45/Microsoft.AspNet.SignalR.Core.xml",
+        "microsoft.aspnet.signalr.core.2.2.2.nupkg.sha512",
+        "microsoft.aspnet.signalr.core.nuspec"
+      ]
+    },
+    "Microsoft.AspNet.SignalR.JS/2.2.2": {
+      "sha512": "Ef+IFpdkLh+x68P71sCLfYVVorEA76m1TJCd0g/evKQYc8MbV6jfxm26p2RfLPmFSqzIMytC6JuKhYD9WtxKwg==",
+      "type": "package",
+      "path": "microsoft.aspnet.signalr.js/2.2.2",
+      "files": [
+        "content/Scripts/jquery.signalR-2.2.2.js",
+        "content/Scripts/jquery.signalR-2.2.2.min.js",
+        "microsoft.aspnet.signalr.js.2.2.2.nupkg.sha512",
+        "microsoft.aspnet.signalr.js.nuspec"
+      ]
+    },
+    "Microsoft.AspNet.SignalR.SystemWeb/2.2.2": {
+      "sha512": "Cs+a53SPIe+kyUTQQQQriAGDD8SfRxTMlmSACdhxsbrPvjlr5AnR1uCDbLYCzHt9SjulGT4QR+EBVeuXIzO/WA==",
+      "type": "package",
+      "path": "microsoft.aspnet.signalr.systemweb/2.2.2",
+      "files": [
+        "lib/net45/Microsoft.AspNet.SignalR.SystemWeb.XML",
+        "lib/net45/Microsoft.AspNet.SignalR.SystemWeb.dll",
+        "microsoft.aspnet.signalr.systemweb.2.2.2.nupkg.sha512",
+        "microsoft.aspnet.signalr.systemweb.nuspec"
       ]
     },
     "Microsoft.AspNetCore/1.1.2": {
@@ -5804,6 +6056,43 @@
         "runtime.json"
       ]
     },
+    "Microsoft.Owin/2.1.0": {
+      "sha512": "lk0kK64mlmcmtWX8YOYkZsnZKDoGEzMZhe8e1bcP+FFcgD4f2QfKwvu5Z8Bh8WS0VO7Rgk+DJ0hwW0k+S/UGMg==",
+      "type": "package",
+      "path": "microsoft.owin/2.1.0",
+      "files": [
+        "lib/net40/Microsoft.Owin.XML",
+        "lib/net40/Microsoft.Owin.dll",
+        "lib/net45/Microsoft.Owin.XML",
+        "lib/net45/Microsoft.Owin.dll",
+        "microsoft.owin.2.1.0.nupkg.sha512",
+        "microsoft.owin.nuspec"
+      ]
+    },
+    "Microsoft.Owin.Host.SystemWeb/2.1.0": {
+      "sha512": "S+YOPgtQuXlKGh1OZCVzvmz++2ibNeACzDlMpeXFN1QBUf9l+gstfV0f5hTbhmkDBE8LrSCBWu+9Rrte+ivNhg==",
+      "type": "package",
+      "path": "microsoft.owin.host.systemweb/2.1.0",
+      "files": [
+        "lib/net40/Microsoft.Owin.Host.SystemWeb.dll",
+        "lib/net40/Microsoft.Owin.Host.SystemWeb.xml",
+        "lib/net45/Microsoft.Owin.Host.SystemWeb.dll",
+        "lib/net45/Microsoft.Owin.Host.SystemWeb.xml",
+        "microsoft.owin.host.systemweb.2.1.0.nupkg.sha512",
+        "microsoft.owin.host.systemweb.nuspec"
+      ]
+    },
+    "Microsoft.Owin.Security/2.1.0": {
+      "sha512": "4n1V0p+O6W1L0xHUM8Cjp2Y+MmmUkiCZv6PvRNIDCJD9zlerBJa2HECo9lUiWC+KuasQJ3QxB1FmipNBxdXXIQ==",
+      "type": "package",
+      "path": "microsoft.owin.security/2.1.0",
+      "files": [
+        "lib/net45/Microsoft.Owin.Security.XML",
+        "lib/net45/Microsoft.Owin.Security.dll",
+        "microsoft.owin.security.2.1.0.nupkg.sha512",
+        "microsoft.owin.security.nuspec"
+      ]
+    },
     "Microsoft.VisualStudio.Web.BrowserLink/1.1.2": {
       "sha512": "QOu+6RH3j+ncittuC5iZNAhOWyYy1BqVb7KPzeRk/s94Yl23+TOUqzH7NBdchObenhGqmFXT654VJEdSF1JERQ==",
       "type": "package",
@@ -5994,6 +6283,16 @@
         "lib/netstandard1.3/NuGet.Frameworks.xml",
         "nuget.frameworks.3.5.0.nupkg.sha512",
         "nuget.frameworks.nuspec"
+      ]
+    },
+    "Owin/1.0.0": {
+      "sha512": "OseTFniKmyp76mEzOBwIKGBRS5eMoYNkMKaMXOpxx9jv88+b6mh1rSaw43vjBOItNhaLFG3d0a20PfHyibH5sw==",
+      "type": "package",
+      "path": "owin/1.0.0",
+      "files": [
+        "lib/net40/Owin.dll",
+        "owin.1.0.0.nupkg.sha512",
+        "owin.nuspec"
       ]
     },
     "Remotion.Linq/2.1.1": {
@@ -8553,6 +8852,8 @@
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.5.2": [
       "Microsoft.ApplicationInsights.AspNetCore >= 2.0.0",
+      "Microsoft.AspNet.SignalR >= 2.2.2",
+      "Microsoft.AspNet.SignalR.Core >= 2.2.2",
       "Microsoft.AspNetCore >= 1.1.2",
       "Microsoft.AspNetCore.Authentication.Cookies >= 1.1.2",
       "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore >= 1.1.2",
@@ -8627,6 +8928,10 @@
             "target": "Package",
             "version": "1.1.2"
           },
+          "Microsoft.AspNet.SignalR.Core": {
+            "target": "Package",
+            "version": "2.2.2"
+          },
           "Microsoft.VisualStudio.Web.BrowserLink": {
             "target": "Package",
             "version": "1.1.2"
@@ -8651,6 +8956,10 @@
           "Microsoft.ApplicationInsights.AspNetCore": {
             "target": "Package",
             "version": "2.0.0"
+          },
+          "Microsoft.AspNet.SignalR": {
+            "target": "Package",
+            "version": "2.2.2"
           },
           "Microsoft.AspNetCore.StaticFiles": {
             "target": "Package",

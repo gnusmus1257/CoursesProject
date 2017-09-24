@@ -28,7 +28,7 @@ namespace coursesProject.Models
         public double Raiting { get; set; }
         public ICollection<Goal> Goals { get; set; }   
         public ICollection<Subscriber> Subscriber { get; set; }
-        public ICollection<TagsRelation> TagsRelation { get; set; }
+        public ICollection<Tag> Tags { get; set; }
         public ICollection<New> News { get; set; }
 
 
@@ -37,7 +37,7 @@ namespace coursesProject.Models
             Comment = new List<Comment>();
             Goals = new List<Goal>();
             Subscriber = new List<Subscriber>();
-            TagsRelation = new List<TagsRelation>();
+            Tags = new List<Tag>();
             News = new List<New>();
         }
     }
@@ -57,6 +57,7 @@ namespace coursesProject.Models
         [JsonIgnore]
         public Project Project { get; set; }
         public User Author { get; set; }
+        public string AuthorEmail { get; set; }
         public string Context { get; set; }
         public DateTime DateCreate { get; set; }   
     }
@@ -73,24 +74,11 @@ namespace coursesProject.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        [JsonIgnore]
-        public ICollection<TagsRelation> TagsRelation { get; set; }
-
-        public Tag()
-        {
-            TagsRelation = new List<TagsRelation>();
-        }
-    }
-
-    public class TagsRelation
-    {
-        public int Id { get; set; }
-        [ForeignKey("TagId")]
-        public Tag Tag { get; set; }
-        [JsonIgnore]
         [Required]
+        [JsonIgnore]       
         public Project Project { get; set; }
     }
+
 
 
     //public class Tag

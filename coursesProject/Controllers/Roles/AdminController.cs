@@ -58,6 +58,7 @@ namespace coursesProject.Controllers
             List<User> users = _context.GetUserListByListID(idUsers);
             foreach (var item in users)
             {
+                _context.Users.Remove(_context.Users.First(x=>x.UserName==item.Email));
                 _context.User.Remove(item);
             }   
             await _context.SaveChangesAsync();
@@ -81,7 +82,7 @@ namespace coursesProject.Controllers
 
 
         [HttpGet, ActionName("Verified")]
-        public async Task<ActionResult> Verified (int id)
+        public ActionResult Verified (int id)
         {
             User user = _context.GetUserById(id);
             UserViewModel uvm = user.UserToVM();

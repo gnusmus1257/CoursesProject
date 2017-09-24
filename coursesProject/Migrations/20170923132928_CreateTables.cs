@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace coursesProject.Migrations
 {
-    public partial class CreateTable : Migration
+    public partial class CreateTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,19 +45,6 @@ namespace coursesProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tag",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tag", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -206,19 +193,40 @@ namespace coursesProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MedalRelation",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MedalRelation", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_MedalRelation_User_UserID",
+                        column: x => x.UserID,
+                        principalTable: "User",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Project",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AthorEmail = table.Column<string>(nullable: true),
                     AthorID = table.Column<int>(nullable: false),
                     Avatar = table.Column<byte[]>(nullable: true),
                     Category = table.Column<string>(nullable: true),
                     CollectMoney = table.Column<int>(nullable: false),
                     DateOfRigister = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(maxLength: 500, nullable: true),
+                    Description = table.Column<string>(nullable: true),
                     EndDate = table.Column<DateTime>(nullable: false),
                     NameProject = table.Column<string>(nullable: true),
+                    NeedMoney = table.Column<int>(nullable: false),
                     Raiting = table.Column<double>(nullable: false),
                     ShortDescription = table.Column<string>(nullable: true),
                     Status = table.Column<string>(nullable: true)
@@ -257,11 +265,32 @@ namespace coursesProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Medal",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    MedalRelationID = table.Column<int>(nullable: true),
+                    Text = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Medal", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Medal_MedalRelation_MedalRelationID",
+                        column: x => x.MedalRelationID,
+                        principalTable: "MedalRelation",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comment",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuthorEmail = table.Column<string>(nullable: true),
                     AuthorID = table.Column<int>(nullable: true),
                     Context = table.Column<string>(nullable: true),
                     DateCreate = table.Column<DateTime>(nullable: false),
@@ -379,29 +408,23 @@ namespace coursesProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TagsRelation",
+                name: "Tag",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ProjectID = table.Column<int>(nullable: false),
-                    TagId = table.Column<int>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    ProjectID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TagsRelation", x => x.Id);
+                    table.PrimaryKey("PK_Tag", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TagsRelation_Project_ProjectID",
+                        name: "FK_Tag_Project_ProjectID",
                         column: x => x.ProjectID,
                         principalTable: "Project",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TagsRelation_Tag_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tag",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -429,6 +452,16 @@ namespace coursesProject.Migrations
                 name: "IX_Goal_ProjectID",
                 table: "Goal",
                 column: "ProjectID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Medal_MedalRelationID",
+                table: "Medal",
+                column: "MedalRelationID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MedalRelation_UserID",
+                table: "MedalRelation",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_New_ProjectID",
@@ -466,14 +499,9 @@ namespace coursesProject.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TagsRelation_ProjectID",
-                table: "TagsRelation",
+                name: "IX_Tag_ProjectID",
+                table: "Tag",
                 column: "ProjectID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TagsRelation_TagId",
-                table: "TagsRelation",
-                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_IdentityUserId",
@@ -519,6 +547,9 @@ namespace coursesProject.Migrations
                 name: "Goal");
 
             migrationBuilder.DropTable(
+                name: "Medal");
+
+            migrationBuilder.DropTable(
                 name: "New");
 
             migrationBuilder.DropTable(
@@ -531,7 +562,7 @@ namespace coursesProject.Migrations
                 name: "Subscriber");
 
             migrationBuilder.DropTable(
-                name: "TagsRelation");
+                name: "Tag");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -549,10 +580,10 @@ namespace coursesProject.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Project");
+                name: "MedalRelation");
 
             migrationBuilder.DropTable(
-                name: "Tag");
+                name: "Project");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

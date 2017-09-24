@@ -32,7 +32,6 @@ namespace coursesProject.Data
         public DbSet<coursesProject.Models.Comment> Comment { get; set; }
         public DbSet<coursesProject.Models.Statistic> Statistic { get; set; }
         public DbSet<coursesProject.Models.Tag> Tag { get; set; }
-        public DbSet<coursesProject.Models.TagsRelation> TagRelation { get; set; }
         public DbSet<coursesProject.Models.Medal> Medal { get; set; }
         public DbSet<coursesProject.Models.MedalRelation> MedalRelation { get; set; }
     }

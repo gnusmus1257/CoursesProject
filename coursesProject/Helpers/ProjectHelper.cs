@@ -16,7 +16,7 @@ namespace coursesProject.Helpers
             return project;
         }
 
-        public static MinProjectViewModel ProjectToMVM(this Project project)
+        public static MinProjectViewModel ProjectToMVM(this Project project, string IdentityUser)
         {
             MinProjectViewModel MinProjectVM = new MinProjectViewModel();
             MinProjectVM.AvatarByte = project.Avatar;
@@ -33,6 +33,7 @@ namespace coursesProject.Helpers
             MinProjectVM.EndDate = project.EndDate;
             MinProjectVM.CollectMoney = project.CollectMoney;
             MinProjectVM.Goals = project.Goals;
+            MinProjectVM.IdentityUser = IdentityUser;
             if (project.GetStartGoal()!=null && project.GetStartGoal().NeedMoney > 0)
             {
                 MinProjectVM.NeedMoney = project.GetStartGoal().NeedMoney;
@@ -43,6 +44,49 @@ namespace coursesProject.Helpers
             return MinProjectVM;
         }
 
+
+        public static DetailProjectViewModel ProjectToDVM(this Project project, string IdentityUser)
+        {
+            DetailProjectViewModel DetailProjectVM = new DetailProjectViewModel();
+            DetailProjectVM.Avatar = project.Avatar;
+            DetailProjectVM.Category = project.Category;
+            DetailProjectVM.Description = project.Description;
+            DetailProjectVM.ShortDescription = project.ShortDescription.GetShortDescrtiption(130);
+            DetailProjectVM.NameProject = project.NameProject;
+            if (project.Athor != null)
+            {
+                DetailProjectVM.Athor = project.Athor;
+            }
+            DetailProjectVM.AthorEmail = project.AthorEmail;
+            DetailProjectVM.DateOfRigister = project.DateOfRigister;
+            DetailProjectVM.Status = project.Status;
+            DetailProjectVM.Raiting = project.Raiting;
+            DetailProjectVM.EndDate = project.EndDate;
+            DetailProjectVM.CollectMoney = project.CollectMoney;
+            DetailProjectVM.Goals = project.Goals;
+            DetailProjectVM.Comments = project.Comment;
+
+            DetailProjectVM.TagStr = project.Tags.TagsListToStr();
+            if (DetailProjectVM.AthorEmail==IdentityUser)
+            {
+                DetailProjectVM.IsAthor = true;
+            }
+            else DetailProjectVM.IsAthor = false;
+            DetailProjectVM.NeedMoney = project.NeedMoney;
+            DetailProjectVM.ID = project.ID;
+            return DetailProjectVM;
+        }
+
+        public static EditProjectViewModel ProjectToEVM(this Project project)
+        {
+            EditProjectViewModel EditProjectVM = new EditProjectViewModel();
+            EditProjectVM.ShortDescription = project.ShortDescription.GetShortDescrtiption(130);
+            EditProjectVM.NameProject = project.NameProject;
+            EditProjectVM.EndDate = project.EndDate;
+            EditProjectVM.NeedMoney = project.NeedMoney;
+            EditProjectVM.ID = project.ID;
+            return EditProjectVM;
+        }
 
         public static string GetShortDescrtiption (this string str, int count)
         {
@@ -56,21 +100,33 @@ namespace coursesProject.Helpers
             return temp;
         }
 
-
-        public static Goal GetStartGoal(this Project project)
+        public static DetailProjectViewModel UpdateListsDVM (this ApplicationDbContext _context, int ID, string Email)
         {
-            List<Goal> Goals = new List<Goal>(project.Goals);
-            int minValue = int.MaxValue;
-            Goal goal = null;
-            for (int i = 0; i < Goals.Count; i++)
+            var project =  _context.Project.First(x => x.ID == ID);
+            project.Goals = _context.GetListGoals(project);
+            project.Comment = _context.GetListComments(project);
+            project.Tags = _context.GetListTags(project);
+            var ViewModel = project.ProjectToDVM(Email);
+            return ViewModel;
+        }
+
+        public static MinProjectViewModel UpdateListsMVM(this Project project, ApplicationDbContext _context, string Email)
+        {
+            project.Goals = _context.GetListGoals(project);
+            project.Comment = _context.GetListComments(project);
+            project.Tags = _context.GetListTags(project);
+            var ViewModel = project.ProjectToMVM(Email);
+            return ViewModel;
+        }
+
+        public static string TagsListToStr(this ICollection<Tag> tags)
+        {
+            string str = "";
+            foreach (var item in tags)
             {
-                if (Goals[i].NeedMoney < minValue)
-                {
-                    minValue = Goals[i].NeedMoney;
-                    goal = Goals[i];
-                }
+                str += item.Name + " ";
             }
-            return goal;
+            return str;
         }
 
         //public static Project CVMToProject(this CreateProjectViewModel CreateModel)
