@@ -74,7 +74,11 @@ namespace coursesProject.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    var user = _context.User.First(x => x.Email == model.Email);
+                    user.LastLoginDate = DateTime.Now;
+                    _context.Update(user);
+                    _context.SaveChanges();
+                    return RedirectToAction(nameof(ProjectsController.Index), "Projects");
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -128,10 +132,10 @@ namespace coursesProject.Controllers
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
-                    await _userManager.AddToRoleAsync(user, "admin");
+                    await _userManager.AddToRoleAsync(user, "user");
                     _context.User.Add(new User() { IdentityUser = user, Region = "en", Status = "newUser", LastLoginDate = DateTime.Now, RegistrationDate = DateTime.Now, Email = model.Email });
                     _context.SaveChanges();
-                    return RedirectToLocal(returnUrl);
+                    RedirectToAction(nameof(ProjectsController.Index), "Projects");
                 }
                 AddErrors(result);
             }
@@ -148,7 +152,7 @@ namespace coursesProject.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
-            return RedirectToAction(nameof(ProjectsController.Index), "Project");
+            return RedirectToAction(nameof(ProjectsController.Index), "Projects");
         }
 
         //

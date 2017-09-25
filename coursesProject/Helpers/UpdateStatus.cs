@@ -1,4 +1,5 @@
-﻿using coursesProject.Models;
+﻿using coursesProject.Data;
+using coursesProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,23 +9,19 @@ namespace coursesProject.Helpers
 {
     public static class UpdateStatus
     {
-        public static Project updateStatus(this Project project )
+        public static void updateStatus(this ApplicationDbContext context, Project project )
         {
-            if (project.GetStartGoal()==null){
-                return null;
-            }
-
-            if (project.EndDate >= DateTime.Now && project.GetStartGoal().NeedMoney > project.CollectMoney)
+            if (project.EndDate <= DateTime.Now && project.NeedMoney > project.CollectMoney)
             {
                 project.Status = "Fail";
             }
-            else if (project.EndDate >= DateTime.Now && project.GetStartGoal().NeedMoney <= project.CollectMoney)
+            else if (project.EndDate <= DateTime.Now && project.NeedMoney <= project.CollectMoney)
             {
                 project.Status = "Sucsess";
             }
             else project.Status = "Active";
-
-                return project;
+            context.Update(project);
+            context.SaveChanges();
         }
 
         

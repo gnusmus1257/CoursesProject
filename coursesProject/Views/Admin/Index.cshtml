@@ -41,7 +41,7 @@
                 <text class="text-info"> delete/ban</text>
             </th>
             <th>
-                <button id="Ban" class="btn btn-default"> Ban</button>
+                <button id="Ban" class="btn btn-default"> Lock</button>
             </th>
             <th>
                 <button id="UnLock" class="btn btn-default"> Unlock</button>
@@ -50,7 +50,7 @@
                 <button id="Del" class="btn btn-default"> Delete</button>
             </th>
             <th>
-                <button id="Verified" class="btn btn-default"> Verified</button>
+                <button id="Verified" class="btn btn-default"> Info</button>
             </th>
             
         </tr>
@@ -58,6 +58,7 @@
     <tbody id="result">
         @foreach (var item in Model)
         {
+            
             <tr class="user-row">
                 <td>
                     @Html.DisplayFor(model => item.Email)

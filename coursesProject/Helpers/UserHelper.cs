@@ -1,5 +1,7 @@
 ﻿using coursesProject.Data;
 using coursesProject.Models;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,6 +43,9 @@ namespace coursesProject.Helpers
             uvm.PasportScanByte = User.PasportScan;
             uvm.PersonalInfo = User.PersonalInfoForVerified;
             uvm.Status = User.Status;
+            uvm.LastLoginDate = User.LastLoginDate;
+            uvm.ProjectCount = User.ProjectCount;
+            uvm.RegistrationDate = User.RegistrationDate;
             return uvm;
         }
 
@@ -50,6 +55,22 @@ namespace coursesProject.Helpers
             User user = _context.GetUserByEmail(Email);
             return user;
         }
+
+
+        public  static void Verified(this ApplicationDbContext _context, User user, UserManager<ApplicationUser> _userManager)
+        {
+            user.Status = "verified";
+            _context.Update(user);
+        }
+
+        public static void UnVerified(this ApplicationDbContext _context, User user, UserManager<ApplicationUser> _userManager)
+        {
+            user.PasportScan = null;
+            user.Status = "newUser";
+            _context.Update(user);
+        }
+
+
         public static List<UserViewModel> GetListUVM( this ApplicationDbContext _context)
         {
             List<UserViewModel> UsersVM = new List<UserViewModel>();

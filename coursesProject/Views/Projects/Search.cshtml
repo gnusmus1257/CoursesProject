@@ -70,11 +70,11 @@
         {
             <div class="col-md-4" padding:10px;">
                 <div class="card">
-                    <h4><a href="Projects/Details/@item.Project">@Html.DisplayFor(model => item.NameProject)</a> </h4>
+                    <h4><a href="Details/@item.Project">@Html.DisplayFor(model => item.NameProject)</a> </h4>
 
                     @if (item.AvatarByte != null)
                 {
-                        <a href="Projects/Details/@item.Project"> <img style="width:100%; height:270px; " src="data:image/jpg;base64,@(Convert.ToBase64String(item.AvatarByte))" /></a>
+                        <a href="Details/@item.Project"> <img style="width:100%; height:270px; " src="data:image/jpg;base64,@(Convert.ToBase64String(item.AvatarByte))" /></a>
                     }
                 </div>
                 <text>@item.Category</text>

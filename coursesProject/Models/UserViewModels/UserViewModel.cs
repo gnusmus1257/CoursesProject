@@ -19,5 +19,9 @@ namespace coursesProject.Models
         public string Comment { get; set; }
         public bool IsBanned { get; set; }
         public string Status { get; set; }
+        public DateTime RegistrationDate { get; set; }
+        public DateTime LastLoginDate { get; set; }
+        public int Rating { get; set; }
+        public int ProjectCount { get; set; }
     }
 }

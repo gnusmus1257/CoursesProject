@@ -38,15 +38,34 @@
         <div class="col-md-4">
             <hr />
             <div class="text-capitalize">
+                <p>
+                    @Html.DisplayNameFor(model => model.Status)
 
-                @Html.DisplayNameFor(model => model.Status)
+                    @Html.DisplayFor(model => model.Status)
+                </p>
+                <p>
+                    @Html.DisplayNameFor(model => model.IsBanned)
 
-                @Html.DisplayFor(model => model.Status)
-                <br /><br />
-                @Html.DisplayNameFor(model => model.IsBanned)
+                    @Html.DisplayFor(model => model.IsBanned)
+                </p>
 
-                @Html.DisplayFor(model => model.IsBanned)
-                <br /><br />
+                <p>
+                    @Html.DisplayNameFor(model => model.LastLoginDate)
+
+                    @Html.DisplayFor(model => model.LastLoginDate)
+                </p>
+
+                <p>
+                    @Html.DisplayNameFor(model => model.RegistrationDate)
+
+                    @Html.DisplayFor(model => model.RegistrationDate)
+                </p>
+
+                <p>
+                    @Html.DisplayNameFor(model => model.ProjectCount)
+
+                    @Html.DisplayFor(model => model.ProjectCount)
+                </p>
             </div>
             <hr />
             <button id="Verified" class="btn btn-default"> Confirmed verification</button><br /><br />

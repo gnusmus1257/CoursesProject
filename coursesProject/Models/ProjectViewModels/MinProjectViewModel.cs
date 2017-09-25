@@ -13,6 +13,7 @@ namespace coursesProject.Models.ProjectViewModels
         public string Author { get; set; }
         public string IdentityUser { get; set; }
         public DateTime EndDate { get; set; }
+        public DateTime DateOfRigister { get; set; }
         public string Status { get; set; }
         public int CollectMoney { get; set; }
         public int NeedMoney { get; set; }

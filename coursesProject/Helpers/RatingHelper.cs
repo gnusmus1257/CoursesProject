@@ -21,7 +21,29 @@ namespace coursesProject.Helpers
                     rating += item.rating;
                 }
             }
-            return rating/count;
+            if (count!=0)
+            {
+                project.Raiting = rating / count;
+                context.Update(project);
+                context.SaveChanges();
+                return rating / count;
+            }
+            return 0;
+        }
+
+        public static void AddRatingIfNotExist(this ApplicationDbContext _context, User user, Project project, int value)
+        {
+            if (_context.Rating.Count()!=0)
+            {
+                var Rating = _context.Rating.FirstOrDefault(x => x.Project == project && x.User == user);
+                if (Rating != null&&Rating.Project==project&&Rating.User==user)
+                {
+                    return;
+                }
+            }
+            var rating = new Rating() { Project = project, User = user, rating = value };
+            _context.Rating.Add(rating);
+            _context.SaveChanges();
         }
     }
 }
