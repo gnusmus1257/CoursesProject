@@ -8,9 +8,10 @@ using coursesProject.Data;
 namespace coursesProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170925094729_Del")]
+    partial class Del
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -85,13 +86,13 @@ namespace coursesProject.Data.Migrations
 
                     b.Property<string>("AuthorEmail");
 
-                    b.Property<int>("AuthorID");
+                    b.Property<int?>("AuthorID");
 
                     b.Property<string>("Context");
 
                     b.Property<DateTime>("DateCreate");
 
-                    b.Property<int?>("ProjectID");
+                    b.Property<int>("ProjectID");
 
                     b.HasKey("Id");
 
@@ -209,9 +210,9 @@ namespace coursesProject.Data.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ProjectID");
+                    b.Property<int>("ProjectID");
 
-                    b.Property<int>("UserID");
+                    b.Property<int?>("UserID");
 
                     b.Property<int>("rating");
 
@@ -428,12 +429,12 @@ namespace coursesProject.Data.Migrations
                 {
                     b.HasOne("coursesProject.Models.User", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AuthorID");
 
                     b.HasOne("coursesProject.Models.Project", "Project")
                         .WithMany("Comment")
-                        .HasForeignKey("ProjectID");
+                        .HasForeignKey("ProjectID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("coursesProject.Models.Goal", b =>
@@ -478,12 +479,12 @@ namespace coursesProject.Data.Migrations
                 {
                     b.HasOne("coursesProject.Models.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("ProjectID");
+                        .HasForeignKey("ProjectID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("coursesProject.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("coursesProject.Models.Statistic", b =>

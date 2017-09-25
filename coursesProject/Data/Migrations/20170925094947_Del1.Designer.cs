@@ -8,9 +8,10 @@ using coursesProject.Data;
 namespace coursesProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170925094947_Del1")]
+    partial class Del1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -209,9 +210,9 @@ namespace coursesProject.Data.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ProjectID");
+                    b.Property<int>("ProjectID");
 
-                    b.Property<int>("UserID");
+                    b.Property<int?>("UserID");
 
                     b.Property<int>("rating");
 
@@ -478,12 +479,12 @@ namespace coursesProject.Data.Migrations
                 {
                     b.HasOne("coursesProject.Models.Project", "Project")
                         .WithMany()
-                        .HasForeignKey("ProjectID");
+                        .HasForeignKey("ProjectID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("coursesProject.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("coursesProject.Models.Statistic", b =>

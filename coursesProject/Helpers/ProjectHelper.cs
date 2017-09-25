@@ -1,6 +1,7 @@
 ﻿using coursesProject.Data;
 using coursesProject.Models;
 using coursesProject.Models.ProjectViewModels;
+using coursesProject.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,39 @@ namespace coursesProject.Helpers
             return project;
         }
 
+        public static void CreateProject(this ApplicationDbContext _context, User user, CreateProjectViewModel CreateModel, Project project, string Email)
+        {
+            user.ProjectCount++;
+            project.NameProject = CreateModel.nameProject;
+            project.Status = "Active";
+            project.Avatar = CreateModel.GetImg();
+            project.Category = CreateModel.Category;
+            _context.CreateCategoryIfNotExist(CreateModel.Category);
+            project.Athor = _context.GetIdentityUser(Email);
+            project.DateOfRigister = DateTime.Now;
+            project.EndDate = CreateModel.EndTime;
+            project.Description = CreateModel.Descrtiption;
+            project.Raiting = 0;
+            project.AthorEmail = Email;
+            project.ShortDescription = CreateModel.ShortDescription.GetShortDescrtiption(230);
+            project.NeedMoney = CreateModel.NeedMoney;
+            Goal FirstGoal = new Goal() { Project = project, NeedMoney = CreateModel.NeedMoney, Text = CreateModel.Goal };
+            _context.Goal.Add(FirstGoal);
+            _context.Project.Add(project);
+            _context.Update(user);
+
+        }
+
+        public  static void EditProject(this ApplicationDbContext _context, Project project, EditProjectViewModel Project)
+        {
+            project.Description = Project.Description;
+            project.ShortDescription = Project.ShortDescription;
+            project.EndDate = Project.EndDate;
+            project.Avatar = Project.Avatar.GetImg();
+            project.NeedMoney = Project.NeedMoney;
+            _context.Update(project);
+        }
+
         public static MinProjectViewModel ProjectToMVM(this Project project, string IdentityUser)
         {
             MinProjectViewModel MinProjectVM = new MinProjectViewModel();
@@ -27,6 +61,7 @@ namespace coursesProject.Helpers
             {
                 MinProjectVM.Author = project.Athor.Email;
             }
+            MinProjectVM.DateOfRigister = project.DateOfRigister;
             MinProjectVM.Author = project.AthorEmail;
             MinProjectVM.Status = project.Status;
             MinProjectVM.Raiting = project.Raiting;

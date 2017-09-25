@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h2><a href="@Model.ID">Details </a></h2>
+<h2><a href="Details/@Model.ID">Details </a></h2>
 
 <div class="row">
     <div class="col-md-5 ">
@@ -13,7 +13,7 @@
         {
             <img style="width:100%; height:270px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.Avatar))" />
         }
-   
+
     </div>
     <div class="col-md-3" style="min-height:310px">
 
@@ -60,19 +60,19 @@
         </div>
         @if ((Model.EndDate.DayOfYear - Model.DateOfRigister.DayOfYear) >= 1)
         {
-        <form id=pay name=pay method="POST" action="https://merchant.webmoney.ru/lmi/payment.asp">
-            <p><b>Pay 100 WMZ...</b></p>
-            <p>
-                <input type="hidden" name="LMI_PAYMENT_AMOUNT" value="100.0">
-                <input type="hidden" name="LMI_PAYMENT_DESC" value="Test pay">
-                <input type="hidden" name="LMI_PAYMENT_NO" value="1">
-                <input type="hidden" name="LMI_PAYEE_PURSE" value="Z145179295679">
-                <input type="hidden" name="LMI_SIM_MODE" value="0">
-            </p>
-            <p>
-                <input type="submit" class="btn btn-default" value="Pay">
-            </p>
-        </form> <br />
+            <form id=pay name=pay method="POST" action="https://merchant.webmoney.ru/lmi/payment.asp">
+                <p><b>Pay 100 WMZ...</b></p>
+                <p>
+                    <input type="hidden" name="LMI_PAYMENT_AMOUNT" value="100.0">
+                    <input type="hidden" name="LMI_PAYMENT_DESC" value="Test pay">
+                    <input type="hidden" name="LMI_PAYMENT_NO" value="1">
+                    <input type="hidden" name="LMI_PAYEE_PURSE" value="Z145179295679">
+                    <input type="hidden" name="LMI_SIM_MODE" value="0">
+                </p>
+                <p>
+                    <input type="submit" class="btn btn-default" value="Pay">
+                </p>
+            </form> <br />
         }
 
     </div>
@@ -100,14 +100,14 @@
                             <input type="text" name="NeedMoney" class="form-control" />
                             <span asp-validation-for="NeedMoney" class="text-danger"></span>
                         </div>
-                    </div>    
+                    </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label">New goal</label>
                         <div class="col-md-10">
                             <input type="text" name="Goal" class="form-control" />
                             <span asp-validation-for="Goal" class="text-danger"></span>
                         </div>
-                    </div>    
+                    </div>
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
                             <input type="submit" value="Add" class="btn btn-default" />
@@ -117,72 +117,72 @@
             </form>
         }
     </div>
- <div class="col-md-2"></div>
-        <div class="col-md-8 lead text-justify" style="margin-top:15px">
-
-
-                @if (Model.IsAthor)
-                {
-                    <form asp-action="AddTopic" enctype="multipart/form-data">
-                        <div class="form-horizontal">
-                            <input type="hidden" asp-for="ID" />
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">New topic</label>
-                                <div class="col-md-10">
-                                    <input type="text" name="Topic" class="form-control" />
-                                    <span asp-validation-for="Topic" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Add" class="btn btn-default" />
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                }
-            <p>
-                <b>Project news :</b>
-                <ul>
-                    @foreach (var item in Model.News)
-                    {
-                        <li>
-                            @item.Text
-                        </li>
-                    }
-                </ul>
-            </p>
-
-            <p>
-                <b> Descriotion :</b> <br />
-                @Model.Description
-            </p>
-        </div>
-    <div class="col-md-2"></div>
     <div class="col-md-2"></div>
     <div class="col-md-8 lead text-justify" style="margin-top:15px">
-        
-        <form asp-action="AddComment" enctype="multipart/form-data">
+
+
+        @if (Model.IsAthor)
+        {
+            <form asp-action="AddTopic" enctype="multipart/form-data">
                 <div class="form-horizontal">
                     <input type="hidden" asp-for="ID" />
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label">Comment</label>
+                        <label class="col-md-2 control-label">New topic</label>
                         <div class="col-md-10">
-                            <input type="text" name="Comment" class="form-control" />
-                            <span asp-validation-for="Comment" class="text-danger"></span>
+                            <input type="text" name="Topic" class="form-control" />
+                            <span asp-validation-for="Topic" class="text-danger"></span>
                         </div>
-                    </div>    
+                    </div>
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Comment" class="btn btn-default" />
+                            <input type="submit" value="Add" class="btn btn-default" />
                         </div>
                     </div>
                 </div>
             </form>
+        }
+        <p>
+            <b>Project news :</b>
+            <ul>
+                @foreach (var item in Model.News)
+                {
+                    <li>
+                        @item.Text
+                    </li>
+                }
+            </ul>
+        </p>
+
+        <p>
+            <b> Descriotion :</b> <br />
+            @Model.Description
+        </p>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-2"></div>
+    <div class="col-md-8 lead text-justify" style="margin-top:15px">
+
+        <form asp-action="AddComment" enctype="multipart/form-data">
+            <div class="form-horizontal">
+                <input type="hidden" asp-for="ID" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Comment</label>
+                    <div class="col-md-10">
+                        <input type="text" name="Comment" class="form-control" />
+                        <span asp-validation-for="Comment" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Comment" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        </form>
 
         <div class="col-md-10">
             @foreach (var item in Model.Comments)
@@ -198,7 +198,7 @@
                 </p>
                 <hr />
             }
-            
+
         </div>
         <p class="text-info">
             <b>
@@ -230,20 +230,20 @@
         }
     </div>
     <div class="col-md-2"></div>
-                                                                        @*WebMoney PAYMENT*@
+    @*WebMoney PAYMENT*@
     @*<form id=pay name=pay method="POST" action="https://merchant.webmoney.ru/lmi/payment.asp">
-        <p>пример платежа через сервис Web Merchant Interface</p> <p>заплатить 1 WMZ...</p>
-        <p>
-            <input type="hidden" name="LMI_PAYMENT_AMOUNT" value="1.0">
-            <input type="hidden" name="LMI_PAYMENT_DESC" value="тестовый платеж">
-            <input type="hidden" name="LMI_PAYMENT_NO" value="1">
-            <input type="hidden" name="LMI_PAYEE_PURSE" value="Z145179295679">
-            <input type="hidden" name="LMI_SIM_MODE" value="0">
-        </p>
-        <p>
-            <input type="submit" value="submit">
-        </p>
-    </form>*@
+            <p>пример платежа через сервис Web Merchant Interface</p> <p>заплатить 1 WMZ...</p>
+            <p>
+                <input type="hidden" name="LMI_PAYMENT_AMOUNT" value="1.0">
+                <input type="hidden" name="LMI_PAYMENT_DESC" value="тестовый платеж">
+                <input type="hidden" name="LMI_PAYMENT_NO" value="1">
+                <input type="hidden" name="LMI_PAYEE_PURSE" value="Z145179295679">
+                <input type="hidden" name="LMI_SIM_MODE" value="0">
+            </p>
+            <p>
+                <input type="submit" value="submit">
+            </p>
+        </form>*@
 </div>
 <div>
     @if (Model.IsAthor)

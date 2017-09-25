@@ -30,18 +30,9 @@ namespace coursesProject.Controllers
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.User
-                .SingleOrDefaultAsync(m => m.ID == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
+            if (id == null) return NotFound();
+            var user = await _context.User.SingleOrDefaultAsync(m => m.ID == id);
+            if (user == null)  return NotFound();
             return View(user);
         }
 
@@ -74,7 +65,6 @@ namespace coursesProject.Controllers
             {
                 return NotFound();
             }
-
             var user = await _context.User.SingleOrDefaultAsync(m => m.ID == id);
             if (user == null)
             {

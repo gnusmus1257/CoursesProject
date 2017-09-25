@@ -11,7 +11,7 @@ using coursesProject.Service;
 
 namespace coursesProject.Controllers.Roles
 {
-    [Authorize]//(Roles = "user")
+    [Authorize(Roles = "user,admin")]
     public class UserController : Controller
     {
         public readonly ApplicationDbContext _context;
@@ -22,14 +22,7 @@ namespace coursesProject.Controllers.Roles
         }
 
 
-
-
-
-
-
-
-
-        [Authorize(Roles = "verified,admin,user")]////        ÄÎÁÀÂËÅÍÈÅ ÏÎÄÏÈÙÈÊÀ(ÍÀÑÒĞÎÈÒÜ ÂÕÎÄÍÛÅ ÄÀÍÍÛÅ) 
+        [Authorize(Roles = "verified,admin,user")]
         [HttpPost, ActionName("AddSubscriber")]
         public async Task<IActionResult> AddSubscriber(int idUser, int idProject)
         {
@@ -40,7 +33,7 @@ namespace coursesProject.Controllers.Roles
             return Ok();
         }
 
-        [Authorize(Roles = "verified,admin,user")]////        ÓÄÀËÅÍÈÅ ÏÎÄÏÈÙÈÊÀ(ÍÀÑÒĞÎÈÒÜ ÂÕÎÄÍÛÅ ÄÀÍÍÛÅ) 
+        [Authorize(Roles = "verified,admin,user")]
         [HttpPost, ActionName("RemoveSubscriber")]
         public async Task<IActionResult> RemoveSubscriber(int idUser, int idProject)
         {
@@ -54,13 +47,13 @@ namespace coursesProject.Controllers.Roles
 
 
         [HttpGet]
-        //[Authorize(Roles = "user")]////                                 ÄÎÁÀÂËÅÍÈÅ ÑÊÀÍÀ ÏÀÑÏÎĞÒÀ(íóæíî äîáàâèòü ñîáûòèå)
+        [Authorize(Roles = "user")]                               
         public  IActionResult PassportScan()
         {
             return View();
         }
         
-        [Authorize  ]////    (Roles = "user")                           ÄÎÁÀÂËÅÍÈÅ ÑÊÀÍÀ ÏÀÑÏÎĞÒÀ(íóæíî äîáàâèòü ñîáûòèå)
+        [Authorize (Roles = "user")]
         [HttpPost, ActionName("PassportScan")]
         public async Task<IActionResult> PassportScanLoad(UserViewModel pvm)
         {
@@ -84,8 +77,6 @@ namespace coursesProject.Controllers.Roles
             return RedirectToAction("Index");
         }
 
-
-        [Authorize]////    (Roles = "user")                           ÄÎÁÀÂËÅÍÈÅ ÀÂÀÒÀĞÀ(íóæíî äîáàâèòü ñîáûòèå)
         [HttpPost, ActionName("Avatar")]
         public async Task<IActionResult> AvatarLoad(UserViewModel pvm)
         {
@@ -99,12 +90,7 @@ namespace coursesProject.Controllers.Roles
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
-
-
-
-
-
-
+        [Authorize(Roles = "verified,admin,user")]
         public IActionResult Index()
         {
             User person =  _context.User.First(x => x.IdentityUser.UserName == User.Identity.Name);

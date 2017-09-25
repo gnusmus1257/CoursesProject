@@ -97,7 +97,18 @@
                 @Html.DisplayFor(model => item.MinDescription)
             </div><hr />
             <text> By @item.Author</text><hr />
-            <div>
+            <div> 
+                Day left:
+                @if ((item.EndDate.DayOfYear - item.DateOfRigister.DayOfYear)>=1)
+                {
+                    @(item.EndDate.DayOfYear - item.DateOfRigister.DayOfYear); 
+                }
+                else
+                {
+                    <b> Project closed</b>
+                }
+                <hr />
+                Status : @item.Status<hr />
                Collect money @item.CollectMoney <hr />
                 Need money @item.NeedMoney <hr />
                 @if (@item.Goals.Count>=1)
