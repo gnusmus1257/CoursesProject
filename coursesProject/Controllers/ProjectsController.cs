@@ -158,7 +158,7 @@ namespace coursesProject.Controllers
 
 
 
-        [Authorize(Roles = "verified,admin")]////        днаюбкемхе мнбнярх(мюярпнхрэ бундмше дюммше) 
+        [Authorize(Roles = "verified,admin")]////        днаюбкемхе мнбнярх() 
         [HttpPost, ActionName("AddTopic")]
         public async Task<IActionResult> AddTopic(string Topic, int ID)
         {
@@ -171,6 +171,22 @@ namespace coursesProject.Controllers
         }
 
 
+        [Authorize(Roles = "verified,admin,user")]////        днаюбкемхе пеирхмцю
+        [HttpPost, ActionName("AddRating")]
+        public async Task<IActionResult> AddRating( int ID, int rating)
+        {
+            if (rating>=0&&rating<=5)
+            {
+                ViewBag.rating = "eror rating";
+                return View("Details", _context.UpdateListsDVM(ID, User.Identity.Name));
+            }
+            User user = await _context.User.FirstAsync(x => x.Email == User.Identity.Name);
+            Project project = await _context.Project.FirstAsync(x => x.ID == ID);
+            _context.AddRatingIfNotExist(user, project, rating);
+            return View("Details", _context.UpdateListsDVM(ID, User.Identity.Name));
+        }
+
+
         [Authorize(Roles = "verified,admin") ]////       днаюбкемхе рецю
         [HttpPost, ActionName("AddTag")]
         public async Task<IActionResult> AddTag(int ID, string Tag)
@@ -178,8 +194,6 @@ namespace coursesProject.Controllers
             User user = _context.GetUserByEmail(User.Identity.Name);
             Project project = await _context.Project.FirstAsync(x => x.ID == ID);
             DetailProjectViewModel ViewModel = project.ProjectToDVM(User.Identity.Name);
-            //_context.RemoveAllTagsProject(project);//               сдюкхрэ ярпнйх
-            //_context.RemoveAllTags();
             project.Tags.Add( new Tag() { Name=Tag,Project=project});
             _context.Project.Update(project);
             _context.SaveChanges();    
@@ -203,6 +217,8 @@ namespace coursesProject.Controllers
 
             return View(project.ProjectToEVM());
         }
+
+
 
         // POST: Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

@@ -107,6 +107,7 @@ namespace coursesProject.Helpers
             project.Comment = _context.GetListComments(project);
             project.Tags = _context.GetListTags(project);
             project.News = _context.GetListTopics(project);
+            project.Raiting = _context.GetRating(project);
             var ViewModel = project.ProjectToDVM(Email);
             return ViewModel;
         }

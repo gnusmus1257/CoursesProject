@@ -10958,11 +10958,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\artem\\source\\repos\\coursesProject\\coursesProject\\coursesProject.csproj",
+      "projectUniqueName": "C:\\Users\\artem\\Desktop\\Обновленный проект\\coursesProject\\coursesProject.csproj",
       "projectName": "coursesProject",
-      "projectPath": "C:\\Users\\artem\\source\\repos\\coursesProject\\coursesProject\\coursesProject.csproj",
+      "projectPath": "C:\\Users\\artem\\Desktop\\Обновленный проект\\coursesProject\\coursesProject.csproj",
       "packagesPath": "C:\\Users\\artem\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\artem\\source\\repos\\coursesProject\\coursesProject\\obj\\",
+      "outputPath": "C:\\Users\\artem\\Desktop\\Обновленный проект\\coursesProject\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\artem\\AppData\\Roaming\\NuGet\\NuGet.Config",

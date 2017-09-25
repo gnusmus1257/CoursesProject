@@ -32,12 +32,21 @@ namespace coursesProject.Controllers
             for (int i = 0; i < idUsers.Count; i++)
             {
                 Users.Add(_context.GetUserById(idUsers[i]));
+                var IdentityUser= _context.Users.First(x => x.Email == Users[i].Email);
                 Users[i].IsBan = true;
+                IdentityUser.LockoutEnabled = true;
+                IdentityUser.LockoutEnd = DateTime.UtcNow.AddMinutes(42);
+                await _userManager.UpdateAsync(IdentityUser);
+                _context.Update(IdentityUser);
+                _context.Update(Users[i]);
                 _context.User.Update(Users[i]);
             }
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+
+
 
         [Authorize]////   (Roles = "admin")     –¿«¡¿Õ ﬁ«≈–¿ (Õ¿—“–Œ»“‹ ¬’ŒƒÕ€≈ ƒ¿ÕÕ€≈) 
         //[HttpPost, ActionName("UnlockUsrs")]
@@ -47,7 +56,11 @@ namespace coursesProject.Controllers
             for (int i = 0; i < idUsers.Count; i++)
             {
                 Users.Add(_context.GetUserById(idUsers[i]));
+                var IdentityUser = _context.Users.First(x => x.Email == Users[i].Email);
+                IdentityUser.LockoutEnabled = false;
                 Users[i].IsBan = false;
+                await _userManager.UpdateAsync(IdentityUser);
+                _context.Update(IdentityUser);
                 _context.User.Update(Users[i]);
             }
             await _context.SaveChangesAsync();

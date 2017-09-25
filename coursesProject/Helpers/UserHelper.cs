@@ -41,6 +41,9 @@ namespace coursesProject.Helpers
             uvm.PasportScanByte = User.PasportScan;
             uvm.PersonalInfo = User.PersonalInfoForVerified;
             uvm.Status = User.Status;
+            uvm.LastLoginDate = User.LastLoginDate;
+            uvm.ProjectCount = User.ProjectCount;
+            uvm.RegistrationDate = User.RegistrationDate;
             return uvm;
         }
 
@@ -50,6 +53,8 @@ namespace coursesProject.Helpers
             User user = _context.GetUserByEmail(Email);
             return user;
         }
+
+
         public static List<UserViewModel> GetListUVM( this ApplicationDbContext _context)
         {
             List<UserViewModel> UsersVM = new List<UserViewModel>();

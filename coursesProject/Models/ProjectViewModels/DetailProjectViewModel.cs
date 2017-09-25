@@ -27,6 +27,7 @@ namespace coursesProject.Models.ProjectViewModels
         public string Topic { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public double Raiting { get; set; }
+        public int rating { get; set; }
         public ICollection<Goal> Goals { get; set; }
         public ICollection<Subscriber> Subscriber { get; set; }
         public ICollection<New> News { get; set; }

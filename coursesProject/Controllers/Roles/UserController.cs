@@ -102,18 +102,7 @@ namespace coursesProject.Controllers.Roles
 
 
 
-        [Authorize(Roles = "verified,admin,user")]////        днаюбкемхе пеирхмцю(мюярпнхрэ бундмше дюммше) 
-        [HttpPost, ActionName("AddRating")]
-        public async Task<IActionResult> AddRating(int idUser, int idProject, int Rating)
-        {
-            User user = await _context.User.FirstAsync(x => x.ID == idUser);
-            Project project = await _context.Project.FirstAsync(x => x.ID == idProject);
-            Rating rating = new Rating() { Project = project, User = user, rating = Rating };
-            _context.Rating.Add(rating);
-            await _context.SaveChangesAsync();
-            return Ok();
-           
-        }
+
 
 
         public IActionResult Index()

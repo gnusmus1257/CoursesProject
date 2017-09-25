@@ -74,7 +74,7 @@ namespace coursesProject.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction(nameof(ProjectsController.Index), "Projects");
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -131,7 +131,7 @@ namespace coursesProject.Controllers
                     await _userManager.AddToRoleAsync(user, "admin");
                     _context.User.Add(new User() { IdentityUser = user, Region = "en", Status = "newUser", LastLoginDate = DateTime.Now, RegistrationDate = DateTime.Now, Email = model.Email });
                     _context.SaveChanges();
-                    return RedirectToLocal(returnUrl);
+                    RedirectToAction(nameof(ProjectsController.Index), "Projects");
                 }
                 AddErrors(result);
             }
@@ -148,7 +148,7 @@ namespace coursesProject.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
-            return RedirectToAction(nameof(ProjectsController.Index), "Project");
+            return RedirectToAction(nameof(ProjectsController.Index), "Projects");
         }
 
         //
