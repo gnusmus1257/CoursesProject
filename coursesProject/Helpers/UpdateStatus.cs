@@ -22,8 +22,6 @@ namespace coursesProject.Helpers
             else project.Status = "Active";
             context.Update(project);
             context.SaveChanges();
-        }
-
-        
+        }        
     }
 }
