@@ -40,8 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\ProjectHelper.cs" />
-    <Compile Include="Helpers\SortByState.cs" />
+    <Compile Include="Helpers\GoalsHelper.cs" />
     <Compile Include="Helpers\TagHelper.cs" />
     <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

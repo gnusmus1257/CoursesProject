@@ -13,7 +13,7 @@ namespace Logic.Helpers
             {
                 if (item.Project == project)
                 {
-                    Tags.Add(item);
+                    result.Add(item);
                 }
             }
             return result;
