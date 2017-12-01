@@ -1,54 +1,50 @@
-﻿using coursesProject.Data;
+﻿using coursesProject.Helpers;
 using coursesProject.Models;
 using coursesProject.Models.ProjectViewModels;
-using coursesProject.Service;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace coursesProject.Helpers
+namespace Logic.Helpers
 {
     public static class ProjectHelper
     {
-        public static Project GetProjectById (this ApplicationDbContext _context, int ProjectID)
+        public static Project GetProjectById(this ICollection<Project> Projects, int ProjectID)
         {
-            Project project = _context.Project.First(x => x.ID == ProjectID);
+            Project project = Projects.First(x => x.ID == ProjectID);
             return project;
         }
 
-        public static void CreateProject(this ApplicationDbContext _context, User user, CreateProjectViewModel CreateModel, Project project, string Email)
-        {
-            user.ProjectCount++;
-            project.NameProject = CreateModel.nameProject;
-            project.Status = "Active";
-            project.Avatar = CreateModel.GetImg();
-            project.Category = CreateModel.Category;
-            _context.CreateCategoryIfNotExist(CreateModel.Category);
-            project.Athor = _context.GetIdentityUser(Email);
-            project.DateOfRigister = DateTime.Now;
-            project.EndDate = CreateModel.EndTime;
-            project.Description = CreateModel.Descrtiption;
-            project.Raiting = 0;
-            project.AthorEmail = Email;
-            project.ShortDescription = CreateModel.ShortDescription.GetShortDescrtiption(230);
-            project.NeedMoney = CreateModel.NeedMoney;
-            Goal FirstGoal = new Goal() { Project = project, NeedMoney = CreateModel.NeedMoney, Text = CreateModel.Goal };
-            _context.Goal.Add(FirstGoal);
-            _context.Project.Add(project);
-            _context.Update(user);
+        //public static void CreateProject(this ApplicationDbContext _context, User user, CreateProjectViewModel CreateModel, Project project, string Email)
+        //{
+        //    user.ProjectCount++;
+        //    project.NameProject = CreateModel.nameProject;
+        //    project.Status = "Active";
+        //    project.Avatar = CreateModel.GetImg();
+        //    project.Category = CreateModel.Category;
+        //    _context.CreateCategoryIfNotExist(CreateModel.Category);
+        //    project.Athor = _context.GetIdentityUser(Email);
+        //    project.DateOfRigister = DateTime.Now;
+        //    project.EndDate = CreateModel.EndTime;
+        //    project.Description = CreateModel.Descrtiption;
+        //    project.Raiting = 0;
+        //    project.AthorEmail = Email;
+        //    project.ShortDescription = CreateModel.ShortDescription.GetShortDescrtiption(230);
+        //    project.NeedMoney = CreateModel.NeedMoney;
+        //    Goal FirstGoal = new Goal() { Project = project, NeedMoney = CreateModel.NeedMoney, Text = CreateModel.Goal };
+        //    _context.Goal.Add(FirstGoal);
+        //    _context.Project.Add(project);
+        //    _context.Update(user);
+        //}
 
-        }
-
-        public  static void EditProject(this ApplicationDbContext _context, Project project, EditProjectViewModel Project)
-        {
-            project.Description = Project.Description;
-            project.ShortDescription = Project.ShortDescription;
-            project.EndDate = Project.EndDate;
-            project.Avatar = Project.Avatar.GetImg();
-            project.NeedMoney = Project.NeedMoney;
-            _context.Update(project);
-        }
+        //public  static void EditProject(this ApplicationDbContext _context, Project project, EditProjectViewModel Project)
+        //{
+        //    project.Description = Project.Description;
+        //    project.ShortDescription = Project.ShortDescription;
+        //    project.EndDate = Project.EndDate;
+        //    project.Avatar = Project.Avatar.GetImg();
+        //    project.NeedMoney = Project.NeedMoney;
+        //    _context.Update(project);
+        //}
 
         public static MinProjectViewModel ProjectToMVM(this Project project, string IdentityUser)
         {
@@ -57,7 +53,7 @@ namespace coursesProject.Helpers
             MinProjectVM.Category = project.Category;
             MinProjectVM.MinDescription = project.ShortDescription.GetShortDescrtiption(130);
             MinProjectVM.NameProject = project.NameProject;
-            if (project.Athor!=null)
+            if (project.Athor != null)
             {
                 MinProjectVM.Author = project.Athor.Email;
             }
@@ -69,13 +65,13 @@ namespace coursesProject.Helpers
             MinProjectVM.CollectMoney = project.CollectMoney;
             MinProjectVM.Goals = project.Goals;
             MinProjectVM.IdentityUser = IdentityUser;
-            if (project.GetStartGoal()!=null && project.GetStartGoal().NeedMoney > 0)
+            if (project.GetStartGoal() != null && project.GetStartGoal().NeedMoney > 0)
             {
                 MinProjectVM.NeedMoney = project.GetStartGoal().NeedMoney;
                 MinProjectVM.Goal = project.GetStartGoal().Text;
             }
             MinProjectVM.NeedMoney = project.NeedMoney;
-            MinProjectVM.Project = project.ID;            
+            MinProjectVM.Project = project.ID;
             return MinProjectVM;
         }
 
@@ -102,7 +98,7 @@ namespace coursesProject.Helpers
             DetailProjectVM.Comments = project.Comment;
             DetailProjectVM.News = project.News;
             DetailProjectVM.TagStr = project.Tags.TagsListToStr();
-            if (DetailProjectVM.AthorEmail==IdentityUser)
+            if (DetailProjectVM.AthorEmail == IdentityUser)
             {
                 DetailProjectVM.IsAthor = true;
             }
@@ -123,11 +119,11 @@ namespace coursesProject.Helpers
             return EditProjectVM;
         }
 
-        public static string GetShortDescrtiption (this string str, int count)
+        private static string GetShortDescrtiption(this string str, int count)
         {
-            if (str.Length<=count) { return str;}
+            if (str.Length <= count) { return str; }
             string temp = "";
-            for (int i = 0; i < count-3; i++)
+            for (int i = 0; i < count - 3; i++)
             {
                 temp += str[i];
             }
@@ -135,28 +131,28 @@ namespace coursesProject.Helpers
             return temp;
         }
 
-        public static DetailProjectViewModel UpdateListsDVM (this ApplicationDbContext _context, int ID, string Email)
-        {
-            var project =  _context.Project.First(x => x.ID == ID);
-            project.Goals = _context.GetListGoals(project);
-            project.Comment = _context.GetListComments(project);
-            project.Tags = _context.GetListTags(project);
-            project.News = _context.GetListTopics(project);
-            project.Raiting = _context.GetRating(project);
-            var ViewModel = project.ProjectToDVM(Email);
-            return ViewModel;
-        }
+        //public static DetailProjectViewModel UpdateListsDVM (this ApplicationDbContext _context, int ID, string Email)
+        //{
+        //    var project =  _context.Project.First(x => x.ID == ID);
+        //    project.Goals = _context.GetListGoals(project);
+        //    project.Comment = _context.GetListComments(project);
+        //    project.Tags = _context.GetListTags(project);
+        //    project.News = _context.GetListTopics(project);
+        //    project.Raiting = _context.GetRating(project);
+        //    var ViewModel = project.ProjectToDVM(Email);
+        //    return ViewModel;
+        //}
 
-        public static MinProjectViewModel UpdateListsMVM(this Project project, ApplicationDbContext _context, string Email)
-        {
-            project.Goals = _context.GetListGoals(project);
-            project.Comment = _context.GetListComments(project);
-            project.Tags = _context.GetListTags(project);
-            var ViewModel = project.ProjectToMVM(Email);
-            return ViewModel;
-        }
+        //public static MinProjectViewModel UpdateListsMVM(this Project project, ApplicationDbContext _context, string Email)
+        //{
+        //    project.Goals = _context.GetListGoals(project);
+        //    project.Comment = _context.GetListComments(project);
+        //    project.Tags = _context.GetListTags(project);
+        //    var ViewModel = project.ProjectToMVM(Email);
+        //    return ViewModel;
+        //}
 
-        public static string TagsListToStr(this ICollection<Tag> tags)
+        private static string TagsListToStr(this ICollection<Tag> tags)
         {
             string str = "";
             foreach (var item in tags)
