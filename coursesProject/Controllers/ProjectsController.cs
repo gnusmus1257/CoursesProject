@@ -30,8 +30,7 @@ namespace coursesProject.Controllers
         public async Task<IActionResult> Index()
         {
             List<Project> Projects = await _context.Project.ToListAsync();
-            List<MinProjectViewModel> MinModels = new List<MinProjectViewModel>();
-            for (int i = 0; i < Projects.Count; i++)  { MinModels.Add(Projects[i].ProjectToMVM(User.Identity.Name)); }
+            List<MinProjectViewModel> MinModels = Projects.Select(t => t.ProjectToMVM(User.Identity.Name)).ToList();
             if (MinModels.Count!=0)   { MinModels[0].Categorys = _context.Category.ToList(); }
             return View(MinModels);
         }

@@ -91,8 +91,10 @@ namespace coursesProject.Controllers
         {
             User user = _context.User.First(x => x.ID == id);
             if (user.Status != "applied") return RedirectToAction("Index");
-            _context.Verified(user, _userManager);
-            _context.SaveChanges();
+            user.Status = "verified";
+            _context.Update(user);
+            _userManager.AddToRoleAsync(_context.Users.First(x => x.Email == user.Email), "verified");
+            _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

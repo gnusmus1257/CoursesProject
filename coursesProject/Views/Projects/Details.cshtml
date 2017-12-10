@@ -200,12 +200,14 @@
             }
             
         </div>
-        <p class="text-info">
-            <b>
-                Tags:
-            </b>
-            @Model.TagStr
-        </p>
+        <div class="col-md-12">
+            <p class="text-info">
+                <b>
+                    Tags:
+                </b>
+                @Model.TagStr
+            </p>
+        </div>
         @if (Model.IsAthor)
         {
             <form asp-action="AddTag" enctype="multipart/form-data">
