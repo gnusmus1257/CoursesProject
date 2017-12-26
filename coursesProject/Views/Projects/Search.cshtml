@@ -41,56 +41,46 @@
         </h4>
     </p>
 
-    <form asp-action="Search" enctype="multipart/form-data">
-        <div class="form-horizontal">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <div class="col-md-10">
-                    <div class="inner-addon left-addon">
-                        <i class="glyphicon glyphicon-search"></i>
-                        <input type="text" class="form-control" name="Search" style="margin-top:12px" />
-                    </div>
-                    <text class="text-danger">
-                        @ViewBag.search
-                    </text>
+<form asp-action="Search" enctype="multipart/form-data">
+    <div class="form-horizontal">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <div class="col-md-3">		
+                <div class="form-group materail-input-block materail-input-block_primary materail-input_slide-line">
+                    <input type="text" name="Search" style="margin-left: 10px" class="form-control materail-input" placeholder="Search">
+                    <span class="materail-input-block__line"></span>
                 </div>
+                <text class="text-danger">
+                    @ViewBag.search
+                </text>
             </div>
         </div>
-    </form>
+    </div>
+</form>
 
-@if (Model.Count() == 0)
+@if (!Model.Any())
 {
     <p>
-        <h1>Not found</h1>
+        <h1>Projects didn't found</h1>
     </p>
 }
 
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-md-4" padding:10px;">
-                <div class="card">
-                    <h4><a href="Details/@item.Project">@Html.DisplayFor(model => item.NameProject)</a> </h4>
-
-                    @if (item.AvatarByte != null)
-                {
-                        <a href="Details/@item.Project"> <img style="width:100%; height:270px; " src="data:image/jpg;base64,@(Convert.ToBase64String(item.AvatarByte))" /></a>
-                    }
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
+            <div class="thumbnail material-card">
+                <header class="material-card__header">
+                    <img src="data:image/jpg;base64,@(Convert.ToBase64String(item.AvatarByte))" style="height: 277px; width: 360px;" alt="Thumbnail label"/>
+                </header>
+                <div class="material-card__content">
+                    <h3 class="material-card__title">@Html.DisplayFor(model => item.NameProject)</h3>
+                    <p>@Html.DisplayFor(model => item.MinDescription)</p>
                 </div>
-                <text>@item.Category</text>
-                <div class="card text-justify" style="margin:5px; height:60px">
-                    @Html.DisplayFor(model => item.MinDescription)
-                </div><hr />
-                <text> By @item.Author</text><hr />
-                <div>
-                    Collect money @item.CollectMoney <hr />
-                    Need money @item.NeedMoney <hr />
-                    @if (@item.Goals.Count >= 1)
-                    {
-                        @item.Goals.ToList()[0].Text
-                    }
-
-                </div>
+                <footer class="material-card__footer">
+                    <a href="/Projects/Details/@item.Project" class="btn material-btn material-btn_primary material-card__showmore material-btn_sm">Show more</a>
+                </footer>
             </div>
-        }
-    </div>
+        </div>
+    }
+</div>

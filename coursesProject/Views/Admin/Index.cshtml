@@ -1,14 +1,31 @@
+@using Microsoft.EntityFrameworkCore.Query.Expressions
 @model IEnumerable<coursesProject.Models.UserViewModel>
+
+@functions {
+    private string GetNumber(int item) => $"checkbox" + item;
+}
 
 @{
     ViewData["Title"] = "Admin";
+    var count = 0;
 }
-
-<h2>Admin</h2>
-
-
-
-<div class="btn-group">
+<p>
+    <h2>Admin</h2>
+</p>
+<div class="col-md-3">
+    <div class="dropdown material-dropdown material-dropdown_primary main-container__column">
+        <button class="dropdown-toggle material-dropdown__btn" data-toggle="dropdown">Sort<span class="caret material-dropdown__caret "></span></button>
+        <ul class="dropdown-menu material-dropdown-menu material-dropdown-menu_primary">
+            <li class="dropdown-header material-dropdown__header">Sort</li>
+            <li><a id="SortByVerified" href="#0" class="material-dropdown-menu__link">Verified users</a></li>
+            <li><a id="SortByApplied" href="#0" class="material-dropdown-menu__link ">Applied users</a></li>
+            <li><a id="newUser" href="#0" class="material-dropdown-menu__link ">New users</a></li>
+            <li class="divider material-dropdown__divider"></li>
+            <li><a id="SortAll" class="material-dropdown-menu__link">All</a></li>
+        </ul>
+    </div>
+</div>
+@*<div class="btn-group">
     <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Sort <span class="caret"></span></button> <p></p>
     <ul class="dropdown-menu">
         <li><a id="SortByVerified">Verified users</a></li>
@@ -16,7 +33,7 @@
         <li class="divider"></li>
         <li><a id="SortAll">All</a></li>
     </ul>
-</div>
+</div>*@
 
 <table class="table">
     <thead>
@@ -78,18 +95,31 @@
                     @Html.DisplayFor(modelItem => item.Comment)
                 </td>
                 <td>
-                    <input type="checkbox" class="checkbox checkbox-inline CheckedUser" value="@item.User"/>
+                    <div class="main-container__column material-checkbox-group material-checkbox-group_primary">
+                        <input class="material-checkbox CheckedUser" id="@GetNumber(count)" name="checkbox" type="checkbox" value="@item.User">
+                        <label class="material-checkbox-group__label" for="@GetNumber(count)"></label>
+                    </div>	
+                    @*<input type="checkbox" class="checkbox checkbox-inline CheckedUser" value="@item.User"/>*@
                 </td>
             </tr>
+            count++;
         }
-        
+       
 
     </tbody>
 </table>
 <text class="text-danger">@ViewBag.eror</text>
     <script>
 
-
+        var newUser = "newUser";
+        var applied = "applied";
+        var verified = "verified";
+        var all = "all";
+        var urlSort = "/Admin/Index?param=";
+        var urlVerified = "/Admin/Verified/";
+        var urlUnlock = "/Admin/UnlockUsers/";
+        var urlLock = "/Admin/lockUsers/";
+        var urlDelete = "/Admin/DeleteUsersAndProjectConfirmed/";
 
         $('.user-row').click(function () {
             $('.user-row').removeClass('active');
@@ -110,9 +140,7 @@
                     temp += "&idUsers[" + i + "]=" + x;
 
             }
-            console.log(temp);
-            open('/Admin/DeleteUsersAndProjectConfirmed/' + temp);
-            close();
+            window.location = urlDelete + temp;
         });
 
 
@@ -127,9 +155,7 @@
                     temp += "&idUsers[" + i + "]=" + x;
                 
             }  
-            console.log(temp);
-            open('/Admin/lockUsers/' + temp);
-            close();
+            window.location = urlLock + temp;
         });
 
         $('#UnLock').click(function () {
@@ -143,9 +169,7 @@
                     temp += "&idUsers[" + i + "]=" + x;
 
             }
-            console.log(temp);
-            open('/Admin/UnlockUsers/' + temp);
-            close();
+            window.location = urlUnlock + temp;
         });
 
 
@@ -153,25 +177,24 @@
 
             var temp = $('.active .UserID').val();
             if (temp) {
-                open('/Admin/Verified/' + temp, null, null, true);
-                close();
+                window.location = urlVerified + temp;
             } else
             { alert('select user'); }
-
-
-            //location.reload();
         });
-
+        
         $('#SortByVerified').click(function () {
-            open('/Admin/IndexSorted?param=verified');
-            close();
+            window.location = urlSort + verified;
         });
+
         $('#SortByApplied').click(function () {
-            open('/Admin/IndexSorted?param=applied');
-            close();
+            window.location = urlSort + applied;
         });
+        
+        $('#newUser').click(function() {
+            window.location = urlSort + newUser;
+        });
+
         $('#SortAll').click(function () {
-            open('/Admin/IndexSorted?param=all');
-            close();
+            window.location = urlSort + all;
         });
     </script>

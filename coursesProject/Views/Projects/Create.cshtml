@@ -4,72 +4,82 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2>Project create</h2>
 
 <form asp-action="CreateProject" enctype="multipart/form-data">
     <div class="form-horizontal">
-        <h4>Project</h4>
-        <hr />
+
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label  class="col-md-2 control-label">Project name</label>
-            <div class="col-md-10">
-                <input type="text" name="nameProject" class="form-control" />
-                <span asp-validation-for="nameProject" class="text-danger"></span>
+            <div class="col-md-2"></div>
+            <div class="col-md-3">
+                <div class="form-group materail-input-block materail-input-block_primary">
+                    <input type="text" name="nameProject" class="form-control materail-input" placeholder="Project name">
+                    <span asp-validation-for="nameProject" class="materail-input-block__line text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-2 control-label"> End date</label>
-            <div class="col-md-10">
-                <input name="EndTime" type="date" class="form-control" />
-                <span asp-validation-for="EndTime" class="text-danger"></span>
+            <div class="col-md-2"></div>
+            <div class="col-md-3">
+                <div class="form-group materail-input-block materail-input-block_primary">
+                    <input name="EndTime" type="date" class="form-control materail-input" title="Expiration date" placeholder="expiration date">
+                    <span asp-validation-for="EndTime" class="materail-input-block__line text-danger"></span>
+                </div>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-2 control-label"> Avatar</label>
-            <div class="col-md-10">
-                <input name="Avatar" type="file" class="form-control" />            
-                @*<input asp-for="Avatar" class="form-control" />*@
-                <span asp-validation-for="Avatar" class="text-danger">@ViewBag.imgEror</span>
+            <div class="col-md-2"></div>
+            <div class="col-md-3">
+                <div class="form-group materail-input-block materail-input-block_primary">
+                    <input name="Avatar" type="file" class="form-control materail-input" title="Avatar" placeholder="Avatar">
+                    <span asp-validation-for="Avatar" class="materail-input-block__line text-danger">@ViewBag.imgEror</span>
+                </div>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Descrtiption" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input type="text" name="Descrtiption" class="form-control" />
-                <span asp-validation-for="Descrtiption" class="text-danger"></span>
+            <div class="col-md-2"></div>
+            <div class="col-md-3">
+                <div class="form-group materail-input-block materail-input-block_primary">
+                    <input type="number" name="NeedMoney" class="form-control materail-input" placeholder="Need money">
+                    <span asp-validation-for="NeedMoney" class="materail-input-block__line text-danger"></span>
+                </div>
             </div>
         </div>
-
         <div class="form-group">
-            <label class="col-md-2 control-label"> Need Money</label>
-            <div class="col-md-10">
-                <input type="text" name="NeedMoney" class="form-control" />
-                <span asp-validation-for="NeedMoney" class="text-danger"></span>
+            <div class="col-md-2"></div>
+            <div class="col-md-3">
+                <div class="form-group materail-input-block materail-input-block_primary">
+                    <input type="text" name="Goal" class="form-control materail-input" placeholder="Start goal">
+                    <span asp-validation-for="Goal" class="materail-input-block__line text-danger"></span>
+                </div>
             </div>
         </div>
-
         <div class="form-group">
-            <label class="col-md-2 control-label"> Start goal</label>
-            <div class="col-md-10">
-                <input type="text" name="Goal" class="form-control" />
-                <span asp-validation-for="Goal" class="text-danger"></span>
+            <div class="col-md-2"></div>
+            <div class="col-md-3">
+                <div class="form-group materail-input-block materail-input-block_primary">
+                    <input type="text" name="Category" class="form-control materail-input" placeholder="Category">
+                    <span asp-validation-for="Category" class="materail-input-block__line text-danger"></span>
+                </div>
             </div>
         </div>
-
         <div class="form-group">
-            <label  class="col-md-2 control-label"> Short Description</label>
-            <div class="col-md-10">
-                <input type="text" name="ShortDescription" class="form-control" />
-                <span asp-validation-for="ShortDescription" class="text-danger"></span>
+            <div class="col-md-2"></div>
+            <div class="col-md-3">
+                <div class="form-group materail-input-block materail-input-block_primary materail-input_slide-line">
+                    <textarea type="text" name="Descrtiption" class="form-control materail-input material-textarea" placeholder="Descrtiption"></textarea>
+                    <span asp-validation-for="Descrtiption" class="materail-input-block__line text-danger"></span>
+                </div>
             </div>
         </div>
-        
         <div class="form-group">
-            <label  class="col-md-2 control-label"> Category</label>
-            <div class="col-md-10">
-                <input asp-for="Category" class="form-control" />
-                <span asp-validation-for="Category" class="text-danger"></span>
+            <div class="col-md-2"></div>
+            <div class="col-md-3">
+                <div class="form-group materail-input-block materail-input-block_primary materail-input_slide-line">
+                    <textarea type="text" name="ShortDescription" class="form-control materail-input material-textarea" placeholder="Short Description"></textarea>
+                    <span asp-validation-for="ShortDescription" class="materail-input-block__line text-danger"></span>
+                </div>
             </div>
         </div>
         @*<div class="form-group">
@@ -88,7 +98,7 @@
         </div>*@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn material-btn material-btn_primary main-container__column" />
             </div>
         </div>
     </div>

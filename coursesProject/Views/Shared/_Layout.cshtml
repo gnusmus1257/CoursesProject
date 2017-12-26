@@ -9,6 +9,7 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/MaterialDesign.css"/>
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -22,7 +23,7 @@
     @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+@*<nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -34,15 +35,31 @@
                 <a asp-area="" asp-controller="Projects" asp-action="Index" class="navbar-brand">coursesProject</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Projects" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>                   
-                </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
-    </nav>
+    </nav>*@
+<nav class="navbar material-navbar material-navbar_primary">
+    <div class="container-fluid">
+        <div class="navbar-header material-navbar__header">
+            <button class="navbar-toggle materail-navbar__toogle collapsed" data-toggle="collapse" data-target="#navbar-navbar_primary">
+                <span class="icon-bar materail-navbar__icon-bar"></span>
+                <span class="icon-bar materail-navbar__icon-bar"></span>
+                <span class="icon-bar materail-navbar__icon-bar"></span>
+            </button>
+            <a class="navbar-brand material-navbar__brand" asp-area="" asp-controller="Projects" asp-action="Index"> CoursesProject</a>
+            
+        </div>
+        <div class="collapse navbar-collapse materil-navbar__collapse" id="navbar-navbar_primary">
+            @await Html.PartialAsync("_LoginPartial")
+            @*<ul class="nav navbar-nav navbar-right material-navbar__nav">
+            <li><a href="#0" class="material-navbar__link">Link</a></li>
+            <li><a href="#0" class="material-navbar__link">Link</a></li>
+            <li><a href="#0" class="material-navbar__link">Link</a></li>
+        </ul>*@
+        </div>
+    </div>
+</nav>
     <div class="container body-content">
         <text class="text-danger">@ViewBag.ban</text> 
         @RenderBody()
