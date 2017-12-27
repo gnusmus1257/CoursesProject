@@ -8,8 +8,8 @@
 <div class="panel panel-default material-panel material-panel_primary">
     <h2 class="panel-heading material-panel__heading">@Html.DisplayFor(model => model.Email)</h2>
     <div class="panel-body material-panel__body">
-        <div class="col-md-4">
-            @Html.DisplayNameFor(model => model.Avatar)
+        <div class="col-md-4 text-center">
+            Avatar <br/>
             @if (Model.AvatarByte != null)
             {
                 <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.AvatarByte))" alt=""/>
@@ -19,18 +19,18 @@
                 error = true;
             }
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 text-center">
 
-            @Html.DisplayNameFor(model => model.PasportScan)
+            Passport Scan<br />
             @if (Model.PasportScanByte != null)
             {
-                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.PasportScanByte))" alt=""/>
+                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.PasportScanByte))" alt="" />
             }
             else
             {
                 error = true;
             }
-        </div>  
+        </div>
 
         <div class="col-md-4">
             <div class="text-capitalize">

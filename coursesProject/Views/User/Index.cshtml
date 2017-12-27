@@ -11,19 +11,15 @@
             <hr />
             @Html.DisplayNameFor(model => model.Avatar)
             @if (Model.Avatar != null)
-                {
+             {
                    <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.Avatar))" />
-                }
+             }
             
-            @*@if (Model.PasportScan != null)
-            {
-                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.PasportScan))" />
-            }*@
             <form asp-action="Avatar" enctype="multipart/form-data">
-                <div class="form-horizontal">
+                <div class="form-horizontal text-center">
                     <hr />
                     <div class="form-group">
-                        <label class="col-md-2 control-label"> Avatar</label>
+                        <label class="control-label"> Avatar</label><br/>
                         <div class="col-md-10">
                             <input name="Avatar" type="file" class="form-control" />
                             <span asp-validation-for="Avatar" class="text-danger"></span>
@@ -33,7 +29,7 @@
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Change" class="btn btn-default" />
+                        <input type="submit" value="Change" class="btn material-btn material-btn_primary" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -54,9 +50,12 @@
 
                 @Html.DisplayFor(model => model.Status)
                 <br /><br />
-                @Html.DisplayNameFor(model => model.IsBan)
-
-                @Html.DisplayFor(model => model.IsBan)
+                      <center>
+                          <div class=" material-checkbox-group material-checkbox-group_primary">
+                              <input type="checkbox" id="checkbox1" name="checkbox" class="material-checkbox" value="@Model.IsBan">
+                              <label class="material-checkbox-group__label" style="display: inline-block" for="checkbox1">Is Ban</label>
+                          </div>
+                      </center>
                 <br /><br />
             </div>
             <hr />
