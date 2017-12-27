@@ -47,13 +47,13 @@ namespace coursesProject.Controllers.Roles
 
 
         [HttpGet]
-        [Authorize(Roles = "user")]                               
+        [Authorize(Roles = "user,admin")]                               
         public  IActionResult PassportScan()
         {
             return View();
         }
         
-        [Authorize (Roles = "user")]
+        [Authorize (Roles = "user,admin")]
         [HttpPost, ActionName("PassportScan")]
         public async Task<IActionResult> PassportScanLoad(UserViewModel pvm)
         {

@@ -2,41 +2,37 @@
 
 @{
     ViewData["Title"] = "Verified";
+    var error = false;
 }
 
-<h2>@Html.DisplayFor(model => model.Email)</h2>
-
-
-<div class="pager">
-    <div class="row">
+<div class="panel panel-default material-panel material-panel_primary">
+    <h2 class="panel-heading material-panel__heading">@Html.DisplayFor(model => model.Email)</h2>
+    <div class="panel-body material-panel__body">
         <div class="col-md-4">
-            <hr />
             @Html.DisplayNameFor(model => model.Avatar)
             @if (Model.AvatarByte != null)
             {
-                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.AvatarByte))" />
+                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.AvatarByte))" alt=""/>
             }
-
-            @*@if (Model.PasportScan != null)
-                {
-                    <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.PasportScan))" />
-                }*@
+            else
+            {
+                error = true;
+            }
         </div>
         <div class="col-md-4">
-            <hr />
-            @Html.DisplayNameFor(model => model.PasportScan)
-            @*@if (Model.Avatar != null)
-            {
-                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.Avatar))" />
-            }*@
 
+            @Html.DisplayNameFor(model => model.PasportScan)
             @if (Model.PasportScanByte != null)
             {
-                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.PasportScanByte))" />
+                <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.PasportScanByte))" alt=""/>
             }
-        </div>
+            else
+            {
+                error = true;
+            }
+        </div>  
+
         <div class="col-md-4">
-            <hr />
             <div class="text-capitalize">
                 <p>
                     @Html.DisplayNameFor(model => model.Status)
@@ -44,9 +40,10 @@
                     @Html.DisplayFor(model => model.Status)
                 </p>
                 <p>
-                    @Html.DisplayNameFor(model => model.IsBanned)
-
-                    @Html.DisplayFor(model => model.IsBanned)
+                    <div class="material-checkbox-group material-checkbox-group_primary">
+                        <label class="material-checkbox-group__label" for="checkbox1">Is Banned</label>
+                        <input type="checkbox" id="checkbox1" name="checkbox" class="material-checkbox" value="@Model.IsBanned">
+                    </div>
                 </p>
 
                 <p>
@@ -66,89 +63,36 @@
 
                     @Html.DisplayFor(model => model.ProjectCount)
                 </p>
+                <p>
+                    @Html.DisplayNameFor(model => model.Comment)
+
+                    @Html.DisplayFor(model => model.Comment)
+                </p>
+                <p>
+                    @Html.DisplayNameFor(model => model.PersonalInfo)
+
+                    @Html.DisplayFor(model => model.PersonalInfo)
+                </p>
             </div>
-            <hr />
-            <button id="Verified" class="btn btn-default"> Confirmed verification</button><br /><br />
-            <button id="UnVerified" class="btn btn-default"> Not confirmed verification</button>
-
-
+            @if (!error && @Model.Status == "Applied")
+            {
+                <a id="Verified" class="btn material-btn material-btn_primary material-btn_sm material-card__showmore material-card__showmore_pos-right">Confirmed</a>
+                <a id="UnVerified" class="btn material-btn material-btn_primary material-btn_sm material-card__showmore material-card__showmore_pos-right">Not confirmed</a>
+            }
         </div>
     </div>
 </div>
 
+
+
 <script>
     $('#Verified').click(function () {
-
         var temp = '@Model.User';
-        open('/Admin/VerifiedConfirmed/' + temp);
-        close();
-        //location.reload();
+        window.location = '/Admin/VerifiedConfirmed/' + temp;
     });
 
     $('#UnVerified').click(function () {
-
         var temp = '@Model.User';
-        open('/Admin/VerifiedUnConfirmed/' + temp);
-        close();
-        //location.reload();
+        window.location = '/Admin/VerifiedUnConfirmed/' + temp;
     });
 </script>
-
-
-
-@*<div>
-    <h4>@Html.DisplayNameFor(model => model.Email)</h4>
-    <hr />
-    <dl class="dl-horizontal">
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Region)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Region)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsBan)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsBan)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Avatar)
-        </dt>
-        @if (Model.Avatar != null)
-        {
-            <img style="width:200px; height:200px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.Avatar))" />
-        }
-        <dt>
-            @Html.DisplayNameFor(model => model.PasportScan)
-        </dt>
-        <dd>
-            @if (Model.PasportScan != null)
-             {
-                 <img  src="data:image/jpg;base64,@(Convert.ToBase64String(Model.PasportScan))" />
-             }
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PersonalInfoForVerified)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PersonalInfoForVerified)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CommentForVerified)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CommentForVerified)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>*@
