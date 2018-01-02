@@ -4,45 +4,49 @@
 }
 
 <h2>Passport Scan</h2>
-
+<br/>
 <form asp-action="PassportScan" enctype="multipart/form-data">
     <div class="form-horizontal">
-        
-        <hr />
-        
- 
+
         <div class="form-group">
-            <label class="col-md-2 control-label"> Pasport scan</label>
+            @*<label class="col-md-2 control-label"> Pasport scan</label>
             <div class="col-md-10">
                 <input name="PasportScan" type="file" class="form-control" />
                 <span asp-validation-for="PasportScan" class="text-danger"></span>
+            </div>*@
+            <div class="col-md-1"></div>
+            <div class="form-group materail-input-block materail-input-block_primary col-md-3">
+                <input name="PasportScan" type="file" class="form-control materail-input" title="Avatar" placeholder="Passport Scan">
+                <span asp-validation-for="PasportScan" class="materail-input-block__line text-danger">@ViewBag.eror</span>
             </div>
+            
+                <div class="col-md-offset-1 col-md-10">
+                    <text class="text-danger">@ViewBag.eror</text>
+                </div>
+            
         </div>
         <div class="form-group">
-            <label class="col-md-2 control-label"> Personal Info</label>
-            <div class="col-md-10">
-                <input type="text" name="PersonalInfo" class="form-control" />
-                <span asp-validation-for="PersonalInfo" class="text-danger"></span>
+            <div class="col-md-1"></div>
+            <div class="form-group materail-input-block materail-input-block_primary col-md-3">
+                <input type="text" name="PersonalInfo" class="form-control materail-input" placeholder="Personal Info"/>
+                <span asp-validation-for="PersonalInfo" class="materail-input-block__line text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label"> Comment</label>
-            <div class="col-md-10">
-                <input type="text" name="Comment" class="form-control" />
-                <span asp-validation-for="Comment" class="text-danger"></span>
+        <div class="form-group">            
+            <div class="col-md-1"></div>
+            <div class="form-group materail-input-block materail-input-block_primary col-md-3">
+                <input type="text" name="Comment" class="form-control materail-input" placeholder="Comment"/>
+                <span asp-validation-for="Comment" class="materail-input-block__line text-danger"></span>
             </div>
         </div>
 
         </div>
    
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Submit" class="btn btn-default" />
+            <div class="col-md-offset-1 col-md-11">
+                <input type="submit" value="Submit" class="btn material-btn material-btn_primary " />
             </div>
         </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <text class="text-danger">@ViewBag.eror</text>
-            </div>
-        </div>
+    
+
 </form>
