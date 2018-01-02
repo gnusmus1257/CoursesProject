@@ -8,7 +8,7 @@
 <div class="panel panel-default material-panel material-panel_primary">
     <h2 class="panel-heading material-panel__heading">@Html.DisplayFor(model => model.Email)</h2>
     <div class="panel-body material-panel__body">
-        <div class="col-md-4 text-center">
+        <div class="col-md-3 text-center">
             Avatar <br />
             @if (Model.Avatar != null)
             {
@@ -19,7 +19,7 @@
                 error = true;
             }
         </div>
-        <div class="col-md-4 text-center">
+        <div class="col-md-3 text-center">
 
             Passport Scan<br />
             @if (Model.PasportScan != null)
@@ -32,7 +32,7 @@
             }
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="text-capitalize">
                 <p>
                     @Html.DisplayNameFor(model => model.Status)
@@ -58,8 +58,14 @@
 
                     @Html.DisplayFor(model => model.ProjectCount)
                 </p>
-                <button class="btn material-btn material-btn_primary" data-toggle="modal" data-target="#myModal_primary">Change avatar</button>
-                <a asp-area="" asp-controller="User" asp-action="PassportScan" title="Passport scan" class="btn material-btn material-btn_primary">Passport scan</a>
+                <div class="btn-group material-btn-group_lg" role="group" aria-label="Basic example">
+                    <button type="button" class="btn material-btn material-btn_primary" data-toggle="modal" data-target="#myModal_primary">Change avatar</button>
+                    <a asp-area="" asp-controller="User" asp-action="PassportScan" title="Passport scan" type="button" class="btn material-btn material-btn_primary">Passport scan</a>
+                    <a asp-area="" asp-controller="Manage" asp-action="ChangePassword" title="Manage" class="btn material-btn material-btn_primary">Reset password</a>
+                </div><br/>
+                @*<button class="btn material-btn material-btn_primary" data-toggle="modal" data-target="#myModal_primary">Change avatar</button><br /><br />
+                <a asp-area="" asp-controller="User" asp-action="PassportScan" title="Passport scan" class="btn material-btn material-btn_primary">Passport scan</a><br /><br />
+                <a asp-area="" asp-controller="Manage" asp-action="ChangePassword" title="Manage" class="btn material-btn material-btn_primary">Reset password</a>*@
                 <div class="modal material-modal_primary fade" id="myModal_primary">
                     <div class="modal-dialog ">
                         <div class="modal-content material-modal__content">
