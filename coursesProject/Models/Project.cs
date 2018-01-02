@@ -45,9 +45,10 @@ namespace coursesProject.Models
     public class Rating
     {
         public int ID { get; set; }
-        public Project Project { get; set; }
         [Required]
         [JsonIgnore]
+        public Project Project { get; set; }
+        
         public User User { get; set; }
         public int rating { get; set; }
     }
@@ -55,9 +56,10 @@ namespace coursesProject.Models
     public class Comment
     {
         public int Id { get; set; }
-        public Project Project { get; set; }
-        [Required]
         [JsonIgnore]
+        [Required]
+        public Project Project { get; set; }
+              
         public User Author { get; set; }
         public string AuthorEmail { get; set; }
         public string Context { get; set; }
@@ -120,6 +122,7 @@ namespace coursesProject.Models
         [Required]
         public Project Project { get; set; }
         public string Text { get; set; }
+        public string Name { get; set; }
     }
 
 

@@ -154,7 +154,7 @@ namespace coursesProject.Controllers
             return RedirectPermanent(str);
         }
 
-        [Authorize(Roles = "verified,admin,user")] ////        днаюбкемхе пеирхмцю
+        [Authorize(Roles = "verified,admin")] ////        днаюбкемхе пеирхмцю
         [HttpPost, ActionName("Pay")]
         public async Task<IActionResult> Pay(int id, int money)
         {
