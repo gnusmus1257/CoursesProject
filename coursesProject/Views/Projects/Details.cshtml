@@ -94,7 +94,7 @@
 
     <div class="primary">
         <div class="progress material-progress">
-            <div class="progress-bar material-progress__progress-bar material-progress__progress-bar_primary" style=@ToProcent(Model.NeedMoney,Model.CollectMoney)></div>
+            <div class="progress-bar material-progress__progress-bar material-progress__progress-bar_primary" style=@ToProcent(Model.Goals.Sum(x => x.NeedMoney),Model.CollectMoney)></div>
         </div>
         <h3>US$ @Model.CollectMoney</h3>
         <h4> pledged of $@SumToStr(Model.Goals.Sum(x => x.NeedMoney)) goal</h4>
