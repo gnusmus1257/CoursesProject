@@ -13,7 +13,7 @@ namespace coursesProject.Helpers
         public static List<MinProjectViewModel> Search (this List<Project> projects, string Search,string Email)
         { 
             List<MinProjectViewModel> MinModels = new List<MinProjectViewModel>();
-            if (Search==""|| Search == null)
+            if (string.IsNullOrEmpty(Search))
             {
                 return MinModels;
             }

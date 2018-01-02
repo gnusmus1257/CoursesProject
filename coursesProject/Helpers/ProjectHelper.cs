@@ -101,12 +101,9 @@ namespace coursesProject.Helpers
             DetailProjectVM.Goals = project.Goals;
             DetailProjectVM.Comments = project.Comment;
             DetailProjectVM.News = project.News;
+            DetailProjectVM.Tags = project.Tags;
             DetailProjectVM.TagStr = project.Tags.TagsListToStr();
-            if (DetailProjectVM.AthorEmail==IdentityUser)
-            {
-                DetailProjectVM.IsAthor = true;
-            }
-            else DetailProjectVM.IsAthor = false;
+            DetailProjectVM.IsAthor = DetailProjectVM.AthorEmail==IdentityUser;
             DetailProjectVM.NeedMoney = project.NeedMoney;
             DetailProjectVM.ID = project.ID;
             return DetailProjectVM;
@@ -161,7 +158,7 @@ namespace coursesProject.Helpers
             string str = "";
             foreach (var item in tags)
             {
-                str += item.Name + " ";
+                str += item.Name + "; ";
             }
             return str;
         }

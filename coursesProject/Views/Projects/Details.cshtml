@@ -1,53 +1,155 @@
 @model coursesProject.Models.ProjectViewModels.DetailProjectViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@functions {
+    private string Counting(string text, int Count) => text + Count.ToString();
+
+    private string ToMonth(int day)
+    {
+        var months = new string[12]
+        {
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        };
+        return months[day-1];
+    }
+
+    private string ToShortName(string mail)
+    {
+        return mail.Remove(mail.IndexOf('@'));
+    }
+
+    private string ToProcent(int need, int collect)
+    {
+        return "width:"+ (collect*100/need)+"%";
+    }
+
+    private string SumToStr(int goals)
+    {
+        return goals.ToString(); ;
+    }
+}
 
 @{
     ViewData["Title"] = "Details";
 }
-
-<h2><a href="@Model.ID">Details </a></h2>
+<style>
+    .category-list * {transition: .4s linear;}
+    .category-list {
+        background: white;
+        list-style-type: circle;
+        list-style-position: inside;
+        padding: 0 10px;
+        margin: 0;
+    }
+    .category-list li {
+        font-family: "Trebuchet MS", "Lucida Sans";
+        border-bottom: 1px solid #efefef;
+        padding: 10px 0;
+    }
+    .category-list a {
+        text-decoration: none;
+        color: #555;
+    }
+    .category-list li span {
+        float: right;
+        display: inline-block;
+        border: 1px solid #efefef;
+        padding: 0 5px;
+        font-size: 13px;
+        color: #999;
+    }
+    .category-list li:hover a {color: #c93961;}
+    .category-list li:hover span {
+        color: #c93961;
+        border: 1px solid #c93961;
+    }
+</style>
+<h2>@Model.NameProject</h2>
 
 <div class="row">
-    <div class="col-md-5 ">
-        <h4>@Model.NameProject</h4>
+    <div class="col-md-7 ">
+        
         @if (Model.Avatar != null)
         {
-            <img style="width:100%; height:270px; " src="data:image/jpg;base64,@(Convert.ToBase64String(Model.Avatar))" />
+            <img style="height: 460px; width: 100%;" src="data:image/jpg;base64,@(Convert.ToBase64String(Model.Avatar))" />
         }
    
     </div>
-    <div class="col-md-3" style="min-height:310px">
+<div class="col-md-5" style="min-height:310px">
 
-        <div>
-            <p>
-                <b>Status</b> : @Model.Status <br />
-            </p>
-            <p>
-                <b>Day left</b> : @if ((Model.EndDate.DayOfYear - Model.DateOfRigister.DayOfYear) >= 1)
-            {
-                    @(Model.EndDate.DayOfYear - Model.DateOfRigister.DayOfYear);
-            }
-            else
-            {
-                    <b> Project closed</b>
-                }<br />
-            </p>
-            <p>
-                <b>Rating</b> :  @Model.Raiting
-            </p>
-            <form asp-action="AddRating" enctype="multipart/form-data">
-                <div class="form-horizontal">
-                    <input type="hidden" asp-for="ID" />
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class=" text-primary">
+        <div class="progress material-progress">
+            <div class="progress-bar material-progress__progress-bar material-progress__progress-bar_primary" style=@ToProcent(Model.NeedMoney,Model.CollectMoney)></div>
+        </div>
+        <h3 class="text-primary text-uppercase">US$ @Model.CollectMoney</h3>
+        <h4 class="text-primary"> pledged of $@SumToStr(Model.Goals.Sum(x => x.NeedMoney)) goal</h4>
+        @if ((Model.EndDate.DayOfYear - Model.DateOfRigister.DayOfYear) >= 1)
+        {
+            <h3>
+                @(Model.EndDate.DayOfYear - Model.DateOfRigister.DayOfYear)
+            </h3>
+            <h4>Days to go</h4>
+        }
+        else
+        {
+            <h4> Project closed</h4>
+        }
+        <br/>
+        <form asp-action="Pay" asp-route-id=@Model.ID asp-route-money="50">
+            <input type="submit" class="btn material-btn material-btn_lg material-btn_primary" value="Back this project" style="width: 100%; display: block" />
+        </form>
+    </div>
+</div>
 
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">New rating</label>
-                        <div class="col-md-10">
-                            <input type="number" name="rating" class="form-control" />
-                            <span asp-validation-for="rating" class="text-danger"></span>
-                        </div>
+
+            @*<p>
+
+                <b>Status</b> : @Model.Status <br/>
+            </p>
+            <p>
+                <b>Day left</b> :
+                @if ((Model.EndDate.DayOfYear - Model.DateOfRigister.DayOfYear) >= 1)
+        {
+            @(Model.EndDate.DayOfYear - Model.DateOfRigister.DayOfYear);
+}
+else
+{
+        <b> Project closed</b>
+}
+                <br />
+            </p>
+            <p>
+                <b>Rating</b> : @Model.Raiting
+            </p>
+            @if (SignInManager.IsSignedIn(User))
+    {
+        <form asp-action="AddRating" enctype="multipart/form-data">
+            <div class="form-horizontal">
+                <input type="hidden" asp-for="ID" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label">New rating</label>
+                    <div class="col-md-10">
+                        <input type="number" name="rating" class="form-control" />
+                        <span asp-validation-for="rating" class="text-danger"></span>
                     </div>
                 </div>
-            </form>
+            </div>
+        </form>
+}
+
             <p>
                 <b>Collect money</b> : @Model.CollectMoney
             </p>
@@ -58,206 +160,246 @@
                 <b>Category </b>: @Model.Category
             </p>
         </div>
-        @if ((Model.EndDate.DayOfYear - Model.DateOfRigister.DayOfYear) >= 1)
+        @if ((Model.EndDate.DayOfYear - Model.DateOfRigister.DayOfYear) >= 1 && SignInManager.IsSignedIn(User))
         {
-        <form id=pay name=pay method="POST" action="https://merchant.webmoney.ru/lmi/payment.asp">
-            <p><b>Pay 100 WMZ...</b></p>
-            <p>
-                <input type="hidden" name="LMI_PAYMENT_AMOUNT" value="100.0">
-                <input type="hidden" name="LMI_PAYMENT_DESC" value="Test pay">
-                <input type="hidden" name="LMI_PAYMENT_NO" value="1">
-                <input type="hidden" name="LMI_PAYEE_PURSE" value="Z145179295679">
-                <input type="hidden" name="LMI_SIM_MODE" value="0">
-            </p>
-            <p>
-                <input type="submit" class="btn btn-default" value="Pay">
-            </p>
-        </form> <br />
-        }
 
-    </div>
-    <div class="col-md-4" style="min-height:310px">
-        <h4>Goals</h4>
-        <ul>
-            @foreach (var item in Model.Goals)
-            {
-                <li>
-                    <text class="text-info">
-                        @item.Text <label style="text-align:right">@item.NeedMoney</label>
-                    </text>
-                </li>
-            }
-        </ul>
-        @if (Model.IsAthor)
-        {
-            <form asp-action="AddGoal" enctype="multipart/form-data">
-                <div class="form-horizontal">
-                    <input type="hidden" asp-for="ID" />
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Need money</label>
-                        <div class="col-md-10">
-                            <input type="text" name="NeedMoney" class="form-control" />
-                            <span asp-validation-for="NeedMoney" class="text-danger"></span>
-                        </div>
-                    </div>    
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">New goal</label>
-                        <div class="col-md-10">
-                            <input type="text" name="Goal" class="form-control" />
-                            <span asp-validation-for="Goal" class="text-danger"></span>
-                        </div>
-                    </div>    
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Add" class="btn btn-default" />
-                        </div>
-                    </div>
-                </div>
-            </form>
-        }
-    </div>
- <div class="col-md-2"></div>
-        <div class="col-md-8 lead text-justify" style="margin-top:15px">
-
-
-                @if (Model.IsAthor)
-                {
-                    <form asp-action="AddTopic" enctype="multipart/form-data">
-                        <div class="form-horizontal">
-                            <input type="hidden" asp-for="ID" />
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">New topic</label>
-                                <div class="col-md-10">
-                                    <input type="text" name="Topic" class="form-control" />
-                                    <span asp-validation-for="Topic" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Add" class="btn btn-default" />
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                }
-            <p>
-                <b>Project news :</b>
-                <ul>
-                    @foreach (var item in Model.News)
-                    {
-                        <li>
-                            @item.Text
-                        </li>
-                    }
-                </ul>
-            </p>
-
-            <p>
-                <b> Descriotion :</b> <br />
-                @Model.Description
-            </p>
-        </div>
-    <div class="col-md-2"></div>
-    <div class="col-md-2"></div>
-    <div class="col-md-8 lead text-justify" style="margin-top:15px">
-        
-        <form asp-action="AddComment" enctype="multipart/form-data">
-                <div class="form-horizontal">
-                    <input type="hidden" asp-for="ID" />
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Comment</label>
-                        <div class="col-md-10">
-                            <input type="text" name="Comment" class="form-control" />
-                            <span asp-validation-for="Comment" class="text-danger"></span>
-                        </div>
-                    </div>    
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Comment" class="btn btn-default" />
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-        <div class="col-md-10">
-            @foreach (var item in Model.Comments)
-            {
-                <p class="text-info">
-                    @item.AuthorEmail :
-                </p>
-                <p class="text-justify">
-                    @item.Context
+            <form id=pay name=pay method="POST" action="https://merchant.webmoney.ru/lmi/payment.asp">
+                <p><b>Pay 100 WMZ...</b></p>
+                <p>
+                    <input type="hidden" name="LMI_PAYMENT_AMOUNT" value="100.0">
+                    <input type="hidden" name="LMI_PAYMENT_DESC" value="Test pay">
+                    <input type="hidden" name="LMI_PAYMENT_NO" value="1">
+                    <input type="hidden" name="LMI_PAYEE_PURSE" value="Z145179295679">
+                    <input type="hidden" name="LMI_SIM_MODE" value="0">
                 </p>
                 <p>
-                    @item.DateCreate
+                    <input type="submit" class="btn btn-default" value="Pay">
                 </p>
-                <hr />
-            }
-            
-        </div>
-        <div class="col-md-12">
-            <p class="text-info">
-                <b>
-                    Tags:
-                </b>
-                @Model.TagStr
-            </p>
-        </div>
-        @if (Model.IsAthor)
-        {
-            <form asp-action="AddTag" enctype="multipart/form-data">
-                <div class="form-horizontal">
-                    <input type="hidden" asp-for="ID" />
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            </form>
+            <br />
+        }
 
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Tag</label>
-                        <div class="col-md-10">
-                            <input type="text" name="Tag" class="form-control" />
-                            <span asp-validation-for="Tag" class="text-danger"></span>
+    </div>*@
+    
+
+ <div class="col-md-12" style="margin-top:15px">
+     <div class="panel-group material-tabs-group">
+         <ul class="nav nav-tabs material-tabs material-tabs_primary">
+             <li class="active"><a href="#Description1" class="material-tabs__tab-link" data-toggle="tab">Description</a></li>
+             <li><a href="#news1" class="material-tabs__tab-link" data-toggle="tab">News</a></li>
+             <li><a href="#goals1" class="material-tabs__tab-link" data-toggle="tab">Goals</a></li>
+             <li><a href="#comments1" class="material-tabs__tab-link" data-toggle="tab">Comments</a></li>
+             <li><a href="#tags1" class="material-tabs__tab-link" data-toggle="tab">Tags</a></li>
+         </ul>
+         <div class="tab-content materail-tabs-content">
+             <div class="tab-pane fade active in" id="Description1">
+                 @Html.Raw(Model.Description)
+             </div> @*Описание*@
+             <div class="tab-pane fade" id="news1">
+                 @if (Model.IsAthor)
+        {
+
+         <div class="">
+             <form asp-action="AddTopic" enctype="multipart/form-data">
+                 <div class="form-horizontal">
+                     <input type="hidden" asp-for="ID" />
+                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                     <div class="form-group">
+                         <div class="col-md-1"></div>
+                         <div class="col-md-3">
+                             <div class="form-group materail-input-block materail-input-block_primary materail-input_slide-line">
+                                 <input asp-for="TopicName" class="form-control materail-input" placeholder="New Topic">
+                                 <span asp-validation-for="Topic" class="materail-input-block__line"></span>
+                             </div>
+                             <div class="form-group materail-input-block materail-input-block_primary materail-input_slide-line">
+                                 <textarea asp-for="Topic" class="form-control materail-input material-textarea" placeholder="Information"></textarea>
+                                 <span class="materail-input-block__line"></span>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="form-group">
+                         <div class="col-md-offset-1 col-md-11">
+                             <button type="submit" class="btn material-btn material-btn_primary">Add</button>
+
+                         </div>
+                     </div>
+                 </div>
+             </form>
+         </div>
+}
+                 <div class="panel-group material-accordion" id="accordion">
+                     <div class="panel-group material-accordion material-accordion_primary" id="accordion1">
+                         @foreach (var item in Model.News.Reverse())
+                {
+                 <div class="panel panel-default material-accordion__panel material-accordion__panel">
+                     <div class="panel-heading material-accordion__heading" id="acc1_headingOne">
+                         <h4 class="panel-title">
+                             <a data-toggle="collapse" data-parent="#accordion1" href="@Counting("#acc1_collapseOne", item.ID)" class="material-accordion__title">@item.Name </a>
+                         </h4>
+                     </div>
+                     <div id="@Counting("acc1_collapseOne", item.ID)" class="panel-collapse collapse in material-accordion__collapse">
+                         <div class="panel-body">
+                             @Html.Raw(item.Text)
+                         </div>
+                     </div>
+                 </div>
+    }
+                     </div>
+                 </div>
+
+
+             </div> @*Новости*@
+             <div class="tab-pane fade " id="comments1">
+                 @if (SignInManager.IsSignedIn(User))
+                 {
+                     <form asp-action="AddComment" enctype="multipart/form-data">
+                         <div class="form-horizontal">
+                             <input type="hidden" asp-for="ID" />
+                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                         <div class="form-group">
+                             <div class="col-md-1"></div>
+                             <div class="col-md-3">
+                                 <div class="form-group materail-input-block materail-input-block_primary materail-input_slide-line">
+                                     <input asp-for="Comment" class="form-control materail-input" placeholder="Comment">
+                                     <span asp-validation-for="Comment" class="materail-input-block__line"></span>
+                                 </div>
+                             </div>
+                             <div class="form-group">
+                                 <div class="col-md-offset-1 col-md-11">
+                                     <button type="submit" class="btn material-btn material-btn_primary">Add</button>
+
+                                 </div>
+                             </div>
+                         </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Add Tag" class="btn btn-default" />
+                     </form>
+                 }
+                     @foreach (var item in Model.Comments)
+                     {
+                     <p class="text-info">
+                         <b style="font-size: 18px"> @ToShortName(item.AuthorEmail)</b> on @ToMonth(item.DateCreate.Month) @item.DateCreate.Day
+                     </p>
+                         <p class="text-justify">
+                             @item.Context
+                         </p>                         
+                     }
+
+             </div> @*комменты*@
+             <div class="tab-pane fade " id="goals1">
+                 @if (Model.IsAthor)
+    {
+             <form asp-action="AddGoal" enctype="multipart/form-data">
+                 <div class="form-horizontal">
+                     <input type="hidden" asp-for="ID" />
+                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                     <div class="form-group">
+                         <div class="col-md-1"></div>
+                         <div class="col-md-3">
+                             <div class="form-group materail-input-block materail-input-block_primary materail-input_slide-line">
+                                 <input asp-for="NeedMoney" class="form-control materail-input" placeholder="Need Money">
+                                 <span asp-validation-for="NeedMoney" class="materail-input-block__line"></span>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="form-group">
+                         <div class="col-md-1"></div>
+                         <div class="col-md-3">
+                             <div class="form-group materail-input-block materail-input-block_primary materail-input_slide-line">
+                                 <input asp-for="Goal" class="form-control materail-input" placeholder="New Goal">
+                                 <span asp-validation-for="Goal" class="materail-input-block__line"></span>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="form-group">
+                         <div class="col-md-offset-1 col-md-11">
+                             <button type="submit" class="btn material-btn material-btn_primary">Add</button>
+                         </div>
+                     </div>
+                 </div>
+             </form>
+}
+                 <ul class="category-list">
+                     @foreach (var item in Model.Goals)
+                     {
+                         <li><a >@item.Text</a><span>@item.NeedMoney</span></li>
+                     }
+                 </ul>
+             </div> @*Цели*@
+                 <div class="tab-pane fade" id="tags1">
+                     <div class="col-md-12"></div>
+                     <p class="text-info">
+                         @foreach (var item in Model.Tags)
+                         {
+                             <a asp-action="Search" asp-route-Search="@item.Name">@item.Name; </a>
+                         }
+
+                     </p>
+
+                     @if (Model.IsAthor)
+                     {
+                         <form asp-action="AddTag" enctype="multipart/form-data">
+                             <div class="form-horizontal">
+                                 <input type="hidden" asp-for="ID"/>
+                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                 <div class="form-group">
+                                     <div class="col-md-1"></div>
+                                     <div class="col-md-3">
+                                         <div class="form-group materail-input-block materail-input-block_primary materail-input_slide-line">
+                                             <input asp-for="Tag" class="form-control materail-input" placeholder="Tag">
+                                             <span asp-validation-for="Tag" class="materail-input-block__line"></span>
+                                         </div>
+                                     </div>
+                                     <div class="form-group">
+                                         <div class="col-md-offset-1 col-md-11">
+                                             <button type="submit" class="btn material-btn material-btn_primary">Add</button>
+
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </form>
+                     }
+                 </div> @*тэги*@
+             </div>
+     </div>    
+ </div>
+</div>
+
+<div>
+
+    @if (Model.IsAthor)
+        {
+            <button class="btn material-btn material-btn_primary" data-toggle="modal" data-target="#myModal_primary">Delete</button>
+            <div class="modal material-modal material-modal_primary fade" id="myModal_primary">
+                <div class="modal-dialog ">
+                    <div class="modal-content material-modal__content">
+                        <div class="modal-header material-modal__header">
+                            <button class="close material-modal__close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title material-modal__title">Delete</h4>
+                        </div>
+                        <div class="modal-body material-modal__body">
+                            <p>
+                                Are you sure you want to delete the project "@Model.NameProject"?
+                            </p>
+                        </div>
+                        <div class="modal-footer material-modal__footer">
+                            <button class="btn material-btn material-btn" data-dismiss="modal">Close</button>
+                            <a asp-action="DeleteConfirmed" asp-route-id="@Model.ID" class="btn btn-primary material-btn material-btn_primary">Confirm Delete</a>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
+
+            @*<p>
+                <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a>
+            </p>
+            <p>
+                <a asp-action="DeleteConfirmed" asp-route-id="@Model.ID">Delete</a>
+            </p>*@
         }
-    </div>
-    <div class="col-md-2"></div>
-                                                                        @*WebMoney PAYMENT*@
-    @*<form id=pay name=pay method="POST" action="https://merchant.webmoney.ru/lmi/payment.asp">
-        <p>пример платежа через сервис Web Merchant Interface</p> <p>заплатить 1 WMZ...</p>
-        <p>
-            <input type="hidden" name="LMI_PAYMENT_AMOUNT" value="1.0">
-            <input type="hidden" name="LMI_PAYMENT_DESC" value="тестовый платеж">
-            <input type="hidden" name="LMI_PAYMENT_NO" value="1">
-            <input type="hidden" name="LMI_PAYEE_PURSE" value="Z145179295679">
-            <input type="hidden" name="LMI_SIM_MODE" value="0">
-        </p>
-        <p>
-            <input type="submit" value="submit">
-        </p>
-    </form>*@
-</div>
-<div>
-    @if (Model.IsAthor)
-    {
-        <p>
-            <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a>
-        </p>
-        <p>
-            <a asp-action="DeleteConfirmed" asp-route-id="@Model.ID">Delete</a>
-        </p>
-    }
+    
 
-    <a asp-action="Index">Back to List</a>
-
+    <a asp-action="Index" class="btn material-btn material-btn_primary">Back</a>
 </div>

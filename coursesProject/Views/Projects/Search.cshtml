@@ -66,7 +66,7 @@
 }
 
 <div class="row">
-    @foreach (var item in Model)
+    @foreach (var item in Model.Reverse())
     {
         <div class="col-md-4">
             <div class="thumbnail material-card">
@@ -75,7 +75,7 @@
                 </header>
                 <div class="material-card__content">
                     <h3 class="material-card__title">@Html.DisplayFor(model => item.NameProject)</h3>
-                    <p>@Html.DisplayFor(model => item.MinDescription)</p>
+                    <p>@Html.Raw(item.MinDescription)</p>
                 </div>
                 <footer class="material-card__footer">
                     <a href="/Projects/Details/@item.Project" class="btn material-btn material-btn_primary material-card__showmore material-btn_sm">Show more</a>

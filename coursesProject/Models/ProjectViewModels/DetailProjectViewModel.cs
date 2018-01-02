@@ -25,12 +25,14 @@ namespace coursesProject.Models.ProjectViewModels
         public string Tag { get; set; }
         public string TagStr { get; set; }
         public string Topic { get; set; }
+        public string TopicName { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public double Raiting { get; set; }
         public int rating { get; set; }
         public ICollection<Goal> Goals { get; set; }
         public ICollection<Subscriber> Subscriber { get; set; }
         public ICollection<New> News { get; set; }
+        public ICollection<Tag> Tags { get; set; }
         public bool IsAthor { get; set; }
         public string Search { get; set; }
 

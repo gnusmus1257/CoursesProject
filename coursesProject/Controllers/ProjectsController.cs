@@ -36,6 +36,7 @@ namespace coursesProject.Controllers
         }
 
         // GET: Projects/Details/5
+
         public IActionResult Details(int id)
         {
             var project =_context.GetProjectById(id);
@@ -90,23 +91,16 @@ namespace coursesProject.Controllers
             project.Goals.Add(new Goal() { Project = project, NeedMoney = NeedMoney, Text = Goal });
             _context.Project.Update(project);
             await _context.SaveChangesAsync();
-            return View("DetailsUpdate", _context.UpdateListsDVM(ID, User.Identity.Name));
+            var str = "/Projects/Details/" + project.ID;
+            return RedirectPermanent(str);
         }
 
         public ActionResult Search (string Search) 
         {
             var projects = _context.Project.ToList();
             foreach (var item in projects) { item.UpdateListsMVM(_context, User.Identity.Name); }
-            List<MinProjectViewModel> MinModels = projects.Search(Search, User.Identity.Name);
-            if (projects == null)
-            {
-                ViewBag.search = "not found";
-                foreach (var item in _context.Project.ToList())
-                {
-                    MinModels.Add(item.ProjectToMVM(User.Identity.Name));
-                }
-            }
-           return View(MinModels);
+            var minModels = projects.Search(Search, User.Identity.Name);
+            return View(minModels);
         }
 
         [Authorize(Roles = "verified,admin,user")]
@@ -125,7 +119,8 @@ namespace coursesProject.Controllers
                 AuthorEmail = User.Identity.Name
             });
             _context.SaveChanges();
-            return View("DetailsUpdate", _context.UpdateListsDVM(ID, User.Identity.Name));
+            var str = "/Projects/Details/" + project.ID;
+            return RedirectPermanent(str);
         }
 
 
@@ -133,13 +128,14 @@ namespace coursesProject.Controllers
 
         [Authorize(Roles = "verified,admin")]
         [HttpPost, ActionName("AddTopic")]
-        public async Task<IActionResult> AddTopic(string Topic, int ID)
+        public async Task<IActionResult> AddTopic(string topic, int id, string topicName)
         {
-            Project project = await _context.Project.FirstAsync(x => x.ID == ID);
-            project.News.Add(new New() { Project = project, Text = Topic });
+            Project project = await _context.Project.FirstAsync(x => x.ID == id);
+            project.News.Add(new New() { Project = project, Text = topic, Name = topicName});
             _context.Update(project);
             await _context.SaveChangesAsync();
-            return View("DetailsUpdate", _context.UpdateListsDVM(ID, User.Identity.Name));
+            var str = "/Projects/Details/" + project.ID;
+            return RedirectPermanent(str);
         }
 
 
@@ -154,9 +150,21 @@ namespace coursesProject.Controllers
                 Project project = await _context.Project.FirstAsync(x => x.ID == ID);
                 _context.AddRatingIfNotExist(user, project, rating);
             }
-            return View("DetailsUpdate", _context.UpdateListsDVM(ID, User.Identity.Name));
+            var str = "/Projects/Details/" + ID;
+            return RedirectPermanent(str);
         }
 
+        [Authorize(Roles = "verified,admin,user")] ////        днаюбкемхе пеирхмцю
+        [HttpPost, ActionName("Pay")]
+        public async Task<IActionResult> Pay(int id, int money)
+        {
+            var project = await _context.Project.FirstAsync(x => x.ID == id);
+            project.CollectMoney += money;
+            _context.Update(project);
+            _context.SaveChanges();
+            var str = "/Projects/Details/" + id;
+            return RedirectPermanent(str);
+        }
 
         [Authorize(Roles = "verified,admin") ]////       днаюбкемхе рецю
         [HttpPost, ActionName("AddTag")]
@@ -168,7 +176,8 @@ namespace coursesProject.Controllers
             project.Tags.Add( new Tag() { Name=Tag,Project=project});
             _context.Project.Update(project);
             _context.SaveChanges();    
-            return View("DetailsUpdate", _context.UpdateListsDVM(ID, User.Identity.Name));
+            var str = "/Projects/Details/"+project.ID;
+            return RedirectPermanent(str);
         }
 
         // GET: Projects/Edit/5
@@ -217,7 +226,8 @@ namespace coursesProject.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var project = await _context.Project.SingleOrDefaultAsync(m => m.ID == id);
-            _context.Project.Remove(project);
+            _context.Comment.RemoveRange(project.Comment);
+            _context.Remove(project);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

@@ -8,16 +8,14 @@
     ViewData["Title"] = "Log in";
 }
 
-<h2>@ViewData["Title"].</h2>
+<h2>@ViewData["Title"]</h2>
 <div class="row">
 
         <section>
             <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                <h4>Use a local account to log in.</h4>
-                <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
-                    <div class="col-md-2"></div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-3">
                         <div class="form-group materail-input-block materail-input-block_primary materail-input_slide-line">
                             <input asp-for="Email" class="form-control materail-input" placeholder="Email">
@@ -26,49 +24,39 @@
                     </div>                    
                 </div>
                 <div class="form-group">
-                    <div class="col-md-2"></div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-3">
                         <div class="form-group materail-input-block materail-input-block_primary materail-input_slide-line">
                             <input asp-for="Password" class="form-control materail-input" placeholder="Password">
                             <span asp-validation-for="Password" class="materail-input-block__line"></span>
                         </div>
                     </div>
-                    @*<label asp-for="Password" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>*@
                 </div>
                 <div class="form-group">
-                    <div class="col-md-2"></div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-3">
                         <div class=" material-checkbox-group material-checkbox-group_primary">
                             <input asp-for="RememberMe" type="checkbox" id="checkbox1" name="checkbox" class="material-checkbox">
                             <label class="material-checkbox-group__label" for="checkbox1">@Html.DisplayNameFor(m => m.RememberMe)</label>
                         </div>
-                        @*<div class="checkbox">
-                <label asp-for="RememberMe">
-                    <input asp-for="RememberMe"/>
-                    @Html.DisplayNameFor(m => m.RememberMe)
-                </label>
-            </div>*@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <button type="submit" class="btn btn-default">Log in</button>
+                    <div class="col-md-offset-1 col-md-11">
+                        <button type="submit" class="btn material-btn material-btn_primary">Log in</button>
+                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" class="btn material-btn material-btn_primary">Register</a>
                     </div>
                 </div>
-                <p>
-                    <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Register as a new user?</a>
+                @*<p>
+                    <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" class="btn material-btn material-btn_primary">Register as a new user?</a>
                 </p>
                 <p>
                     <a asp-action="ForgotPassword">Forgot your password?</a>
-                </p>
+                </p>*@
             </form>
         </section>
     </div>
-</div>
+
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
