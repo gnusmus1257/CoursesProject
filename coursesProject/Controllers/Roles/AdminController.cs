@@ -87,14 +87,14 @@ namespace coursesProject.Controllers
 
 
         
-        public ActionResult VerifiedConfirmed(int id)
+        public async Task<ActionResult> VerifiedConfirmed(int id)
         {
             User user = _context.User.First(x => x.ID == id);
             if (user.Status != "applied") return RedirectToAction("Index");
             user.Status = "verified";
             _context.Update(user);
-            _userManager.AddToRoleAsync(_context.Users.First(x => x.Email == user.Email), "verified");
-            _context.SaveChangesAsync();
+            await _userManager.AddToRoleAsync(_context.Users.First(x => x.Email == user.Email), "verified");
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
